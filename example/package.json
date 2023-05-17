@@ -1,0 +1,22 @@
+{
+  "name": "towny",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "sass": "node-sass scss/ -o css/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nes.css": "^2.3.0",
+    "phaser": "^3.60.0",
+    "phaser-navmesh": "^2.3.1",
+    "pixel-borders": "^1.1.4"
+  },
+  "devDependencies": {
+    "node-sass": "^8.0.0"
+  }
+}

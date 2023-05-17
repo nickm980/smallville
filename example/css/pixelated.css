@@ -1,0 +1,21 @@
+:root {
+  --button-color: #02e4fd;
+  --button-color-secondary: #02d0e7;
+}
+
+.nes-btn {
+  color: white;
+  border: 0;
+  position: relative;
+  background-color: var(--button-color);
+  box-shadow: inset -4px -4px rgba(63, 63, 63, 0.25);
+  width: fit-content;
+  padding: 1em;
+  cursor: pointer;
+  border: 3px solid black;
+} 
+
+.nes-btn:hover {
+  box-shadow: inset -5px -5px rgba(63, 63, 63, 0.25);
+  background-color: var(--button-color-secondary);
+}

@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#autocomplete {
+    z-index: 1;
+    color: grey;
+    padding: 1em;
+    font-family: sans-serif;
+    font-size: 16px;
+    position: absolute;
+    top: 0;
+}
+
+input {
+    font-size: 16px;
+
+    font-family: sans-serif;
+
+    background-color: black;
+    color: white;
+    border: none;
+    width: min(768px, 100%);
+    padding: 1em;
+}
+
+.count,
+span.title,
+button,
+textarea {
+    font-family: 'Press Start 2P', sans-serif;
+}
+
+.count {
+    width: 40px;
+}
+
+canvas {
+    display: block;
+}
+
+canvas:hover {
+    cursor: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABFklEQVRYR9WXURLDIAhE6/0PbSdOtUpcd1Gnpv1KGpTHBpCE1/cXq+vrMph7dGvXZTtpfW10DCA5jrH1H0Jhs5E0hnZdCR+vb5S8Nn8mQCeS9BdSalYJqMBjAGzq59xAESN7VFVUgV8AZB/dZBR7QTFDCqGquvUBVVoEtgIwpQRzmANSFHgWQKExHdIrPeuMvQNDarXe6nC/AutgV3JW+6bgqQLeV8FekRtgV+ToDKEKnACYKsfZjjkam7a0ZpYTytwmgainpC3HvwBocgKOxqRjehoR9DFKNFYtOwCGYCszobeCbl26N6yyQ6g8X/Wex/rBPsNEV6qAMaJPMynIHQCoSqS9JSMmwef51LflTgCRszU7DvAGiV6mHWfsaVUAAAAASUVORK5CYII=), auto;
+}
+
+.container {
+    padding: 1em;
+    margin: 0 auto;
+    display: flex;
+    gap: 1em;
+    flex-wrap: wrap;
+}
+
+p {
+    font-family: sans-serif;
+}
+
+button {
+    cursor: pointer;
+}
+
+#game {
+    flex: 1;
+    flex-basis: 50%;
+}
+
+textarea {
+    resize: none;
+    padding: 1em;
+    border: 3px solid black;
+    flex-grow: 1;
+    flex-basis: 100%;
+    font-weight: bold;
+    font-family: '';
+}
+.options {
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+#debug {
+    position: absolute;
+    z-index: 1;
+    background-color: black;
+    padding: 1em;
+    right: 0;
+    top: 0;
+    color: white;
+    max-width: min(500px, 50%);
+    width: 100%;
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Smallville | An opensource project to create custom generative agents</title>
+    <script>
+        if (/Mobi/.test(navigator.userAgent)) {
+            window.location.href = "mobile.html";
+        }
+    </script>
+    <link rel="stylesheet" href="css/pixelated.css">
+    <link rel="stylesheet" href="css/main.css">
+
+    <script src="javascript/phaser.min.js"></script>
+</head>
+
+<body>
+    <div class="options">
+        <button class="nes-btn" id="smallville--next">Update State (1 min)</button>
+    </div>
+    <div id="debug">
+        <p>Debug Info</p>
+        <p>Mouse Coords <span id="smallville--debug-mouse">(0, 0)</span></p>
+    </div>
+
+    <script type="module" src="javascript/game.js"></script>
+    <script type="module" src="javascript/smallville.js"></script>
+    <script type="module" src="javascript/commands.js"></script>
+</body>
+
+</html>
