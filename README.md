@@ -14,7 +14,7 @@ Generative Agents save time programming interactions by hand and make NPC's more
 4. Start the server and let your generative agent run in your game.
 
 ## Getting Started
-
+Visit the package on npm https://www.npmjs.com/package/smallville
 ### Install the necessary files
 
 Start a new javascript project
