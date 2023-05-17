@@ -10,7 +10,7 @@ public final class Settings {
     }
 
     public final static TokenUsage TOKEN_USAGE = TokenUsage.LOW;
-    private static String API_KEY = "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";
+    private static String API_KEY;
 
     public static void setApiKey(String key) {
 	API_KEY = key;
