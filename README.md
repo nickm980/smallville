@@ -1,6 +1,6 @@
 # Smallville [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)]([https://opensource.org/licenses/MIT](https://github.com/nickm980/towny/blob/main/LICENSE)) [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/nickm980/smallville/issues)
 
-Create your own generative agent simulations for RPG games or research
+My attempt at creating generative agent simulations for RPG games or research
 
 ## What are Generative Agents?
 Generative agents are virtual characters that can learn and adapt to their environment. Using LLM models such as ChatGPT or StableLM, agents are able to observe their surroundings, store memories, and react to state changes in the world
