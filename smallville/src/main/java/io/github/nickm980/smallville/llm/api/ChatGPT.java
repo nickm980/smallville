@@ -1,6 +1,7 @@
 package io.github.nickm980.smallville.llm.api;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,11 @@ public class ChatGPT implements LLM {
     // ["choices"]["message"]["content"]
     @Override
     public String sendChat(Prompt prompt, double temperature) {
-	OkHttpClient client = new OkHttpClient();
+	OkHttpClient client = new OkHttpClient.Builder()
+	    .connectTimeout(30, TimeUnit.SECONDS)
+	    .writeTimeout(30, TimeUnit.SECONDS)
+	    .readTimeout(30, TimeUnit.SECONDS)
+	    .build();
 
 	String json = """
 		{
