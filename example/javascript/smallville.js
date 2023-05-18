@@ -24,10 +24,7 @@ async function startSimulation() {
      * Create locations and stateful objects *
      *                                       *
      *****************************************/
-    await smallville.createLocation({ name: 'Red House', })
-
     await smallville.createLocation({
-        parent: 'Red House',
         name: 'Kitchen',
     })
 
@@ -49,10 +46,11 @@ async function startSimulation() {
      *                              *
      ********************************/
     agents.forEach(async (agent) => {
+        console.log(agent)
         await smallville.createAgent({
             name: agent.name,
-            location: agent.location,
-            activity: agent.activity,
+            location: 'Kitchen',
+            activity: agent.activity || "Cleaning the kitchen",
             memories: [
                 "John is nice and he lives in the Red House",
             ]
@@ -65,6 +63,3 @@ document.getElementById("smallville--next").addEventListener('click', function (
     smallville.updateState()
 });
 
-alert(document.getElementById("smallville--next"))
-
-console.log("!111")
