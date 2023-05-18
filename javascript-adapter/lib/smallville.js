@@ -118,7 +118,7 @@ class Smallville {
     */
     async createAgent({ name, memories, location, activity }) {
         const url = `${this.host}/agents`
-        const response = await fetch(url, {
+        await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -144,7 +144,7 @@ class Smallville {
      * @returns {Promise<Boolean>} - Whether or not the creation was succesful
     */
     async createObject({ parent, name, state }) {
-        const url = `${this.host}/locations`
+        const url = `${this.host}/objects`
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -164,11 +164,10 @@ class Smallville {
      * Creates a new location with the given name, description and state.
      * 
      * @param {Object} options - Location information
-     * @param {?string} options.parent - Parent location
      * @param {string} options.name - The name of the location.
      * @returns {Promise<Boolean>} - Whether or not the creation was succesful
     */
-    async createLocation({ parent, name }) {
+    async createLocation({ name }) {
         const url = `${this.host}/locations`
         const response = await fetch(url, {
             method: 'POST',
@@ -176,7 +175,6 @@ class Smallville {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                parent: parent,
                 name: name,
             })
         })
@@ -195,7 +193,7 @@ class Smallville {
     async updateState() {
         const url = `${this.host}/state`
         const response = await fetch(url, {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             }
