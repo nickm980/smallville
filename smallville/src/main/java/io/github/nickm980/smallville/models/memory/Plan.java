@@ -18,20 +18,14 @@ import io.github.nickm980.smallville.models.NaturalLanguageConvertible;
 public class Plan extends Memory implements TemporalMemory, NaturalLanguageConvertible {
 
     private final LocalDateTime time;
-    private final Duration duration;
 
-    public Plan(String description, LocalDateTime time, Duration duration) {
+    public Plan(String description, LocalDateTime time) {
 	super(description);
 	this.time = time;
-	this.duration = duration;
     }
 
     public LocalDateTime getTime() {
 	return time;
-    }
-
-    public Duration getDuration() {
-	return duration;
     }
 
     @Override
@@ -46,6 +40,6 @@ public class Plan extends Memory implements TemporalMemory, NaturalLanguageConve
 
     @Override
     public String asNaturalLanguage() {
-	return getDescription() + " for " + duration.getSeconds() / 60 + " minutes starting at " + time.toString();
+	return getDescription();
     }
 }

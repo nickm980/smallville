@@ -24,6 +24,7 @@ import io.github.nickm980.smallville.llm.PromptService;
 import io.github.nickm980.smallville.llm.TimePhrase;
 import io.github.nickm980.smallville.llm.api.LLM;
 import io.github.nickm980.smallville.llm.response.CurrentPlan;
+import io.github.nickm980.smallville.llm.response.ObjectChangeResponse;
 import io.github.nickm980.smallville.llm.response.Reaction;
 import io.github.nickm980.smallville.models.ActionHistory;
 import io.github.nickm980.smallville.models.Agent;
@@ -177,27 +178,38 @@ public class ChatService {
 	return chat.sendChat(prompt, .5);
     }
 
-    private static List<Plan> parsePlans(String input) {
+    public List<Plan> parsePlans(String input) {
 	List<Plan> plans = new ArrayList<>();
 
-	Pattern pattern = Pattern.compile("([0-9]+)\\. (.+) from ([0-9]+:[0-9]+ [AP]M) to ([0-9]+:[0-9]+ [AP]M)");
-	Matcher matcher = pattern.matcher(input);
+	String[] lines = input.split("\n");
 
-	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+	for (String line : lines) {
+	    String[] splitPlan = line.split("\\d+", 2); // split after first number
 
-	while (matcher.find()) {
-	    LOG.info("matched");
-	    String description = matcher.group(2);
-	    LocalTime startTime = LocalTime.parse(matcher.group(3), formatter);
-	    LocalTime endTime = LocalTime.parse(matcher.group(4), formatter);
-	    Duration duration = Duration.between(startTime, endTime);
-	    plans.add(new Plan(description, LocalDateTime.of(LocalDate.now(), startTime), duration));
+	    if (splitPlan.length == 1) {
+		continue;
+	    }
+
+	    int index = input.indexOf(splitPlan[1]) - 2;
+
+	    if (index == -1) {
+		LOG.warn("Skipping a plan");
+		continue;
+	    }
+
+	    String time = input.substring(index, index + 8).trim();
+
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+	    LocalDateTime start = LocalDateTime.of(LocalDate.now(), LocalTime.parse(time, formatter));
+
+	    Plan plan = new Plan(line, start);
+	    plans.add(plan);
 	}
 
 	return plans;
     }
 
-    public SimulatedObject[] getObjectsChangedBy(Agent agent) {
+    public ObjectChangeResponse[] getObjectsChangedBy(Agent agent) {
 	Prompt tensesPrompt = new PromptBuilder().withAgent(agent).createPastAndPresent().build();
 	String tenses = chat.sendChat(tensesPrompt, .1);
 
@@ -208,7 +220,18 @@ public class ChatService {
 	    .build();
 
 	String response = chat.sendChat(changedPrompt, .3);
-	LOG.info(response);
-	return new SimulatedObject[0];
+
+	String[] lines = response.split("\n");
+	ObjectChangeResponse[] objects = new ObjectChangeResponse[lines.length];
+
+	for (int i = 0; i < lines.length; i++) {
+	    String line = lines[i];
+	    String[] parts = line.split(": ");
+	    String item = parts[0].trim();
+	    String value = parts[1].trim();
+	    objects[i] = new ObjectChangeResponse(item, value);
+	}
+
+	return objects;
     }
 }

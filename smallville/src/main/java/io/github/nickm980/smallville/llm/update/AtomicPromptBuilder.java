@@ -8,8 +8,6 @@ import java.util.stream.Collectors;
 
 import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.Location;
-import io.github.nickm980.smallville.models.SimulatedLocation;
-import io.github.nickm980.smallville.models.SimulatedObject;
 import io.github.nickm980.smallville.models.NaturalLanguageConvertible;
 import io.github.nickm980.smallville.models.memory.Characteristic;
 import io.github.nickm980.smallville.models.memory.Memory;
@@ -64,7 +62,7 @@ public class AtomicPromptBuilder {
      */
     public String getAgentSummaryDescription(Agent person) {
 	var prompt = """
-		You are the AI behind the NPC character %name%
+		Pretend you are %name%
 
 		Name: %name%
 		Description: %description%

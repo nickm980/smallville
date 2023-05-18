@@ -70,50 +70,16 @@ public class PromptBuilder implements IPromptBuilder {
     }
 
     @Override
-    public PromptBuilder createAgentLocationStatePrompt(String pastAndPresentStatus) {
-	prompt = """
-		All objects in the world: %objects%
-
-		John's status: %status%
-
-		What happens to the state of the objects?
-
-		For example, if a door turns from closed to open respond with
-		{
-		    "object": "door",
-		    "state": "open"
-		}
-
-		[
-		 {
-		    "object": "<fill in>",
-		    "state": "<fill in>"
-		 },
-		 {
-		    "object": "<fill in>",
-		    "state": "<fill in>"
-		 }
-		]
-		""";
-
-	prompt = prompt.replace("%objects%", atomicBuilder.asNaturalLanguage(data.getLocations()));
-	prompt = prompt.replace("%status%", pastAndPresentStatus);
-
-	return this;
-    }
-
-    @Override
     public PromptBuilder createReactionSuggestion(String observation) {
 	prompt = """
 		[World Description]
 		[Agent Summary Description]
-		John Lin’s status: %current_activity%
+		[Agent Name]’s status: %current_activity%
 		Observation: %observation%
 		Summary of relevant context from [Agent Name]’s memory: %relevant_memories%
 
 		Should [Agent Name] react to the observation, and if so, what would the reaction be?
 
-		* If the reaction is to start a conversation set the conservation field to true
 		* Prefer to stay in a close by area
 
 		Respond in the following JSON format:
@@ -139,7 +105,6 @@ public class PromptBuilder implements IPromptBuilder {
 	prompt = """
 		[World Description]
 		[Agent Summary Description]
-		[Future Plans]
 
 		What are you doing now? You will always be engaged in an activity.
 		For last_activity fill in the past tense of this sentence: [Current Activity]
@@ -181,16 +146,17 @@ public class PromptBuilder implements IPromptBuilder {
     public PromptBuilder createFuturePlansPrompt(TimePhrase time) {
 	this.prompt = """
 		[Agent Summary Description]
-		Based on what you know and the current time, guess what [Agent Name] will do for the rest of the day
+		Based on what you know and the current time, guess what [Agent Name] (you) will do for the rest of the day
 
+		When responding with a time, use the format "hh:mm a
 		For example:
-		1. Walk to the school from 9am-9:30am
-		2. Take a test from 12pm-12:30pm
-		3. Go to lunch from 2pm-3pm
-		4. Work on a project after school from 2:30pm-3pm
-		5. Have dinner from 5pm to 5:30pm
+		- Walk to the school from 9:00 AM - 9:30 PM
+		- Take a test from 12:00 PM - 12:30 PM
+		- Go to lunch from 2:00 PM - 3:00 PM
+		- Work on a project after school from 2:30 PM - 3:00 PM
+		- Have dinner from 5:00 PM to 5:30 PM
 
-		Respond using a bullet list of 5 activities and times. Do not use pronouns.
+		Respond using a list of activities and times. Do not use pronouns.
 					""";
 
 	return this;
@@ -216,8 +182,8 @@ public class PromptBuilder implements IPromptBuilder {
 
     public PromptBuilder createPastAndPresent() {
 	prompt = """
-		  John Lin's current status: [Current Activity]
-		  John Lin's past status: [Last Activity]
+		  [Agent Name]'s current status: [Current Activity]
+		  [Agent Name]'s past status: [Last Activity]
 
 		  Format the current and past activity to say x is no longer {past status} and is now {current status}
 		""";
@@ -248,19 +214,23 @@ public class PromptBuilder implements IPromptBuilder {
     public PromptBuilder createObjectUpdates(String tenses) {
 	prompt = """
 		[World Description]
-		Description: %tenses%
+
+		%tenses%
 
 		What are the new states of the locations?
 		Respond in the following format:
 
 		<Object>: <State>
 
-		For example, if John is no longer cooking coffee and is now taking a shower
+		For example, if you are no longer cooking coffee and are now taking a shower
 		Coffee Machine: Off
 		Shower: On
 
 		Do not include locations which have not been changed.
 		""";
+
+	// tenses is "<name> is no longer <past activity> and is now <current activity>"
+	prompt = prompt.replace("%tenses%", tenses);
 	return this;
     }
 }

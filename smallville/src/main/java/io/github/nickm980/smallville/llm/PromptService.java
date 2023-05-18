@@ -48,8 +48,7 @@ public class PromptService {
 	    .setNext(new UpdateFuturePlans())
 	    .setNext(new UpdateCurrentActivity())
 	    .setNext(new UpdateMemoryWeights())
-	    .setNext(new UpdateLocations())
-	    .setNext(new UpdateConversation());
+	    .setNext(new UpdateLocations());
 
 	update.start(chatService, world, agent);
     }

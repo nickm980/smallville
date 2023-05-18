@@ -20,7 +20,7 @@ public class SentenceTokenizer {
      * 
      * @param text
      */
-    public void getNamedEntities(String text) {
+    public String getNamedEntities(String text) {
 	Properties props = new Properties();
 	props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner");
 	StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
@@ -54,9 +54,23 @@ public class SentenceTokenizer {
 		}
 	    }
 	}
+
+	return sb.toString();
     }
 
     public String extractName(String observation) {
-	return null;
+	String input = getNamedEntities(observation);
+
+	String[] lines = input.split("\n");
+	String result = null;
+
+	for (int i = lines.length - 1; i >= 0; i--) {
+	    if (lines[i].startsWith("Name:")) {
+		result = lines[i].substring(6).trim();
+		break;
+	    }
+	}
+
+	return result;
     }
 }

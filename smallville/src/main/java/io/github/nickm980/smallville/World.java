@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.github.nickm980.smallville.exceptions.LocationNotFoundException;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
 import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.Conversation;
@@ -109,12 +110,6 @@ public class World {
 	locations.add(location);
     }
 
-    public void saveAll(SimulatedLocation... locs) {
-	for (SimulatedLocation location : locs) {
-	    locations.add(location);
-	}
-    }
-
     public List<Agent> getAgents() {
 	return persons;
     }
@@ -188,14 +183,32 @@ public class World {
 	return conversations.stream().filter(conversation -> conversation.createdAt().compareTo(time) < 0).toList();
     }
 
-    public void updateAll(SimulatedObject[] a) {
-	for (SimulatedObject b : objects) {
-	    for (SimulatedObject updated : a) {
-		if (b.getName().equals(updated.getName())) {
-		    b.setState(updated.getState());
-		}
-	    }
-	}
+    /**
+     * Get the exact Simulated Object given a parent
+     * 
+     * @param location String formatted as Parent: Object
+     * @return
+     */
+    public SimulatedObject getExactLocation(String location) {
+	String[] parts = location.split(":");
+
+	String locationName = parts[0].trim();
+	String objectName = parts[1].trim();
+
+	SimulatedLocation loc = (SimulatedLocation) getLocation(locationName)
+	    .orElseThrow(() -> new LocationNotFoundException(locationName));
+
+	SimulatedObject object = loc.getObject(objectName).orElseThrow(() -> new LocationNotFoundException(objectName));
+
+	return object;
+    }
+
+    public SimulatedObject getObjectByName(String name) {
+	return objects.stream().filter(obj -> obj.getName().equals(name)).findFirst().orElse(null);
+    }
+
+    public void changeObject(String object, String state) {
+	SimulatedObject obj = getObjectByName(object);
     }
 
 }

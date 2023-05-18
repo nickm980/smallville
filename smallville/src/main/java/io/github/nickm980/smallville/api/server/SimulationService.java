@@ -23,7 +23,6 @@ import io.github.nickm980.smallville.llm.api.LLM;
 import io.github.nickm980.smallville.models.AccessTime;
 import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.Conversation;
-import io.github.nickm980.smallville.models.Location;
 import io.github.nickm980.smallville.models.ObjectState;
 import io.github.nickm980.smallville.models.SimulatedLocation;
 import io.github.nickm980.smallville.models.SimulatedObject;

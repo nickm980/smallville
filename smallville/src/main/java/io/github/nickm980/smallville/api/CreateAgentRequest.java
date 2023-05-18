@@ -4,7 +4,7 @@ import java.util.List;
 
 public class CreateAgentRequest {
     private String name;
-    private String[] memories;
+    private List<String> memories;
     private String activity;
     private String location;
 
@@ -17,7 +17,7 @@ public class CreateAgentRequest {
     }
 
     public List<String> getMemories() {
-	return List.of(memories);
+	return memories;
     }
 
     public String getActivity() {
@@ -36,7 +36,7 @@ public class CreateAgentRequest {
 	this.location = location;
     }
 
-    public void setMemories(String[] memories) {
+    public void setMemories(List<String> memories) {
 	this.memories = memories;
     }
 }

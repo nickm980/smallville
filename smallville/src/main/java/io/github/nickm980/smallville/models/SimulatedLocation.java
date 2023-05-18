@@ -2,6 +2,7 @@ package io.github.nickm980.smallville.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class SimulatedLocation implements NaturalLanguageConvertible, Location {
 
@@ -54,5 +55,9 @@ public class SimulatedLocation implements NaturalLanguageConvertible, Location {
 	}
 
 	return objects;
+    }
+
+    public Optional<SimulatedObject> getObject(String objectName) {
+	return getObjects().stream().filter(obj -> obj.getName().equals(objectName)).findFirst();
     }
 }

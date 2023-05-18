@@ -95,13 +95,4 @@ public interface IPromptBuilder {
      * @return the prompt builder instance
      */
     PromptBuilder createAskQuestionPrompt(String question);
-
-    /**
-     * 
-     * @param pastAndPresentStatus - A sentence telling what the agent's last
-     *                             activity was and the state of the object it was
-     *                             on and what the agent is doing now
-     * @return the prompt builder instance
-     */
-    PromptBuilder createAgentLocationStatePrompt(String pastAndPresentStatus);
 }
