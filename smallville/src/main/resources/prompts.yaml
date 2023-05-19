@@ -57,7 +57,7 @@ createFuturePlansPrompt: |
   [Agent Summary Description]
   Based on what you know and the current time, guess what [Agent Name] (you) will do for the rest of the day
 
-  Use the future tense. When responding with a time, use the format "hh:mm a
+  Use the future tense. When responding with a time, use the format "hh:mm a"
   
   For example:
   - Will walk to the school from 9:00 AM - 9:30 AM
