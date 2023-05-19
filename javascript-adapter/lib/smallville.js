@@ -118,7 +118,7 @@ class Smallville {
     */
     async createAgent({ name, memories, location, activity }) {
         const url = `${this.host}/agents`
-        await fetch(url, {
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -131,6 +131,8 @@ class Smallville {
             })
         })
 
+        const json = await response.json()
+        console.log(json)
         return true
     }
 
@@ -156,7 +158,8 @@ class Smallville {
                 state: state
             })
         })
-
+        const json = await response.json()
+        console.log(json)
         return true
     }
 
@@ -179,6 +182,9 @@ class Smallville {
             })
         })
 
+        const json = await response.json()
+        console.log(json)
+
         return true
     }
 
@@ -192,7 +198,6 @@ class Smallville {
     */
     async updateState() {
         const url = `${this.host}/state`
-        console.log("RESPONSE SENDING")
 
         const response = await fetch(url, {
             method: 'POST',
@@ -200,7 +205,7 @@ class Smallville {
                 'Content-Type': 'application/json'
             }
         })
-        
+
         const json = await response.json()
 
         this.stateHandler(json)
