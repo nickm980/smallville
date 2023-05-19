@@ -28,14 +28,9 @@ const sim = new Smallville({
         host: "http://localhost:8080", // host of the server
         stateHandler: function(state) {
                 //in here you would update the location of the agent using your own pathfinding algorithm
-                const currentLocation = state.agents[0].getCurrentLocation()
-                const newLocation = state.agents[0].getNextLocation()
-                const emoji = state.agents[0].getEmoji()
-                const activity = state.agents[0].getCurrentActivity()
-                
-                const updatedLocations = state.locations;
-                
-                const conversations = state.conversations;
+                const agents = state.agents
+                const objects = state.locations
+                const conversations = state.conversations
                 
                 console.log('[State Change]: The simulation has been updated')
     },
