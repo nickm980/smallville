@@ -6,6 +6,13 @@ console.log(Smallville)
 const smallville = new Smallville({
     host: 'http://localhost:8080',
     stateHandler: (state) => {
+        console.log(state)
+        
+        if (state.agents == undefined){
+            console.log("No agents found")
+            return
+        }
+
         state.agents.forEach(agent => {
             updateAgent(agent.name, agent.location, agent.currentActivity, agent.emoji)
         })
@@ -14,7 +21,7 @@ const smallville = new Smallville({
 
 const successful = await smallville.init()
 
-if (successful){
+if (successful) {
     startSimulation()
 }
 
@@ -50,10 +57,8 @@ async function startSimulation() {
         await smallville.createAgent({
             name: agent.name,
             location: 'Kitchen',
-            activity: agent.activity || "Cleaning the kitchen",
-            memories: [
-                "John is nice and he lives in the Red House",
-            ]
+            activity: agent.activity,
+            memories: agent.memories
         })
     })
 }

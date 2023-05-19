@@ -17,15 +17,18 @@ class Agent {
      *
      * @constructor
      * @param {string} name - The name of the agent.
+     * @param {string} activity - The name of the agent.
+     * @param {string[]} memories - The name of the agent.
      * @param {Phaser.GameObjects.Sprite} agent - The Phaser sprite representing the agent.
      * @param {Phaser.GameObjects.Text} text - The Phaser text object displaying the agent's name and text.
      */
-    constructor(name, agent, text) {
+    constructor(name, agent, text, activity, memories) {
         this.name = name
         this.agent = agent
         this.text = text
         this.emoji = "😀"
-        this.activity = ""
+        this.activity = activity
+        this.memories = memories
     }
 
     moveTo(locationName) {
@@ -46,10 +49,12 @@ class Agent {
 
     setEmoji(emoji) {
         this.emoji = emoji
+        this.say(activity + " " + emoji)
     }
 
     setActivity(activity) {
         this.activity = activity
+        this.say(activity + " " + emoji)
     }
 
     getAgent() {
@@ -84,8 +89,9 @@ function updateAgent({ name, location, activity, emoji }) {
  *   @param {string} options.name - The name of the agent.
  *   @param {string} options.location - The location of the agent.
  *   @param {string} options.activity - The activity of the agent.
+ *   @param {string[]} options.memories - The memories of the agent.
  */
-function createAgent({ scene, name, location, activity }) {
+function createAgent({ scene, name, location, activity, memories }) {
     const coords = getCoordinates(location)
     const player = scene.add.sprite(coords.x, coords.y, 'player');
     player.frame = 28
@@ -94,9 +100,10 @@ function createAgent({ scene, name, location, activity }) {
     text.setStyle({ backgroundColor: '#111111' });
     text.setOrigin(.5);
 
-    const agent = new Agent(name, player, text)
+    const agent = new Agent(name, player, text, activity, memories)
     agents.push(agent)
     player.play('idle');
+    
     console.log("Created a new agent " + name)
 }
 

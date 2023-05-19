@@ -45,9 +45,30 @@ function create() {
    enableCameraControlls(game, this);
    loadTilemap(this);
    loadAnimations(this)
-   createAgent({ scene: this, name: "Agent #1", location: "Red House", activity: "Gardening plants" })
-   createAgent({ scene: this, name: "Agent #2", location: "Campfire", activity: "Sitting by campfire" })
-   moveAgent({ name: "Agent #1", location: "Green House" })
+   createAgent({
+      scene: this,
+      name: "Josh",
+      location: "Red House",
+      activity: "Gardening plants",
+      memories: [
+         "Son of Medina",
+         "Hates to cook",
+         "Still in school"
+      ]
+   })
+
+   createAgent({
+      scene: this,
+      name: "Medina",
+      location: "Campfire",
+      activity: "Getting ready for dinner",
+      memories: [
+         "Mom of Josh",
+         "Loves to cook"
+      ]
+   })
+   
+   moveAgent({ name: "Medina", location: "Green House" })
 }
 
 export { moveAgent }
