@@ -192,16 +192,18 @@ class Smallville {
     */
     async updateState() {
         const url = `${this.host}/state`
+        console.log("RESPONSE SENDING")
+
         const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             }
         })
-
+        
         const json = await response.json()
 
-        this.stateHandler.call(json)
+        this.stateHandler(json)
 
         return json
     }
