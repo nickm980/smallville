@@ -48,7 +48,7 @@ sim.createLocation({
    name: 'Barn',
 })
 
-sim.createLocation({
+sim.createObject({
    name: 'Hay Pile',
    parent: 'Barn',
    state: 'Full'  
