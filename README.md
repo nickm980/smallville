@@ -7,12 +7,6 @@ Generative agents are virtual characters that can learn and adapt to their envir
 
 Generative Agents save time programming interactions by hand and make NPC's more realistic / dynamic
 
-## How to Use Generative Agents Server
-1. Download and install the Java server.
-2. Use the JavaScript SDK to create your own generative agent.
-3. Connect your generative agent to the server.
-4. Start the server and let your generative agent run in your game.
-
 ## Getting Started
 Visit the package on npm https://www.npmjs.com/package/smallville
 ### Install the necessary files
@@ -28,7 +22,7 @@ npm i smallville
 Download the compiled jar from releases
 
 ### Start writing code
-Create new agents (as seen in the example project) [example project](/example/javascript/smallville.js)
+Create new agents (as in the example project) [example project](/example/javascript/smallville.js)
 ```javascript
 const sim = new Smallville({
         host: "http://localhost:8080", // host of the server
@@ -52,13 +46,11 @@ Create new location trees
 ```javascript
 sim.createLocation({
    name: 'Barn',
-   description: 'An empty barn'
 })
 
 sim.createLocation({
    name: 'Hay Pile',
    parent: 'Barn',
-   description: 'A hay pile',
    state: 'Full'  
 })
 ```
@@ -67,7 +59,8 @@ Add new agents and initialize their memory stream with starting memories
 ```javascript
 sim.createAgent({
   name: 'John',
-  location: 'Barn: Hay Pile',
+  location: 'Hay Pile',
+  activity: 'Stacking hay on the hay pile',
   memories: [
     "John is a farmer at the Barn",
     "John is a nice and outgoing person"
@@ -76,9 +69,9 @@ sim.createAgent({
 ```
 Increment the time clock. The simulation will get the current time and update the agents state
 ```javascript
-sim.next();
+sim.updateState();
 ```
-Keep calling sim.next whenever you want to update the simulation step
+Keep calling sim.updateState whenever you want to update the simulation step
 
 To add new observations to the agent which they will prompt a reaction to use the following method
 ```javascript
@@ -91,14 +84,7 @@ For observatonal purposes, you can also ask an agent a question which will use t
 sim.askQuestion("John", "What do you do in your free time")
 ```
 
-This will not store the question in the agents memory unless you call `sim.addObservation()`
-
-Furthermore, locations should be given as a full tree. ex) 
-```javascript
-location: "Island: Red House: desk"
-```
-
-And the leaf node (in this example desk), should have a state, although it is not necessary. Adding states to leaf locations enables the agents to interact with the world. To get the leaf location and move the agent to the location you can use our utility function `getLeafLocation(location)` or make your own method.
+Asking an agent a question will not create a new memory unless called with `sim.addObservation()`
 
 ## Running the server
 Running the Server
@@ -108,12 +94,12 @@ Run the following command in the same directory as your jar file downloaded from
 ```
 java -jar smallville-server.jar --api-key <OPEN_AI_KEY> --port 8080
 ```
-The server will start on the default port 8080 unless specified otherwise
+The server will start on the default port 8080 unless specified otherwise. The dashboard which shows the memory stream, current activities, locations, and emojis of all available agents is found at http://localhost:8080/dashboard
 
 ## Example
 ![image](https://user-images.githubusercontent.com/81270095/233894690-97aedf01-7b20-4c8d-a48c-e234fdc0f4bf.png)
 
-The example is under the example directory. Start a node server on that port and run the java server to start the simulation. This example isn't finished yet but is a basic example of how to get started.
+The example is under the example directory. This example isn't finished yet but is a basic example of how to get started.
 [example javascript project](/example)
 
 ## TODO:
