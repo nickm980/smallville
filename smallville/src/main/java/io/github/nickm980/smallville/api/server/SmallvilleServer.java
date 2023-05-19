@@ -17,7 +17,7 @@ import io.github.nickm980.smallville.api.CreateLocationRequest;
 import io.github.nickm980.smallville.api.CreateMemoryRequest;
 import io.github.nickm980.smallville.api.CreateObjectRequest;
 import io.github.nickm980.smallville.api.LocationStateResponse;
-import io.github.nickm980.smallville.llm.api.LLM;
+import io.github.nickm980.smallville.llm.LLM;
 import io.javalin.Javalin;
 
 public class SmallvilleServer {
@@ -97,7 +97,8 @@ public class SmallvilleServer {
 		.check((req) -> exists(req.getName()), "{name} cannot be missing")
 		.check((req) -> exists(req.getActivity()), "{activity} cannot be missing")
 		.check((req) -> exists(req.getLocation()), "{location} cannot be missing")
-		.check((req) -> !req.getMemories().isEmpty(), "{memories} cannot be missing")
+		.check((req) -> req.getMemories() != null && !req.getMemories().isEmpty(),
+			"{memories} cannot be missing")
 		.get();
 
 	    service.createPerson(request);

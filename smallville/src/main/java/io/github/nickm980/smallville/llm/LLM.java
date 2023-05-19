@@ -1,6 +1,6 @@
-package io.github.nickm980.smallville.llm.api;
+package io.github.nickm980.smallville.llm;
 
-import io.github.nickm980.smallville.llm.Prompt;
+import io.github.nickm980.smallville.prompts.Prompt;
 
 public interface LLM {
 

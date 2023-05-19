@@ -2,7 +2,7 @@ package io.github.nickm980.smallville;
 
 import org.junit.Test;
 
-import io.github.nickm980.smallville.llm.api.ChatGPT;
+import io.github.nickm980.smallville.llm.ChatGPT;
 import io.github.nickm980.smallville.llm.update.ChatService;
 
 public class Parsing {

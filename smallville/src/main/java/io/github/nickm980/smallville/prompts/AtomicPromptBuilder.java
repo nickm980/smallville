@@ -1,4 +1,4 @@
-package io.github.nickm980.smallville.llm.update;
+package io.github.nickm980.smallville.prompts;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.Location;
 import io.github.nickm980.smallville.models.NaturalLanguageConvertible;
+import io.github.nickm980.smallville.models.SimulatedObject;
 import io.github.nickm980.smallville.models.memory.Characteristic;
 import io.github.nickm980.smallville.models.memory.Memory;
 
@@ -42,7 +43,11 @@ public class AtomicPromptBuilder {
 	var prompt = "Only use the following locations in your answer: ";
 
 	for (Location location : list) {
-	    prompt += location.asNaturalLanguage() + "; ";
+	    if (location instanceof SimulatedObject) {
+		prompt += location.getName() + "; ";
+	    } else {
+		prompt += location.asNaturalLanguage() + "; ";
+	    }
 	}
 
 	return prompt;

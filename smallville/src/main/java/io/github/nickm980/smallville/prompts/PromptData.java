@@ -1,4 +1,4 @@
-package io.github.nickm980.smallville.llm;
+package io.github.nickm980.smallville.prompts;
 
 import java.util.ArrayList;
 import java.util.List;

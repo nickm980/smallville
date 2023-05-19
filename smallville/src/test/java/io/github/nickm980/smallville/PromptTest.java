@@ -11,13 +11,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.github.nickm980.smallville.llm.Progress;
-import io.github.nickm980.smallville.llm.Prompt;
-import io.github.nickm980.smallville.llm.PromptService;
-import io.github.nickm980.smallville.llm.api.ChatGPT;
+import io.github.nickm980.smallville.llm.ChatGPT;
 import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.SimulatedLocation;
 import io.github.nickm980.smallville.models.memory.Characteristic;
+import io.github.nickm980.smallville.prompts.Prompt;
 
 public class PromptTest {
 
@@ -73,14 +71,5 @@ public class PromptTest {
 	assertEquals(dateTime.getHour(), 14);
 	assertEquals(dateTime.getMinute(), 30);
 	assertEquals(minutes, duration.getSeconds() / 60);
-    }
-
-    public void testUpdateAgent() {
-	Agent agent = sim.getAgents().get(0);
-
-	PromptService converter = new PromptService(new ChatGPT(), sim);
-	converter.updateAgent(agent);
-
-	System.out.println(agent);
     }
 }

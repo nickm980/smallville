@@ -7,7 +7,7 @@ import io.github.nickm980.smallville.models.memory.Plan;
 
 public class Agent {
 
-    private MemoryStream memories; // TODO: refactor into MemoryStream class
+    private MemoryStream memories;
     private String name;
     private ActionHistory currentAction;
     private SimulatedLocation location;

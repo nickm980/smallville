@@ -7,13 +7,15 @@ import org.slf4j.LoggerFactory;
 import com.beust.jcommander.JCommander;
 
 import io.github.nickm980.smallville.api.server.SmallvilleServer;
-import io.github.nickm980.smallville.llm.api.ChatGPT;
+import io.github.nickm980.smallville.config.CommandLineArgs;
+import io.github.nickm980.smallville.config.Config;
+import io.github.nickm980.smallville.llm.ChatGPT;
 
 public class Smallville {
 
     private static final Logger LOG = LoggerFactory.getLogger(Smallville.class);
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {	
 	CommandLineArgs jArgs = new CommandLineArgs();
 	JCommander commands = JCommander.newBuilder().addObject(jArgs).build();
 	commands.parse(args);

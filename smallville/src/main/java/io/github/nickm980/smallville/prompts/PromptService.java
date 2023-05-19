@@ -1,10 +1,11 @@
-package io.github.nickm980.smallville.llm;
+package io.github.nickm980.smallville.prompts;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.github.nickm980.smallville.World;
-import io.github.nickm980.smallville.llm.api.LLM;
+import io.github.nickm980.smallville.exceptions.SmallvilleException;
+import io.github.nickm980.smallville.llm.LLM;
 import io.github.nickm980.smallville.llm.update.AgentUpdate;
 import io.github.nickm980.smallville.llm.update.ChatService;
 import io.github.nickm980.smallville.llm.update.UpdateConversation;
@@ -27,8 +28,10 @@ public class PromptService {
     private final World world;
     private final ChatService chatService;
     private final Logger LOG = LoggerFactory.getLogger(PromptService.class);
+    private boolean updateInProgress;
 
     public PromptService(LLM chat, World world) {
+	this.updateInProgress = false;
 	this.world = world;
 	this.chatService = new ChatService(world, chat);
     }
@@ -44,6 +47,12 @@ public class PromptService {
     public void updateAgent(Agent agent) {
 	LOG.info("Starting update for " + agent.getFullName());
 
+	if (updateInProgress) {
+	    throw new SmallvilleException("Cannot update agetns at same time");
+	}
+
+	updateInProgress = true;
+
 	AgentUpdate update = new UpdateMemoryWeights()
 	    .setNext(new UpdateFuturePlans())
 	    .setNext(new UpdateCurrentActivity())
@@ -51,6 +60,9 @@ public class PromptService {
 	    .setNext(new UpdateLocations());
 
 	update.start(chatService, world, agent);
+
+	LOG.info("Agent updated");
+	updateInProgress = false;
     }
 
     /**
@@ -65,12 +77,21 @@ public class PromptService {
      * 
      */
     public void updateAgent(Agent agent, String observation) {
+	if (updateInProgress) {
+	    throw new SmallvilleException("Cannot update agetns at same time");
+	}
+
+	updateInProgress = true;
+
 	AgentUpdate updater = new UpdateMemoryWeights()
 	    .setNext(new UpdateReaction(observation))
 	    .setNext(new UpdateConversation(observation))
 	    .setNext(new UpdateMemoryWeights());
 
 	updater.start(chatService, world, agent);
+
+	LOG.info("Agent updated");
+	updateInProgress = false;
     }
 
     /**

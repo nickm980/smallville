@@ -1,4 +1,4 @@
-package io.github.nickm980.smallville;
+package io.github.nickm980.smallville.config;
 
 import com.beust.jcommander.Parameter;
 

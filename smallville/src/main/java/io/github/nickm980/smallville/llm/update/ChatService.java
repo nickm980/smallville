@@ -18,14 +18,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.github.nickm980.smallville.World;
-import io.github.nickm980.smallville.llm.Prompt;
-import io.github.nickm980.smallville.llm.PromptBuilder;
-import io.github.nickm980.smallville.llm.PromptService;
-import io.github.nickm980.smallville.llm.TimePhrase;
-import io.github.nickm980.smallville.llm.api.LLM;
-import io.github.nickm980.smallville.llm.response.CurrentPlan;
-import io.github.nickm980.smallville.llm.response.ObjectChangeResponse;
-import io.github.nickm980.smallville.llm.response.Reaction;
+import io.github.nickm980.smallville.llm.LLM;
 import io.github.nickm980.smallville.models.ActionHistory;
 import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.Conversation;
@@ -33,6 +26,13 @@ import io.github.nickm980.smallville.models.Dialog;
 import io.github.nickm980.smallville.models.SimulatedLocation;
 import io.github.nickm980.smallville.models.SimulatedObject;
 import io.github.nickm980.smallville.models.memory.Plan;
+import io.github.nickm980.smallville.prompts.Prompt;
+import io.github.nickm980.smallville.prompts.PromptBuilder;
+import io.github.nickm980.smallville.prompts.PromptService;
+import io.github.nickm980.smallville.prompts.TimePhrase;
+import io.github.nickm980.smallville.prompts.response.CurrentPlan;
+import io.github.nickm980.smallville.prompts.response.ObjectChangeResponse;
+import io.github.nickm980.smallville.prompts.response.Reaction;
 
 //TODO: rename this class to a better name. Its hard to tell what it does
 public class ChatService {

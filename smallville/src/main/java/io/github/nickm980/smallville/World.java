@@ -4,8 +4,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -62,12 +64,12 @@ public class World {
     private List<SimulatedLocation> locations;
     private List<SimulatedObject> objects;
     private List<Conversation> conversations;
-    private List<Agent> persons;
+    private Set<Agent> persons;
     private final Logger LOG = LoggerFactory.getLogger(World.class);
 
     public World() {
 	this.locations = new ArrayList<>();
-	this.persons = new ArrayList<>();
+	this.persons = new HashSet<>();
 	this.objects = new ArrayList<>();
 	this.conversations = new ArrayList<>();
     }
@@ -110,7 +112,7 @@ public class World {
 	locations.add(location);
     }
 
-    public List<Agent> getAgents() {
+    public Set<Agent> getAgents() {
 	return persons;
     }
 

@@ -3,6 +3,7 @@ package io.github.nickm980.smallville.api.server;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import io.github.nickm980.smallville.World;
@@ -18,8 +19,7 @@ import io.github.nickm980.smallville.api.ModelMapper;
 import io.github.nickm980.smallville.exceptions.AgentNotFoundException;
 import io.github.nickm980.smallville.exceptions.LocationNotFoundException;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
-import io.github.nickm980.smallville.llm.PromptService;
-import io.github.nickm980.smallville.llm.api.LLM;
+import io.github.nickm980.smallville.llm.LLM;
 import io.github.nickm980.smallville.models.AccessTime;
 import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.Conversation;
@@ -27,6 +27,7 @@ import io.github.nickm980.smallville.models.ObjectState;
 import io.github.nickm980.smallville.models.SimulatedLocation;
 import io.github.nickm980.smallville.models.SimulatedObject;
 import io.github.nickm980.smallville.models.memory.Characteristic;
+import io.github.nickm980.smallville.prompts.PromptService;
 
 public class SimulationService {
 
@@ -57,7 +58,7 @@ public class SimulationService {
     }
 
     public List<AgentStateResponse> getAgents() {
-	List<Agent> agents = world.getAgents();
+	Set<Agent> agents = world.getAgents();
 
 	return agents.stream().map(mapper::fromAgent).toList();
     }
@@ -92,9 +93,11 @@ public class SimulationService {
 
     public List<MemoryResponse> getMemories(String pathParam) {
 	List<MemoryResponse> result = world
-	    .getAgents()
+	    .getAgent(pathParam)
+	    .orElseThrow(() -> new AgentNotFoundException(pathParam))
+	    .getMemoryStream()
+	    .getMemories()
 	    .stream()
-	    .flatMap(agent -> agent.getMemoryStream().getMemories().stream())
 	    .map(mapper::fromMemory)
 	    .sorted(Comparator.comparing(MemoryResponse::getTime, Comparator.nullsLast(Comparator.naturalOrder())))
 	    .collect(Collectors.toList());

@@ -3,9 +3,9 @@ package io.github.nickm980.smallville.llm.update;
 import java.util.List;
 
 import io.github.nickm980.smallville.World;
-import io.github.nickm980.smallville.llm.TimePhrase;
 import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.memory.Plan;
+import io.github.nickm980.smallville.prompts.TimePhrase;
 
 public class UpdateFuturePlans extends AgentUpdate {
 

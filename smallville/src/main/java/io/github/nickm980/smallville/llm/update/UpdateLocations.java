@@ -1,8 +1,8 @@
 package io.github.nickm980.smallville.llm.update;
 
 import io.github.nickm980.smallville.World;
-import io.github.nickm980.smallville.llm.response.ObjectChangeResponse;
 import io.github.nickm980.smallville.models.Agent;
+import io.github.nickm980.smallville.prompts.response.ObjectChangeResponse;
 
 public class UpdateLocations extends AgentUpdate {
 

@@ -1,4 +1,4 @@
-package io.github.nickm980.smallville.llm.response;
+package io.github.nickm980.smallville.prompts.response;
 
 public class CurrentPlan {
     private String lastActivity;

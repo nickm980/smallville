@@ -1,4 +1,4 @@
-package io.github.nickm980.smallville.llm.api;
+package io.github.nickm980.smallville.llm;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.github.nickm980.smallville.Settings;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
-import io.github.nickm980.smallville.llm.Prompt;
+import io.github.nickm980.smallville.prompts.Prompt;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
