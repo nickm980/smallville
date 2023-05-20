@@ -63,6 +63,22 @@ class Smallville {
         this.host = host
         this.stateHandler = stateHandler
     }
+
+    /**
+     * Syncs the game with the server to preserve state when reloading the page
+    */
+    async sync(){
+        const response = await fetch(this.host + "/state", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+
+        const json = await response.json()
+        this.stateHandler(json)
+    }
+    
     /**
      * Checks if server is alive and sends requests until a response is received or after 10 attempts
      * 
