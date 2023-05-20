@@ -23,7 +23,6 @@ public class ChatGPT implements LLM {
     private final static Logger LOG = LoggerFactory.getLogger(ChatGPT.class);
     private final static ObjectMapper MAPPER = new ObjectMapper();
 
-    // ["choices"]["message"]["content"]
     @Override
     public String sendChat(Prompt prompt, double temperature) {
 	OkHttpClient client = new OkHttpClient.Builder()
@@ -52,7 +51,7 @@ public class ChatGPT implements LLM {
 	    e1.printStackTrace();
 	}
 
-	LOG.info(json);
+	LOG.debug(json);
 
 	RequestBody body = RequestBody.create(json.getBytes());
 	Request request = new Request.Builder()
@@ -76,7 +75,7 @@ public class ChatGPT implements LLM {
 		throw new SmallvilleException("Invalid api token or rate limit reached.");
 	    }
 
-	    LOG.info(responseBody.replace("\n", ""));
+	    LOG.debug(responseBody.replace("\n", ""));
 
 	    result = node.get("choices").get(0).get("message").get("content").asText();
 	} catch (IOException e) {

@@ -25,9 +25,6 @@ public class PromptTest {
     public static void setUp() {
 	sim = new World();
 	sim.save(new SimulatedLocation("red house"));
-	sim
-	    .save(new Agent("John", Arrays.asList(new Characteristic("John likes the red house")), "Likes architecture",
-		    new SimulatedLocation("red house")));
     }
 
     public void testChat() {

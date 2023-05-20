@@ -110,7 +110,7 @@ public class ChatService {
 	    .createAskQuestionPrompt(question)
 	    .build();
 
-	return chat.sendChat(prompt, .2);
+	return chat.sendChat(prompt, .9);
     }
 
     public List<Plan> getPlans(Agent agent, TimePhrase phrase) {

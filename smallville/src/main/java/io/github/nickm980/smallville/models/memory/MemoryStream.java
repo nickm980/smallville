@@ -1,5 +1,6 @@
 package io.github.nickm980.smallville.models.memory;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -79,5 +80,16 @@ public class MemoryStream {
 
     public void addCharacteristics(List<Characteristic> characteristics) {
 	this.memories.addAll(characteristics);
+    }
+
+    public void prunePlans() {
+	for (Memory memory : memories) {
+	    if (memory instanceof Plan) {
+		Plan plan = (Plan) memory;
+		if (plan.getTime() != null && plan.getTime().compareTo(LocalDateTime.now()) < 0) {
+		    memories.remove(plan);
+		}
+	    }
+	}
     }
 }
