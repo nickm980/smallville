@@ -23,6 +23,7 @@ public class ModelMapper {
 	    result.setLocation(agent.getLocation().getName());
 	}
 	result.setName(agent.getFullName());
+	result.setObject(agent.getObject().asNaturalLanguage());
 	return result;
     }
 

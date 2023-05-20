@@ -1,13 +1,18 @@
 package io.github.nickm980.smallville.prompts;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.github.nickm980.smallville.World;
+import io.github.nickm980.smallville.config.Config;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
 import io.github.nickm980.smallville.llm.LLM;
 import io.github.nickm980.smallville.llm.update.AgentUpdate;
 import io.github.nickm980.smallville.llm.update.ChatService;
+import io.github.nickm980.smallville.llm.update.UpdateAgentExactLocation;
 import io.github.nickm980.smallville.llm.update.UpdateConversation;
 import io.github.nickm980.smallville.llm.update.UpdateCurrentActivity;
 import io.github.nickm980.smallville.llm.update.UpdateFuturePlans;
@@ -57,6 +62,7 @@ public class PromptService {
 	    .setNext(new UpdateFuturePlans())
 	    .setNext(new UpdateCurrentActivity())
 	    .setNext(new UpdateMemoryWeights())
+	    .setNext(new UpdateAgentExactLocation())
 	    .setNext(new UpdateLocations());
 
 	update.start(chatService, world, agent);

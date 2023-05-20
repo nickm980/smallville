@@ -4,6 +4,15 @@ public class CurrentPlan {
     private String lastActivity;
     private String currentActivity;
     private String emoji;
+    private String location;
+
+    public String getLocation() {
+	return location;
+    }
+
+    public void setLocation(String location) {
+	this.location = location;
+    }
 
     public String getLastActivity() {
 	return lastActivity;

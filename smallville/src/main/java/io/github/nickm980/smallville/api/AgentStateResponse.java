@@ -5,6 +5,15 @@ public class AgentStateResponse {
     private String action;
     private String location;
     private String emoji;
+    private String object;
+    
+    public String getObject() {
+	return object;
+    }
+    
+    public void setObject(String object) {
+	this.object = object;
+    }
     
     public String getName() {
         return name;

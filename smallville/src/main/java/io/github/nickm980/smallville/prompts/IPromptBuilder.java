@@ -5,6 +5,7 @@ import java.util.List;
 import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.Conversation;
 import io.github.nickm980.smallville.models.Location;
+import io.github.nickm980.smallville.models.SimulatedLocation;
 
 /**
  * This interface represents a builder for creating prompts.
@@ -25,7 +26,7 @@ public interface IPromptBuilder {
      * @param locations the list of locations relevant to the prompt
      * @return the prompt builder instance
      */
-    PromptBuilder withLocations(List<? extends Location> locations);
+    PromptBuilder withLocations(List<SimulatedLocation> locations);
 
     /**
      * Sets the conversation relevant to the prompt.

@@ -17,12 +17,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.github.nickm980.smallville.Util;
 import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.llm.LLM;
 import io.github.nickm980.smallville.models.ActionHistory;
 import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.Conversation;
 import io.github.nickm980.smallville.models.Dialog;
+import io.github.nickm980.smallville.models.Location;
 import io.github.nickm980.smallville.models.SimulatedLocation;
 import io.github.nickm980.smallville.models.SimulatedObject;
 import io.github.nickm980.smallville.models.memory.Plan;
@@ -73,7 +75,7 @@ public class ChatService {
     public Reaction getReaction(Agent agent, String observation) {
 	Prompt prompt = new PromptBuilder()
 	    .withAgent(agent)
-	    .withLocations(world.getObjects())
+	    .withLocations(world.getLocations())
 	    .createReactionSuggestion(observation)
 	    .build();
 
@@ -88,9 +90,7 @@ public class ChatService {
 	    if (willReact) {
 		String currentActivity = json.get("reaction").asText();
 		String emoji = json.get("emoji").asText();
-		String location = json.get("location").asText();
 
-		reaction.setLocation(location);
 		reaction.setEmoji(emoji);
 		reaction.setCurrentActivity(currentActivity);
 	    }
@@ -106,7 +106,7 @@ public class ChatService {
     public String ask(Agent agent, String question) {
 	Prompt prompt = new PromptBuilder()
 	    .withAgent(agent)
-	    .withLocations(world.getObjects())
+	    .withLocations(world.getLocations())
 	    .createAskQuestionPrompt(question)
 	    .build();
 
@@ -115,7 +115,7 @@ public class ChatService {
 
     public List<Plan> getPlans(Agent agent, TimePhrase phrase) {
 	Prompt prompt = new PromptBuilder()
-	    .withLocations(world.getObjects())
+	    .withLocations(world.getLocations())
 	    .withAgent(agent)
 	    .createFuturePlansPrompt(phrase)
 	    .build();
@@ -129,7 +129,7 @@ public class ChatService {
 	CurrentPlan result = new CurrentPlan();
 	Prompt prompt = new PromptBuilder()
 	    .withAgent(agent)
-	    .withLocations(world.getObjects())
+	    .withLocations(world.getLocations())
 	    .createCurrentPlanPrompt()
 	    .build();
 
@@ -148,8 +148,11 @@ public class ChatService {
 	result.setCurrentActivity(json.get("activity").asText());
 	result.setEmoji(json.get("emoji").asText());
 	result.setLastActivity(json.get("last_activity").asText());
+	result.setLocation(json.get("location").asText());
 
-	LOG.info(agent.getFullName() + ": " + result.getCurrentActivity() + " emoji: " + result.getEmoji());
+	LOG
+	    .info(agent.getFullName() + ": " + result.getCurrentActivity() + " emoji: " + result.getEmoji()
+		    + " location: " + agent.getLocation());
 
 	return result;
     }
@@ -215,7 +218,7 @@ public class ChatService {
 
 	Prompt changedPrompt = new PromptBuilder()
 	    .withAgent(agent)
-	    .withLocations(agent.getLocation().getObjects())
+	    .withLocations(world.getLocations())
 	    .createObjectUpdates(tenses)
 	    .build();
 
@@ -233,5 +236,10 @@ public class ChatService {
 	}
 
 	return objects;
+    }
+
+    public String getExactLocation(Agent agent) {
+	Prompt prompt = new PromptBuilder().withAgent(agent).createExactLocation().build();
+	return chat.sendChat(prompt, 0);
     }
 }

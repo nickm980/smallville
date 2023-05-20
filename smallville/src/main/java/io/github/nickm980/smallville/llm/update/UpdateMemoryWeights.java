@@ -10,7 +10,7 @@ public class UpdateMemoryWeights extends AgentUpdate {
 
     @Override
     public boolean update(ChatService converter, World world, Agent agent) {
-	LOG.info("[Updater / Memory] Updating memory weights");
+	LOG.info("[Memory] Updating memory weights");
 
 	List<Memory> memories = agent.getMemoryStream().getUnweightedMemories();
 
@@ -22,7 +22,7 @@ public class UpdateMemoryWeights extends AgentUpdate {
 	    }
 	}
 
-	LOG.info("[Updater / Memory] Memory weights updated");
+	LOG.info("[Memory] Memory weights updated");
 
 	return next(converter, world, agent);
     }

@@ -148,7 +148,15 @@ public class SmallvilleServer {
 
 	    ctx.json(Map.of("agents", agents, "location_states", locations, "conversations", conversations));
 	});
+	
+	app.get("/state", (ctx) -> {
+	    List<AgentStateResponse> agents = service.getAgents();
+	    List<LocationStateResponse> locations = service.getChangedLocations();
+	    List<ConversationResponse> conversations = service.getConversations();
 
+	    ctx.json(Map.of("agents", agents, "location_states", locations, "conversations", conversations));
+	});
+	
 	app.start(port);
     }
 

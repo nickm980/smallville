@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.github.nickm980.smallville.Util;
 import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.api.AgentStateResponse;
 import io.github.nickm980.smallville.api.ConversationResponse;
@@ -22,6 +26,7 @@ import io.github.nickm980.smallville.exceptions.SmallvilleException;
 import io.github.nickm980.smallville.llm.LLM;
 import io.github.nickm980.smallville.models.AccessTime;
 import io.github.nickm980.smallville.models.Agent;
+import io.github.nickm980.smallville.models.AgentLocation;
 import io.github.nickm980.smallville.models.Conversation;
 import io.github.nickm980.smallville.models.ObjectState;
 import io.github.nickm980.smallville.models.SimulatedLocation;
@@ -35,6 +40,7 @@ public class SimulationService {
     private final PromptService prompts;
     private final World world;
     private final AccessTime time;
+    private final Logger LOG = LoggerFactory.getLogger(SimulationService.class);
 
     public SimulationService(LLM llm, World world) {
 	this.world = world;
@@ -75,10 +81,13 @@ public class SimulationService {
 
     public void createPerson(CreateAgentRequest request) {
 	List<Characteristic> characteristics = request.getMemories().stream().map(c -> new Characteristic(c)).toList();
+	// Location : Object
+	String[] names = Util.parseLocation(request.getLocation());
 
-	SimulatedLocation location = world
-	    .getLocation(request.getLocation())
-	    .orElseThrow(() -> new LocationNotFoundException(request.getLocation()));
+	SimulatedLocation loc = world.getLocation(names[0]).orElseThrow();
+	SimulatedObject obj = world.getObjectByName(names[1]);
+
+	AgentLocation location = new AgentLocation(loc, obj);
 
 	world.save(new Agent(request.getName(), characteristics, request.getActivity(), location));
     }

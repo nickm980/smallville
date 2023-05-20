@@ -1,6 +1,6 @@
 package io.github.nickm980.smallville.models;
 
-public class SimulatedObject implements NaturalLanguageConvertible, Location {
+public class SimulatedObject implements Location {
     private ObjectState state;
     private String name;
 
@@ -20,7 +20,7 @@ public class SimulatedObject implements NaturalLanguageConvertible, Location {
 
     @Override
     public String asNaturalLanguage() {
-	return name + " (" + state.getCurrentState() + ")";
+	return name;
     }
 
     @Override

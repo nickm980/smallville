@@ -10,9 +10,9 @@ public class Agent {
     private MemoryStream memories;
     private String name;
     private ActionHistory currentAction;
-    private SimulatedLocation location;
+    private AgentLocation location;
 
-    public Agent(String name, List<Characteristic> characteristics, String currentAction, SimulatedLocation location) {
+    public Agent(String name, List<Characteristic> characteristics, String currentAction, AgentLocation location) {
 	this.name = name;
 	this.memories = new MemoryStream();
 	this.memories.addCharacteristics(characteristics);
@@ -36,11 +36,15 @@ public class Agent {
 	this.currentAction.setActivity(description);
     }
 
+    public SimulatedObject getObject() {
+	return location.getObject();
+    }
+    
     public SimulatedLocation getLocation() {
-	return location;
+	return location.getLocation();
     }
 
-    public void setLocation(SimulatedLocation location) {
+    public void setLocation(AgentLocation location) {
 	this.location = location;
     }
 

@@ -1,21 +1,13 @@
 package io.github.nickm980.smallville.prompts;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public abstract class Prompt {
     private String content;
-    private List<Prompt> others;
 
     public Prompt(String content) {
 	this.content = content;
-	this.others = new ArrayList<Prompt>();
-    }
-
-    public void append(String content) {
-	this.content += " " + content;
     }
     
     abstract String getRole();
@@ -28,10 +20,6 @@ public abstract class Prompt {
 	Map<String, String> map = new HashMap<>();
 	map.put("role", getRole());
 	map.put("content", content.replace("\n", " "));
-
-	for (Prompt prompt : others) {
-	    others.add(prompt);
-	}
 	
 	return map;
     }

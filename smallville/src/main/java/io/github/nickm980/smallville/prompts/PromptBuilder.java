@@ -9,6 +9,8 @@ import io.github.nickm980.smallville.exceptions.SmallvilleException;
 import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.Conversation;
 import io.github.nickm980.smallville.models.Location;
+import io.github.nickm980.smallville.models.SimulatedLocation;
+import io.github.nickm980.smallville.models.SimulatedObject;
 
 public class PromptBuilder implements IPromptBuilder {
 
@@ -28,7 +30,7 @@ public class PromptBuilder implements IPromptBuilder {
     }
 
     @Override
-    public PromptBuilder withLocations(List<? extends Location> locations) {
+    public PromptBuilder withLocations(List<SimulatedLocation> locations) {
 	data.setLocations(locations);
 	return this;
     }
@@ -119,6 +121,7 @@ public class PromptBuilder implements IPromptBuilder {
 	    .replace("[Agent Summary Description]", atomicBuilder.getAgentSummaryDescription(agent))
 	    .replace("[Current Time]", atomicBuilder.getTimeAsString(LocalDateTime.now()))
 	    .replace("[Agent Name]", agent.getFullName())
+	    .replace("[Current Location's Objects]", atomicBuilder.getObjects(agent.getLocation().getObjects()))
 	    .replace("[Current Activity]", agent.getCurrentActivity())
 	    .replace("[Last Activity]", agent.getLastActivity())
 	    .replace("[Future Plans]", "Plans: " + atomicBuilder.asNaturalLanguage(agent.getPlans()));
@@ -131,6 +134,12 @@ public class PromptBuilder implements IPromptBuilder {
 
 	// tenses is "<name> is no longer <past activity> and is now <current activity>"
 	prompt = prompt.replace("%tenses%", tenses);
+	return this;
+    }
+
+    public PromptBuilder createExactLocation() {
+	prompt = Config.getPrompts().getPickLocation();
+
 	return this;
     }
 }

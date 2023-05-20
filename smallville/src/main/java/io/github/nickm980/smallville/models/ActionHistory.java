@@ -1,7 +1,5 @@
 package io.github.nickm980.smallville.models;
 
-import javax.annotation.Nullable;
-
 public class ActionHistory {
 
     private String activity;

@@ -19,7 +19,7 @@ public class UpdateReaction extends AgentUpdate {
 	Reaction reaction = service.getReaction(agent, observation);
 
 	if (reaction.willReact()) {
-	    agent.setLocation(world.getLocation(reaction.getLocation()).orElse(null));
+//	    agent.setLocation(world.getLocation(reaction.getLocation()).orElse(null));
 	    agent.setCurrentEmoji(reaction.getEmoji());
 	    agent.setCurrentActivity(reaction.getCurrentActivity());
 	}

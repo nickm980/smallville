@@ -10,7 +10,8 @@ public class PromptsConfig {
     private String createAskQuestionPrompt;
     private String createPastAndPresent;
     private String createObjectUpdates;
-
+    private String pickLocation;
+    
     public PromptsConfig() {
     }
 
@@ -76,6 +77,14 @@ public class PromptsConfig {
 
     public void setCreateObjectUpdates(String createObjectUpdates) {
 	this.createObjectUpdates = createObjectUpdates;
+    }
+
+    public String getPickLocation() {
+	return pickLocation;
+    }
+    
+    public void setPickLocation(String pickLocation) {
+	this.pickLocation= pickLocation;
     }
 
 }

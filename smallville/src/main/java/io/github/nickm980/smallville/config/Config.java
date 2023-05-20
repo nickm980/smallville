@@ -12,6 +12,7 @@ import org.yaml.snakeyaml.Yaml;
 
 public class Config {
     private static PromptsConfig prompts;
+    private static GeneralConfig config;
     private static final Logger LOG = LoggerFactory.getLogger(Config.class);
 
     private Config() {
@@ -24,6 +25,14 @@ public class Config {
 	}
 
 	return prompts;
+    }
+
+    public static GeneralConfig getConfig() {
+	if (config == null) {
+	    config = loadFile("config.yaml", GeneralConfig.class);
+	}
+
+	return config;
     }
 
     private static <T> T loadFile(String file, Class<T> clazz) {

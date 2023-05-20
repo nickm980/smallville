@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class SimulatedLocation implements NaturalLanguageConvertible, Location {
+public class SimulatedLocation implements Location {
 
     private String name;
     private SimulatedLocation parent;
@@ -42,7 +42,7 @@ public class SimulatedLocation implements NaturalLanguageConvertible, Location {
 	    childrenStr += location.asNaturalLanguage() + ", ";
 	}
 
-	return name + " : " + childrenStr;
+	return name + " has " + childrenStr;
     }
 
     public List<SimulatedObject> getObjects() {

@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.Location;
 import io.github.nickm980.smallville.models.NaturalLanguageConvertible;
+import io.github.nickm980.smallville.models.SimulatedLocation;
 import io.github.nickm980.smallville.models.SimulatedObject;
 import io.github.nickm980.smallville.models.memory.Characteristic;
 import io.github.nickm980.smallville.models.memory.Memory;
@@ -39,15 +40,15 @@ public class AtomicPromptBuilder {
      * @param list
      * @return
      */
-    public String getWorldDescription(List<? extends Location> list) {
-	var prompt = "Only use the following locations in your answer: ";
+    public String getWorldDescription(List<SimulatedLocation> list) {
+	var prompt = """
+		Only use the following locations in your response.
+
+		Locations:
+		""";
 
 	for (Location location : list) {
-	    if (location instanceof SimulatedObject) {
-		prompt += location.getName() + "; ";
-	    } else {
-		prompt += location.asNaturalLanguage() + "; ";
-	    }
+	    prompt += location.asNaturalLanguage() + "; ";
 	}
 
 	return prompt;
@@ -110,6 +111,16 @@ public class AtomicPromptBuilder {
 
 	for (NaturalLanguageConvertible convertible : convertibles) {
 	    result += convertible.asNaturalLanguage() + ", ";
+	}
+
+	return result;
+    }
+
+    public CharSequence getObjects(List<SimulatedObject> objects) {
+	String result = "";
+
+	for (var obj : objects) {
+	    result += obj.getName() + ", ";
 	}
 
 	return result;

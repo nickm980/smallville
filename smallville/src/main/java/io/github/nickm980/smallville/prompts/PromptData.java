@@ -11,7 +11,7 @@ import io.github.nickm980.smallville.models.SimulatedLocation;
 public class PromptData {
 
     private Agent agent;
-    private List<? extends Location> locations;
+    private List<SimulatedLocation> locations;
     private Conversation conversation;
     private String question;
 
@@ -29,11 +29,11 @@ public class PromptData {
 	this.agent = agent;
     }
 
-    public List<? extends Location> getLocations() {
+    public List<SimulatedLocation> getLocations() {
 	return locations;
     }
 
-    public void setLocations(List<? extends Location> locations) {
+    public void setLocations(List<SimulatedLocation> locations) {
 	this.locations = locations;
     }
 
