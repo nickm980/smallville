@@ -14,11 +14,13 @@ public class PromptData {
     private List<SimulatedLocation> locations;
     private Conversation conversation;
     private String question;
-
+    private TimePhrase phrase;
+    
     public PromptData() {
 	this.locations = new ArrayList<SimulatedLocation>();
 	this.locations = List.of();
 	this.question = "";
+	this.phrase = TimePhrase.DAY;
     }
 
     public Agent getAgent() {
@@ -51,6 +53,14 @@ public class PromptData {
 
     public String getQuestion() {
 	return question;
+    }
+
+    public void setTimePhrase(TimePhrase phrase) {
+	this.phrase = phrase;
+    }
+    
+    public TimePhrase getTimePhrase() {
+	return phrase;
     }
 
 }

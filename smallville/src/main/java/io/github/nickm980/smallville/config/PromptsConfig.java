@@ -11,6 +11,7 @@ public class PromptsConfig {
     private String createPastAndPresent;
     private String createObjectUpdates;
     private String pickLocation;
+    private String createShortTermPlans;
     
     public PromptsConfig() {
     }
@@ -85,6 +86,14 @@ public class PromptsConfig {
     
     public void setPickLocation(String pickLocation) {
 	this.pickLocation= pickLocation;
+    }
+
+    public String getCreateShortTermPlans() {
+	return createShortTermPlans;
+    }
+
+    public void setCreateShortTermPlans(String createShortTermPlans) {
+	this.createShortTermPlans = createShortTermPlans;
     }
 
 }

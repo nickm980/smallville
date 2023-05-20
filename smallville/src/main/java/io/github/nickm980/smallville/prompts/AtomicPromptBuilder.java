@@ -3,6 +3,7 @@ package io.github.nickm980.smallville.prompts;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,6 +14,7 @@ import io.github.nickm980.smallville.models.SimulatedLocation;
 import io.github.nickm980.smallville.models.SimulatedObject;
 import io.github.nickm980.smallville.models.memory.Characteristic;
 import io.github.nickm980.smallville.models.memory.Memory;
+import io.github.nickm980.smallville.models.memory.Plan;
 
 /**
  * Creates the variable prompts and converts objects to natural language
@@ -73,7 +75,6 @@ public class AtomicPromptBuilder {
 		Name: %name%
 		Description: %description%
 		Current Location: %location%
-		%plans%
 
 		[Current Time]
 		""";
@@ -124,5 +125,22 @@ public class AtomicPromptBuilder {
 	}
 
 	return result;
+    }
+
+    public CharSequence getLatestPlan(Agent agent) {
+	String result = "";
+
+	Plan plan = agent.getPlans().stream().sorted(new Comparator<Plan>() {
+	    @Override
+	    public int compare(Plan o1, Plan o2) {
+		return o1.getTime().compareTo(o2.getTime());
+	    }
+	}).findFirst().orElse(null);
+
+	if (plan == null) {
+	    return result;
+	}
+
+	return "The next plan for the day is: " + plan.asNaturalLanguage();
     }
 }

@@ -8,9 +8,7 @@ import io.github.nickm980.smallville.config.Config;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
 import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.Conversation;
-import io.github.nickm980.smallville.models.Location;
 import io.github.nickm980.smallville.models.SimulatedLocation;
-import io.github.nickm980.smallville.models.SimulatedObject;
 
 public class PromptBuilder implements IPromptBuilder {
 
@@ -87,7 +85,7 @@ public class PromptBuilder implements IPromptBuilder {
     }
 
     @Override
-    public PromptBuilder createFuturePlansPrompt(TimePhrase time) {
+    public PromptBuilder createFuturePlansPrompt() {
 	prompt = Config.getPrompts().getCreateFuturePlansPrompt();
 	return this;
     }
@@ -124,6 +122,7 @@ public class PromptBuilder implements IPromptBuilder {
 	    .replace("[Current Location's Objects]", atomicBuilder.getObjects(agent.getLocation().getObjects()))
 	    .replace("[Current Activity]", agent.getCurrentActivity())
 	    .replace("[Last Activity]", agent.getLastActivity())
+	    .replace("[Most Recent Plan]", atomicBuilder.getLatestPlan(agent))
 	    .replace("[Future Plans]", "Plans: " + atomicBuilder.asNaturalLanguage(agent.getPlans()));
 
 	return new Prompt.User(prompt);
@@ -139,7 +138,11 @@ public class PromptBuilder implements IPromptBuilder {
 
     public PromptBuilder createExactLocation() {
 	prompt = Config.getPrompts().getPickLocation();
-
+	return this;
+    }
+    
+    public PromptBuilder createShortTermPlansPrompt() {
+	prompt = Config.getPrompts().getCreateShortTermPlans();
 	return this;
     }
 }

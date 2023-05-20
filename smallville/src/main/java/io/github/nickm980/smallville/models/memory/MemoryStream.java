@@ -1,6 +1,8 @@
 package io.github.nickm980.smallville.models.memory;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,10 +12,10 @@ import java.util.stream.Collectors;
  * Includes plans, observations, and characteristics
  */
 public class MemoryStream {
-    private Set<Memory> memories;
+    private List<Memory> memories;
 
     public MemoryStream() {
-	this.memories = new HashSet<Memory>();
+	this.memories = new ArrayList<Memory>();
     }
 
     /**
@@ -38,7 +40,7 @@ public class MemoryStream {
 	this.memories.add(new Observation(memory));
     }
 
-    public Set<Memory> getMemories() {
+    public List<Memory> getMemories() {
 	return memories;
     }
 
@@ -83,13 +85,33 @@ public class MemoryStream {
     }
 
     public void prunePlans() {
-	for (Memory memory : memories) {
+	memories.removeIf((memory) -> {
 	    if (memory instanceof Plan) {
 		Plan plan = (Plan) memory;
 		if (plan.getTime() != null && plan.getTime().compareTo(LocalDateTime.now()) < 0) {
-		    memories.remove(plan);
+		    return true;
 		}
 	    }
-	}
+	    return false;
+	});
+    }
+
+    public void setShortTermPlans(List<Plan> plans) {
+	List<Plan> removed = getShortTermPlans();
+	memories.removeAll(removed);
+	memories.addAll(plans);
+    }
+
+    public List<Plan> getShortTermPlans() {
+	return getPlans().stream().filter(plan -> plan.isShortTerm()).toList();
+    }
+
+    public List<? extends TemporalMemory> sortByTime(List<? extends TemporalMemory> mems) {
+	return mems.stream().sorted(new Comparator<TemporalMemory>() {
+	    @Override
+	    public int compare(TemporalMemory o1, TemporalMemory o2) {
+		return o1.getTime().compareTo(o2.getTime());
+	    }
+	}).toList();
     }
 }

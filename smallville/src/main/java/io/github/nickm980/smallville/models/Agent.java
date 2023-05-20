@@ -71,4 +71,8 @@ public class Agent {
     public List<Plan> getPlans() {
 	return memories.getPlans();
     }
+
+    public void setShortTermPlans(List<Plan> plans) {
+	this.getMemoryStream().setShortTermPlans(plans);
+    }
 }

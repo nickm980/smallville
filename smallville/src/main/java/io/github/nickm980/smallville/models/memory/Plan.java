@@ -1,12 +1,10 @@
 package io.github.nickm980.smallville.models.memory;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import io.github.nickm980.smallville.math.SmallvilleMath;
 import io.github.nickm980.smallville.models.AccessTime;
-import io.github.nickm980.smallville.models.SimulatedLocation;
 import io.github.nickm980.smallville.models.NaturalLanguageConvertible;
 
 /**
@@ -18,10 +16,20 @@ import io.github.nickm980.smallville.models.NaturalLanguageConvertible;
 public class Plan extends Memory implements TemporalMemory, NaturalLanguageConvertible {
 
     private final LocalDateTime time;
+    private boolean isShortTerm;
 
     public Plan(String description, LocalDateTime time) {
+	this(description, time, false);
+    }
+
+    public Plan(String description, LocalDateTime time, boolean isShortTerm) {
 	super(description);
 	this.time = time;
+	this.isShortTerm = isShortTerm;
+    }
+
+    public boolean isShortTerm() {
+	return isShortTerm;
     }
 
     public LocalDateTime getTime() {
@@ -41,5 +49,9 @@ public class Plan extends Memory implements TemporalMemory, NaturalLanguageConve
     @Override
     public String asNaturalLanguage() {
 	return getDescription();
+    }
+
+    public void convertToShortTermMemory(boolean b) {
+	this.isShortTerm = b;
     }
 }

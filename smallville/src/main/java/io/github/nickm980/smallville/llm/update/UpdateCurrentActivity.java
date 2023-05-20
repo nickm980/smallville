@@ -10,7 +10,7 @@ public class UpdateCurrentActivity extends AgentUpdate {
 
     @Override
     public boolean update(ChatService service, World world, Agent agent) {
-	LOG.info("[Updater / Activity] Updating current activity and emoji");
+	LOG.info("[Activity] Updating current activity and emoji");
 
 	CurrentPlan plan = service.getCurrentPlan(agent);
 	SimulatedLocation location = world.getLocation(plan.getLocation()).orElse(agent.getLocation());

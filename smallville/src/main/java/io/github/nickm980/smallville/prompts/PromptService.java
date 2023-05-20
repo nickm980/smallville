@@ -53,7 +53,7 @@ public class PromptService {
 	LOG.info("Starting update for " + agent.getFullName());
 
 	if (updateInProgress) {
-	    throw new SmallvilleException("Cannot update agetns at same time");
+	    throw new SmallvilleException("Cannot update agents at same time");
 	}
 
 	updateInProgress = true;
@@ -84,7 +84,7 @@ public class PromptService {
      */
     public void updateAgent(Agent agent, String observation) {
 	if (updateInProgress) {
-	    throw new SmallvilleException("Cannot update agetns at same time");
+	    throw new SmallvilleException("Cannot update agents at same time");
 	}
 
 	updateInProgress = true;

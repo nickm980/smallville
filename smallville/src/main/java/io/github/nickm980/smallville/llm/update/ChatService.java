@@ -113,11 +113,23 @@ public class ChatService {
 	return chat.sendChat(prompt, .9);
     }
 
-    public List<Plan> getPlans(Agent agent, TimePhrase phrase) {
+    public List<Plan> getPlans(Agent agent) {
 	Prompt prompt = new PromptBuilder()
 	    .withLocations(world.getLocations())
 	    .withAgent(agent)
-	    .createFuturePlansPrompt(phrase)
+	    .createFuturePlansPrompt()
+	    .build();
+
+	String response = chat.sendChat(prompt, .7);
+
+	return parsePlans(response);
+    }
+
+    public List<Plan> getShortTermPlans(Agent agent) {
+	Prompt prompt = new PromptBuilder()
+	    .withLocations(world.getLocations())
+	    .withAgent(agent)
+	    .createShortTermPlansPrompt()
 	    .build();
 
 	String response = chat.sendChat(prompt, .7);
@@ -150,9 +162,7 @@ public class ChatService {
 	result.setLastActivity(json.get("last_activity").asText());
 	result.setLocation(json.get("location").asText());
 
-	LOG
-	    .info(agent.getFullName() + ": " + result.getCurrentActivity() + " emoji: " + result.getEmoji()
-		    + " location: " + agent.getLocation());
+	LOG.info("[Activity]" + result.getCurrentActivity() + " location: " + agent.getLocation().getName());
 
 	return result;
     }

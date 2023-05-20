@@ -70,10 +70,9 @@ public interface IPromptBuilder {
     /**
      * Adds the future plans of the agent, given a time frame, to the prompt.
      * 
-     * @param time the time frame for the future plans
      * @return the prompt builder instance
      */
-    PromptBuilder createFuturePlansPrompt(TimePhrase time);
+    PromptBuilder createFuturePlansPrompt();
 
     /**
      * 
