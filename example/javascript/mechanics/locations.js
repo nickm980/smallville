@@ -17,7 +17,11 @@ const locations = {
         y: -140
     },
     "Campfire": {
-        x: 600,
+        x: 590,
+        y: 380
+    },
+    "Forest": {
+        x: 590,
         y: 380
     }
 }

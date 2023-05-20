@@ -7,14 +7,14 @@ const smallville = new Smallville({
     host: 'http://localhost:8080',
     stateHandler: (state) => {
         console.log(state)
-        
-        if (state.agents == undefined){
-            console.log("No agents found")
-            return
-        }
 
         state.agents.forEach(agent => {
-            updateAgent(agent.name, agent.location, agent.currentActivity, agent.emoji)
+            updateAgent({
+                name: agent.name,
+                location: agent.location,
+                activity: agent.action,
+                emoji: agent.emoji
+            })
         })
     }
 });
@@ -32,19 +32,29 @@ async function startSimulation() {
      *                                       *
      *****************************************/
     await smallville.createLocation({
-        name: 'Kitchen',
+        name: 'Main Island',
+    })
+
+    await smallville.createLocation({
+        name: 'Forest',
     })
 
     await smallville.createObject({
-        parent: 'Kitchen',
-        name: 'Chair',
-        state: 'occupied'
+        parent: 'Main Island',
+        name: 'Green House',
+        state: 'empty'
     })
 
     await smallville.createObject({
-        parent: 'Kitchen',
-        name: 'Stove',
-        state: 'off'
+        parent: 'Main Island',
+        name: 'Red House',
+        state: 'empty'
+    })
+
+    await smallville.createObject({
+        parent: 'Forest',
+        name: 'Campfire',
+        state: 'on'
     })
 
     /********************************
@@ -56,7 +66,7 @@ async function startSimulation() {
         console.log(agent)
         await smallville.createAgent({
             name: agent.name,
-            location: 'Kitchen',
+            location: agent.location,
             activity: agent.activity,
             memories: agent.memories
         })
@@ -68,3 +78,4 @@ document.getElementById("smallville--next").addEventListener('click', function (
     smallville.updateState()
 });
 
+await smallville.sync()

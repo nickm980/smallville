@@ -13,22 +13,26 @@ var agents = []
  */
 class Agent {
     /**
-     * Creates a new Agent instance.
-     *
+     * Represents an Agent instance.
+     * @class
+     * @classdesc Smallville Agent
      * @constructor
-     * @param {string} name - The name of the agent.
-     * @param {string} activity - The name of the agent.
-     * @param {string[]} memories - The name of the agent.
-     * @param {Phaser.GameObjects.Sprite} agent - The Phaser sprite representing the agent.
-     * @param {Phaser.GameObjects.Text} text - The Phaser text object displaying the agent's name and text.
+     * @param {Object} options - The options object.
+     * @param {string} options.name - The name of the instance.
+     * @param {string} options.agent - The agent of the instance.
+     * @param {string} options.text - The text of the instance.
+     * @param {string} options.activity - The activity of the instance.
+     * @param {string} options.location - The location of the instance.
+     * @param {Array} options.memories - The memories of the instance.
      */
-    constructor(name, agent, text, activity, memories) {
+    constructor({ name, agent, text, activity, location, memories }) {
         this.name = name
         this.agent = agent
         this.text = text
         this.emoji = "😀"
         this.activity = activity
         this.memories = memories
+        this.location = location
     }
 
     moveTo(locationName) {
@@ -49,12 +53,13 @@ class Agent {
 
     setEmoji(emoji) {
         this.emoji = emoji
-        this.say(activity + " " + emoji)
+        this.say(this.activity + " " + this.emoji)
     }
 
     setActivity(activity) {
+        console.log("New activity: " + activity)
         this.activity = activity
-        this.say(activity + " " + emoji)
+        this.say(activity + " " + this.emoji)
     }
 
     getAgent() {
@@ -72,14 +77,19 @@ class Agent {
  * @returns {void}
  */
 function updateAgent({ name, location, activity, emoji }) {
-    agents.forEach(agent => {
-        if (agent.name === name) {
-            agent.moveTo(location)
-            agent.setEmoji(emoji)
-            agent.setActivity(activity)
-            return
-        }
+    const agent = agents.find(agent => {
+        return name == agent.name
     })
+
+    if (!agent) {
+        console.error(`No agent found with name ${name}`)
+        return;
+    }
+
+    console.log("Updating location, emoji, and activity")
+    agent.moveTo(location)
+    agent.setEmoji(emoji)
+    agent.setActivity(activity)
 }
 
 /**
@@ -92,7 +102,8 @@ function updateAgent({ name, location, activity, emoji }) {
  *   @param {string[]} options.memories - The memories of the agent.
  */
 function createAgent({ scene, name, location, activity, memories }) {
-    const coords = getCoordinates(location)
+    const leaf = getLeafLocation(location)
+    const coords = getCoordinates(leaf)
     const player = scene.add.sprite(coords.x, coords.y, 'player');
     player.frame = 28
 
@@ -100,14 +111,24 @@ function createAgent({ scene, name, location, activity, memories }) {
     text.setStyle({ backgroundColor: '#111111' });
     text.setOrigin(.5);
 
-    const agent = new Agent(name, player, text, activity, memories)
+    const agent = new Agent({
+        name: name,
+        agent: player,
+        text: text,
+        activity: activity,
+        location: location,
+        memories: memories
+    })
+
     agents.push(agent)
     player.play('idle');
-    
+
+    moveAgent({ name: name, location: location })
     console.log("Created a new agent " + name)
 }
 
 function moveAgent({ name, location }) {
+    console.log("moving")
     const agent = agents.find(agent => {
         console.log(agent.name + " : " + name)
         return name == agent.name
@@ -117,8 +138,13 @@ function moveAgent({ name, location }) {
         console.error(`No agent found with name ${name}`)
         return;
     }
+    console.log(getLeafLocation(location))
+    agent.moveTo(getLeafLocation(location))
+}
 
-    agent.moveTo(location)
+function getLeafLocation(location) {
+    const parts = location.split(':');
+    return parts[parts.length - 1].trim();
 }
 
 function loadAnimations(scene) {
