@@ -103,9 +103,8 @@ The example is under the example directory. This example isn't finished yet but 
 - Finish example game
 - Improve memory retrieval
 - Improve token embeddings
-- Add option to use StableLM
+- Add option to use self hosted LLM models
 - Bug fixes on location state updates
-- Work on a way around possible timeouts from long request wait times
 - Improve test coverage
 
 ## Info
