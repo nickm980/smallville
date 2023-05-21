@@ -53,13 +53,13 @@ class Agent {
 
     setEmoji(emoji) {
         this.emoji = emoji
-        this.say(this.activity + " " + this.emoji)
+        this.say(this.activity)
     }
 
     setActivity(activity) {
         console.log(this.name + " activity")
         this.activity = activity
-        this.say(activity + " " + this.emoji)
+        this.say(activity)
     }
 
     getAgent() {
