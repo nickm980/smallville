@@ -1,6 +1,8 @@
 var camera;
 
-function enableCameraControlls(game, scene) {
+function enableCameraControlls(game, scene, uiElements) {
+   
+
     scene.cameras.main.setRoundPixels(true)
     camera = scene.cameras.main;
 
@@ -44,9 +46,8 @@ function enableCameraControlls(game, scene) {
     scene.input.on('wheel', (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
 
         zoomLevel -= deltaY * zoomSpeed;
-
         zoomLevel = Phaser.Math.Clamp(zoomLevel, minZoom, maxZoom);
-
+    
         camera.setZoom(zoomLevel);
     });
 }
