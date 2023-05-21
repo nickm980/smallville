@@ -1,11 +1,10 @@
 package io.github.nickm980.smallville.models.memory;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -36,7 +35,7 @@ public class MemoryStream {
 	return memories.stream().filter(memory -> memory.getImportance() == 0).toList();
     }
 
-    public void remember(String memory) {
+    public void addObservation(String memory) {
 	this.memories.add(new Observation(memory));
     }
 
@@ -65,14 +64,14 @@ public class MemoryStream {
 	    return memory instanceof Plan;
 	}).map(memory -> {
 	    return (Plan) memory;
-	}).collect(Collectors.toList());
+	}).sorted(new TemporalMemoryComparator()).collect(Collectors.toList());
     }
 
     public void setPlans(List<Plan> plans) {
-	memories.addAll(plans);
+	this.memories.addAll(plans);
     }
 
-    public void addAll(List<String> memories) {
+    public void addObservations(List<String> memories) {
 	this.memories.addAll(memories.stream().map(Observation::new).toList());
     }
 
@@ -88,9 +87,7 @@ public class MemoryStream {
 	memories.removeIf((memory) -> {
 	    if (memory instanceof Plan) {
 		Plan plan = (Plan) memory;
-		if (plan.getTime() != null && plan.getTime().compareTo(LocalDateTime.now()) < 0) {
-		    return true;
-		}
+		return plan.getTime() != null && plan.getTime().compareTo(LocalDateTime.now()) < 0;
 	    }
 	    return false;
 	});
@@ -113,5 +110,13 @@ public class MemoryStream {
 		return o1.getTime().compareTo(o2.getTime());
 	    }
 	}).toList();
+    }
+
+    public void addPlans(List<Plan> plans) {
+	this.memories.addAll(plans);
+    }
+
+    public List<Plan> getPlans(PlanType midTerm) {
+	return getPlans().stream().filter(plan -> plan.getType() == midTerm).toList();
     }
 }

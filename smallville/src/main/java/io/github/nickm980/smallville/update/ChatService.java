@@ -1,15 +1,11 @@
-package io.github.nickm980.smallville.llm.update;
+package io.github.nickm980.smallville.update;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,21 +13,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.github.nickm980.smallville.Util;
 import io.github.nickm980.smallville.World;
+import io.github.nickm980.smallville.config.Config;
 import io.github.nickm980.smallville.llm.LLM;
-import io.github.nickm980.smallville.models.ActionHistory;
 import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.Conversation;
 import io.github.nickm980.smallville.models.Dialog;
-import io.github.nickm980.smallville.models.Location;
-import io.github.nickm980.smallville.models.SimulatedLocation;
-import io.github.nickm980.smallville.models.SimulatedObject;
 import io.github.nickm980.smallville.models.memory.Plan;
 import io.github.nickm980.smallville.prompts.Prompt;
 import io.github.nickm980.smallville.prompts.PromptBuilder;
-import io.github.nickm980.smallville.prompts.PromptService;
-import io.github.nickm980.smallville.prompts.TimePhrase;
 import io.github.nickm980.smallville.prompts.response.CurrentPlan;
 import io.github.nickm980.smallville.prompts.response.ObjectChangeResponse;
 import io.github.nickm980.smallville.prompts.response.Reaction;
@@ -40,7 +30,7 @@ import io.github.nickm980.smallville.prompts.response.Reaction;
 public class ChatService {
 
     private final LLM chat;
-    private final static Logger LOG = LoggerFactory.getLogger(PromptService.class);
+    private final static Logger LOG = LoggerFactory.getLogger(UpdateService.class);
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final World world;
 
@@ -50,7 +40,11 @@ public class ChatService {
     }
 
     public int[] getWeights(Agent agent) {
-	Prompt prompt = new PromptBuilder().withAgent(agent).createMemoryRankPrompt().build();
+	Prompt prompt = new PromptBuilder()
+	    .withAgent(agent)
+	    .withPrompt(Config.getPrompts().getCreateMemoryRankPrompt())
+	    .createMemoryRankPrompt()
+	    .build();
 
 	String response = chat.sendChat(prompt, .1);
 
@@ -107,6 +101,7 @@ public class ChatService {
 	Prompt prompt = new PromptBuilder()
 	    .withAgent(agent)
 	    .withLocations(world.getLocations())
+	    .withPrompt(Config.getPrompts().getCreateAskQuestionPrompt())
 	    .createAskQuestionPrompt(question)
 	    .build();
 
@@ -117,10 +112,10 @@ public class ChatService {
 	Prompt prompt = new PromptBuilder()
 	    .withLocations(world.getLocations())
 	    .withAgent(agent)
-	    .createFuturePlansPrompt()
+	    .withPrompt(Config.getPrompts().getCreateFuturePlansPrompt())
 	    .build();
 
-	String response = chat.sendChat(prompt, .7);
+	String response = chat.sendChat(prompt, .4);
 
 	return parsePlans(response);
     }
@@ -129,7 +124,7 @@ public class ChatService {
 	Prompt prompt = new PromptBuilder()
 	    .withLocations(world.getLocations())
 	    .withAgent(agent)
-	    .createShortTermPlansPrompt()
+	    .withPrompt(Config.getPrompts().getCreateShortTermPlans())
 	    .build();
 
 	String response = chat.sendChat(prompt, .7);
@@ -142,7 +137,7 @@ public class ChatService {
 	Prompt prompt = new PromptBuilder()
 	    .withAgent(agent)
 	    .withLocations(world.getLocations())
-	    .createCurrentPlanPrompt()
+	    .withPrompt(Config.getPrompts().getCreateCurrentPlanPrompt())
 	    .build();
 
 	String response = chat.sendChat(prompt, .7);// higher value provides better results for emojis
@@ -168,7 +163,11 @@ public class ChatService {
     }
 
     public Conversation getConversationIfExists(Agent agent, Agent other) {
-	Prompt prompt = new PromptBuilder().withAgent(agent).createConversationWith(other).build();
+	Prompt prompt = new PromptBuilder()
+	    .withAgent(agent)
+	    .withPrompt(Config.getPrompts().getCreateConversationWith())
+	    .createConversationWith(other)
+	    .build();
 
 	String response = chat.sendChat(prompt, .7);
 	String[] lines = response.split("\\r?\\n");
@@ -183,12 +182,6 @@ public class ChatService {
 
 	Conversation conversation = new Conversation(agent.getFullName(), other.getFullName(), dialogs);
 	return conversation;
-    }
-
-    public String combinePastAndPresentActivities(ActionHistory activity) {
-	Prompt prompt = new PromptBuilder().createPastAndPresent().build();
-
-	return chat.sendChat(prompt, .5);
     }
 
     public List<Plan> parsePlans(String input) {
@@ -206,7 +199,7 @@ public class ChatService {
 	    int index = input.indexOf(splitPlan[1]) - 2;
 
 	    if (index == -1) {
-		LOG.warn("Skipping a plan");
+		LOG.warn("Skipping plan which did not have a time");
 		continue;
 	    }
 
@@ -223,12 +216,17 @@ public class ChatService {
     }
 
     public ObjectChangeResponse[] getObjectsChangedBy(Agent agent) {
-	Prompt tensesPrompt = new PromptBuilder().withAgent(agent).createPastAndPresent().build();
+	Prompt tensesPrompt = new PromptBuilder()
+	    .withAgent(agent)
+	    .withPrompt(Config.getPrompts().getCreatePastAndPresent())
+	    .build();
+
 	String tenses = chat.sendChat(tensesPrompt, .1);
 
 	Prompt changedPrompt = new PromptBuilder()
 	    .withAgent(agent)
 	    .withLocations(world.getLocations())
+	    .withPrompt(Config.getPrompts().getCreateObjectUpdates())
 	    .createObjectUpdates(tenses)
 	    .build();
 
@@ -239,17 +237,37 @@ public class ChatService {
 
 	for (int i = 0; i < lines.length; i++) {
 	    String line = lines[i];
-	    String[] parts = line.split(": ");
+	    String[] parts = line.split(":");
 	    String item = parts[0].trim();
 	    String value = parts[1].trim();
-	    objects[i] = new ObjectChangeResponse(item, value);
+	    LOG.debug("Trying to change " + item + " to " + value);
+
+	    if (item != null && value != null && !value.equals("Unchanged")) {
+		objects[i] = new ObjectChangeResponse(item, value);
+	    }
+	}
+
+	if (objects.length == 0) {
+	    LOG.warn("No objects were updated");
 	}
 
 	return objects;
     }
 
     public String getExactLocation(Agent agent) {
-	Prompt prompt = new PromptBuilder().withAgent(agent).createExactLocation().build();
+	Prompt prompt = new PromptBuilder().withAgent(agent).withPrompt(Config.getPrompts().getPickLocation()).build();
 	return chat.sendChat(prompt, 0);
+    }
+
+    public List<Plan> getMidTermPlans(Agent agent) {
+	Prompt prompt = new PromptBuilder()
+	    .withLocations(world.getLocations())
+	    .withAgent(agent)
+	    .withPrompt(Config.getPrompts().getCreateMidTermPlans())
+	    .build();
+
+	String response = chat.sendChat(prompt, .6);
+
+	return parsePlans(response);
     }
 }

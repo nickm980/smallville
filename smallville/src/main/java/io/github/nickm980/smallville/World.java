@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.annotation.Nullable;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,23 +62,20 @@ public class World {
     private List<SimulatedLocation> locations;
     private List<SimulatedObject> objects;
     private List<Conversation> conversations;
-    private Set<Agent> persons;
+    private Set<Agent> agents;
     private final Logger LOG = LoggerFactory.getLogger(World.class);
 
     public World() {
 	this.locations = new ArrayList<>();
-	this.persons = new HashSet<>();
+	this.agents = new HashSet<>();
 	this.objects = new ArrayList<>();
 	this.conversations = new ArrayList<>();
     }
 
     /**
-     * Creates a new agent.
+     * Saves an agent.
      * 
-     * @param name            - The name of the agent
-     * @param characteristics - A list of characteristic traits. These will be the
-     *                        first memories the agent has. Ex) "John Lin is a
-     *                        painter" or "John Lin has a house near the woods"
+     * @param agent - the agent to save
      */
     public void save(Agent agent) {
 	if (getAgent(agent.getFullName()).isPresent()) {
@@ -88,17 +83,9 @@ public class World {
 	}
 
 	LOG.info("Creating a new person: " + agent.getFullName());
-	persons.add(agent);
+	agents.add(agent);
     }
 
-    /**
-     * Useful for world building so there is context for the generative agents to
-     * move around in the world
-     * 
-     * @param name        - Name of the location. Ex) The Woods
-     * @param description - brief description of the area < 50 words. Ex) The woods
-     *                    are a secretive place full of bugs and insects
-     */
     public void save(SimulatedLocation location) {
 	if (locations.size() >= 10) {
 	    throw new SmallvilleException(
@@ -113,7 +100,7 @@ public class World {
     }
 
     public Set<Agent> getAgents() {
-	return persons;
+	return agents;
     }
 
     public List<SimulatedLocation> getLocations() {
@@ -133,7 +120,6 @@ public class World {
     }
 
     public void save(SimulatedObject object) {
-
 	for (SimulatedObject obj : objects) {
 	    if (obj.getName().equals(object.getName())) {
 		throw new SmallvilleException("Object already exists, try using a different name");
@@ -148,7 +134,7 @@ public class World {
     }
 
     public Optional<Agent> getAgent(String name) {
-	return persons.stream().filter(agent -> agent.getFullName().equals(name)).findFirst();
+	return agents.stream().filter(agent -> agent.getFullName().equals(name)).findFirst();
     }
 
     public List<Conversation> getAllConversations(String agent) {
@@ -211,6 +197,10 @@ public class World {
 
     public void changeObject(String object, String state) {
 	SimulatedObject obj = getObjectByName(object);
-    }
 
+	if (obj != null) {
+	    LOG.info("Changing state of " + object + " from " + obj.getState() + " to " + state);
+	    obj.setState(state);
+	}
+    }
 }

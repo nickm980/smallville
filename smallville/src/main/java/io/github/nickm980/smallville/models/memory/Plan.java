@@ -17,6 +17,7 @@ public class Plan extends Memory implements TemporalMemory, NaturalLanguageConve
 
     private final LocalDateTime time;
     private boolean isShortTerm;
+    public PlanType type;
 
     public Plan(String description, LocalDateTime time) {
 	this(description, time, false);
@@ -26,6 +27,11 @@ public class Plan extends Memory implements TemporalMemory, NaturalLanguageConve
 	super(description);
 	this.time = time;
 	this.isShortTerm = isShortTerm;
+	this.type = PlanType.OTHER;
+    }
+
+    public PlanType getType() {
+	return type;
     }
 
     public boolean isShortTerm() {
@@ -51,7 +57,8 @@ public class Plan extends Memory implements TemporalMemory, NaturalLanguageConve
 	return getDescription();
     }
 
-    public void convertToShortTermMemory(boolean b) {
+    public void convertToShortTermMemory(boolean b, PlanType type) {
 	this.isShortTerm = b;
+	this.type = type;
     }
 }

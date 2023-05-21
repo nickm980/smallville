@@ -1,4 +1,4 @@
-package io.github.nickm980.smallville.llm.update;
+package io.github.nickm980.smallville.update;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

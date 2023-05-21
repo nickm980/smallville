@@ -24,13 +24,13 @@ public class AtomicPromptBuilder {
     /**
      * [Current Time]
      * <p>
-     * Example "It is currently February 13, 2023, 4:56 pm"
+     * Example "It is currently 4:56 pm"
      * 
      * @param time Current time
      * @return Current time as natural language
      */
     public String getTimeAsString(LocalDateTime time) {
-	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy, h:mm a");
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
 	return "It is currently " + time.format(formatter);
     }
 
@@ -111,7 +111,7 @@ public class AtomicPromptBuilder {
 	String result = "";
 
 	for (NaturalLanguageConvertible convertible : convertibles) {
-	    result += convertible.asNaturalLanguage() + ", ";
+	    result += convertible.asNaturalLanguage() + "; ";
 	}
 
 	return result;

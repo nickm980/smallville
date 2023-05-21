@@ -1,4 +1,4 @@
-package io.github.nickm980.smallville.llm.update;
+package io.github.nickm980.smallville.update;
 
 import java.util.List;
 
