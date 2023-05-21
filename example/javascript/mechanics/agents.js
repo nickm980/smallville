@@ -49,17 +49,18 @@ class Agent {
 
     say(message) {
         this.text.setText(this.name + ": " + message + " " + this.emoji)
+        console.log(this.emoji)
     }
 
     setEmoji(emoji) {
         this.emoji = emoji
-        this.say(this.activity + " " + this.emoji)
+        this.say(this.activity + " ")
     }
 
     setActivity(activity) {
-        console.log(this.name + " activity")
+        console.log("New activity: " + activity)
         this.activity = activity
-        this.say(activity + " " + this.emoji)
+        this.say(activity + " ")
     }
 
     getAgent() {
@@ -86,6 +87,7 @@ function updateAgent({ name, location, activity, emoji }) {
         return;
     }
 
+    console.log("Updating location, emoji, and activity")
     agent.moveTo(location)
     agent.setEmoji(emoji)
     agent.setActivity(activity)
@@ -101,7 +103,8 @@ function updateAgent({ name, location, activity, emoji }) {
  *   @param {string[]} options.memories - The memories of the agent.
  */
 function createAgent({ scene, name, location, activity, memories }) {
-    const coords = getCoordinates(location)
+    const leaf = getLeafLocation(location)
+    const coords = getCoordinates(leaf)
     const player = scene.add.sprite(coords.x, coords.y, 'player');
     player.frame = 28
 
@@ -126,7 +129,9 @@ function createAgent({ scene, name, location, activity, memories }) {
 }
 
 function moveAgent({ name, location }) {
+    console.log("moving")
     const agent = agents.find(agent => {
+        console.log(agent.name + " : " + name)
         return name == agent.name
     })
 
@@ -134,9 +139,13 @@ function moveAgent({ name, location }) {
         console.error(`No agent found with name ${name}`)
         return;
     }
-    
-    console.log(location)
-    agent.moveTo(location)
+    console.log(getLeafLocation(location))
+    agent.moveTo(getLeafLocation(location))
+}
+
+function getLeafLocation(location) {
+    const parts = location.split(':');
+    return parts[parts.length - 1].trim();
 }
 
 function loadAnimations(scene) {
