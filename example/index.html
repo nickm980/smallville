@@ -16,12 +16,23 @@
 </head>
 
 <body>
-    <div id="debug">
-        <p>Debug Info</p>
-        <p>Mouse Coords <span id="smallville--debug-mouse">(0, 0)</span></p>
+    <div class="container">
+        <div id="phaser-container"></div>
+        <p id="myLog"></p>
     </div>
-    <div id="phaser-container"></div>
 
+    <script>
+        var old = console.log
+
+        window.console = {
+            log: function (str) {
+                old(str)                
+                var node = document.createElement("div");
+                node.appendChild(document.createTextNode(JSON.stringify(str)));
+                document.getElementById("myLog").appendChild(node);
+            }
+        }
+    </script>
     <script type="module" src="javascript/game.js"></script>
     <script type="module" src="javascript/smallville.js"></script>
     <script type="module" src="javascript/commands.js"></script>

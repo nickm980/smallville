@@ -51,7 +51,7 @@ function getCoordinates(name) {
 
 function getLeafLocation(location) {
     const parts = location.split(':');
-    return parts[parts.length - 1].trim();
+    return parts[parts.length - 1].trim().replace(":", "");
 }
 
 export { getCoordinates }

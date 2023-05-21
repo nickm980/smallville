@@ -76,9 +76,14 @@ async function startSimulation() {
     })
 }
 
-document.getElementById("smallville--next").addEventListener('click', function () {
+document.getElementById("smallville--next").addEventListener('click', async function () {
     console.log("Updating the game state")
-    smallville.updateState()
+    this.innerHTML = "Loading..."
+    this.disabled = true
+    await smallville.updateState()
+    this.innerHTML = "Update State"
+    this.disabled = false
+
 });
 
 await smallville.sync()
