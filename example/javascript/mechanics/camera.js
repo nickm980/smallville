@@ -1,6 +1,6 @@
 var camera;
 
-function enableCameraControlls(game, scene) {
+function enableCameraControlls(game, scene, uiElements) {
     scene.cameras.main.setRoundPixels(true)
     camera = scene.cameras.main;
 
@@ -48,7 +48,14 @@ function enableCameraControlls(game, scene) {
         zoomLevel = Phaser.Math.Clamp(zoomLevel, minZoom, maxZoom);
 
         camera.setZoom(zoomLevel);
+        for (const uiElement of uiElements) {
+            // Counter effects of zooming so ui remains in the same place
+            uiElement.scale = 1 / zoomLevel;
+            uiElement.setPosition(uiElement.originalOriginX / zoomLevel, uiElement.originalOriginY / zoomLevel)
+        }
     });
+
+   return {zoomLevel}
 }
 
 export { enableCameraControlls }

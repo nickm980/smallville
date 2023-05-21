@@ -15,6 +15,10 @@ var config = {
    scene: {
       preload: preload,
       create: create,
+   },
+   parent: 'phaser-container',
+   dom: {
+      createContainer: true
    }
 };
 
@@ -34,16 +38,26 @@ function create() {
    function loadTilemap(scene) {
       const map = scene.make.tilemap({ key: 'my_map' });
       const tileset = map.addTilesetImage('my_tileset');
-      
       map.createLayer('ground', tileset);
       map.createLayer('upperground', tileset);
       map.createLayer('structs2', tileset);
       map.createLayer('structs', tileset);
    }
 
-   enableCameraControlls(game, this);
+   function setupButtons(scene) {
+      let updateStateButton = scene.add.dom(149, 24).createFromHTML('<button class="nes-btn" id="smallville--next">Update State (1 min)</button>');
+      updateStateButton.setScrollFactor(0,0);
+      updateStateButton.originalOriginX = updateStateButton.originalOriginX;
+      updateStateButton.originalOriginY = updateStateButton.originalOriginY;
+      
+      return [updateStateButton]
+   }
+
+   
+   enableCameraControlls(game, this, setupButtons(this));
    loadTilemap(this);
    loadAnimations(this)
+   
 
    createAgent({
       scene: this,
