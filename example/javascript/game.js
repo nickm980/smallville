@@ -33,9 +33,8 @@ function preload() {
 function create() {
    function loadTilemap(scene) {
       const map = scene.make.tilemap({ key: 'my_map' });
-      console.log(map)
       const tileset = map.addTilesetImage('my_tileset');
-      console.log(tileset)
+      
       map.createLayer('ground', tileset);
       map.createLayer('upperground', tileset);
       map.createLayer('structs2', tileset);
@@ -54,7 +53,7 @@ function create() {
       memories: [
          "Does not know anyone",
          "Loves to cook",
-         "Likes to sometimes hang out by camfires"
+         "Likes to sometimes hang out by campfires"
       ]
    })
 }

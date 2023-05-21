@@ -2,7 +2,6 @@ import { Smallville } from '../../javascript-adapter/dist/index.js'
 import { agents } from './mechanics/agents.js'
 import { updateAgent } from './mechanics/index.js';
 
-console.log(Smallville)
 const smallville = new Smallville({
     host: 'http://localhost:8080',
     stateHandler: (state) => {
@@ -11,7 +10,7 @@ const smallville = new Smallville({
         state.agents.forEach(agent => {
             updateAgent({
                 name: agent.name,
-                location: agent.location,
+                location: agent.location + ": " + agent.object,
                 activity: agent.action,
                 emoji: agent.emoji
             })
@@ -56,14 +55,18 @@ async function startSimulation() {
         name: 'Campfire',
         state: 'on'
     })
-
+    
+    await smallville.createObject({
+        parent: 'Forest',
+        name: 'Branches',
+        state: 'broken'
+    })
     /********************************
      *                              *
      * Add the agents to the server *
      *                              *
      ********************************/
     agents.forEach(async (agent) => {
-        console.log(agent)
         await smallville.createAgent({
             name: agent.name,
             location: agent.location,
@@ -74,7 +77,7 @@ async function startSimulation() {
 }
 
 document.getElementById("smallville--next").addEventListener('click', function () {
-    console.log("Pressed update state button")
+    console.log("Updating the game state")
     smallville.updateState()
 });
 

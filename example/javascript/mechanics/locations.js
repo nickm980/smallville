@@ -21,8 +21,16 @@ const locations = {
         y: 380
     },
     "Forest": {
-        x: 590,
-        y: 380
+        x: 490,
+        y: 500
+    },
+    "Branches": {
+        x: 810,
+        y: 355
+    },
+    "Main Island": {
+        x: 330,
+        y: 110
     }
 }
 
@@ -32,7 +40,18 @@ const locations = {
  * @returns {{x: number, y: number}} - The coordinates of the location.
  */
 function getCoordinates(name) {
-    return { x: locations[name].x, y: locations[name].y }
+    const location = getLeafLocation(name)
+    if (locations[location] == undefined){
+        console.error(name + " does not exist")
+        return
+    }
+
+    return { x: locations[location].x, y: locations[location].y }
+}
+
+function getLeafLocation(location) {
+    const parts = location.split(':');
+    return parts[parts.length - 1].trim();
 }
 
 export { getCoordinates }
