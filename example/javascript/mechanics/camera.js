@@ -54,8 +54,6 @@ function enableCameraControlls(game, scene, uiElements) {
             uiElement.setPosition(uiElement.originalOriginX / zoomLevel, uiElement.originalOriginY / zoomLevel)
         }
     });
-
-   return {zoomLevel}
 }
 
 export { enableCameraControlls }
