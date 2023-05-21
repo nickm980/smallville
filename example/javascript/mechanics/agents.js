@@ -49,7 +49,6 @@ class Agent {
 
     say(message) {
         this.text.setText(this.name + ": " + message + " " + this.emoji)
-        console.log(this.emoji)
     }
 
     setEmoji(emoji) {
