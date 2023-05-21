@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.github.nickm980.smallville.Settings;
+import io.github.nickm980.smallville.config.Config;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
 import io.github.nickm980.smallville.prompts.Prompt;
 import okhttp3.OkHttpClient;
@@ -19,7 +20,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ChatGPT implements LLM {
-    private final static String REQUEST_PATH = "https://api.openai.com/v1/chat/completions";
     private final static Logger LOG = LoggerFactory.getLogger(ChatGPT.class);
     private final static ObjectMapper MAPPER = new ObjectMapper();
 
@@ -52,10 +52,10 @@ public class ChatGPT implements LLM {
 	}
 
 	LOG.debug(json);
-
+	
 	RequestBody body = RequestBody.create(json.getBytes());
 	Request request = new Request.Builder()
-	    .url(REQUEST_PATH)
+	    .url(Config.getConfig().getApiPath())
 	    .addHeader("Content-Type", "application/json")
 	    .addHeader("Authorization", "Bearer " + Settings.getApiKey())
 	    .post(body)
