@@ -42,12 +42,46 @@ canvas {
     display: block;
 }
 
-canvas:hover {
-    cursor: url(../assets/NES.css/cursor.png), auto;
+/* "cursor" and "cursor-click" icon source: https://nostalgic-css.github.io/NES.css/ */
+#phaser-container:hover {
+    cursor: url(../assets/cursor/cursor.png), auto;
 }
 
 .nes-btn:hover {
-    cursor: url(../assets/NES.css/cursor-click.png), auto;
+    cursor: url(../assets/cursor/cursor-click.png), auto;
+}
+
+/* loading icon source: http://www.rw-designer.com/cursor-detail/112959 */
+#phaser-container.loading-cursor-frame-0:hover {
+    cursor: url(../assets/cursor/loading/frame_0_delay-0.16s.png), auto;
+}
+
+#phaser-container.loading-cursor-frame-1:hover {
+    cursor: url(../assets/cursor/loading/frame_1_delay-0.16s.png), auto;
+}
+
+#phaser-container.loading-cursor-frame-2:hover {
+    cursor: url(../assets/cursor/loading/frame_2_delay-0.16s.png), auto;
+}
+
+#phaser-container.loading-cursor-frame-3:hover {
+    cursor: url(../assets/cursor/loading/frame_3_delay-0.16s.png), auto;
+}
+
+#phaser-container.loading-cursor-frame-4:hover {
+    cursor: url(../assets/cursor/loading/frame_4_delay-0.16s.png), auto;
+}
+
+#phaser-container.loading-cursor-frame-5:hover {
+    cursor: url(../assets/cursor/loading/frame_5_delay-0.16s.png), auto;
+}
+
+#phaser-container.loading-cursor-frame-6:hover {
+    cursor: url(../assets/cursor/loading/frame_6_delay-0.16s.png), auto;
+}
+
+#phaser-container.loading-cursor-frame-7:hover {
+    cursor: url(../assets/cursor/loading/frame_7_delay-0.16s.png), auto;
 }
 
 .container {
