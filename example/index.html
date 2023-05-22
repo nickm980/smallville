@@ -23,10 +23,17 @@
 
     <script>
         var old = console.log
+        var oldError = console.error
 
         window.console = {
             log: function (str) {
-                old(str)                
+                old(str)
+                var node = document.createElement("div");
+                node.appendChild(document.createTextNode(JSON.stringify(str)));
+                document.getElementById("myLog").appendChild(node);
+            },
+            error: function (str) {
+                oldError(str)
                 var node = document.createElement("div");
                 node.appendChild(document.createTextNode(JSON.stringify(str)));
                 document.getElementById("myLog").appendChild(node);

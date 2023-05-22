@@ -43,11 +43,11 @@ canvas {
 }
 
 /* "cursor" and "cursor-click" icon source: https://nostalgic-css.github.io/NES.css/ */
-#phaser-container:hover {
+#phaser-container:hover:not(disabled) {
     cursor: url(../assets/cursor/cursor.png), auto;
 }
 
-.nes-btn:hover:not(button[disabled]) {
+.nes-btn:hover:not(disabled) {
     cursor: url(../assets/cursor/cursor-click.png), auto;
 }
 
@@ -82,14 +82,6 @@ canvas {
 
 #phaser-container.loading-cursor-frame-7:hover {
     cursor: url(../assets/cursor/loading/frame_7_delay-0.16s.png), auto;
-}
-
-button[disabled]{
-    cursor: not-allowed;
-}
-
-button[disabled]{
-    cursor: not-allowed;
 }
 
 .container {
