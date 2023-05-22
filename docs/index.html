@@ -6,211 +6,285 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smallville - Generative Agents for video games and simulations</title>
+    <script src="https://kit.fontawesome.com/6215c4a563.js" crossorigin="anonymous"></script>
     <style>
+        :root {
+            --primary-color: #5067ff;
+        }
+
         body {
             margin: 0;
             padding: 0;
             font-family: Arial, Helvetica, sans-serif;
+            background-color: #f9f9fa;
         }
 
-        #hero {
-            background-image: url("background.png");
-            height: 500px;
-            color: #dedede;
-            background-size: cover;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        * {
+            box-sizing: border-box;
+        }
+
+        p {
+            line-height: 1.5em;
+        }
+
+        .hero h1 {
+            text-align: center;
+            font-size: 4rem;
+            word-wrap: break-word;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 40px !important;
+            }
+        }
+
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 24px !important;
+            }
+        }
+
+        .section--colored {
+            background-color: rgb(244, 246, 248);
+        }
+
+        .section {
+            border-radius: .5em;
+            max-width: min(1200px, 100%);
+            margin: 0 auto;
+            padding: 5em;
+        }
+
+        .section,
+        .hero {
             text-align: center;
         }
 
-        .footer {
-            background-color: #111;
-            padding: 40px 0;
-            color: #fff;
-            text-align: center;
+        .hero {
+            padding: 10rem;
         }
 
-        .footer ul {
+        .navbar ul {
             list-style-type: none;
-            margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
+            margin: 0;
         }
 
-        .footer li {
-            margin: 10px;
+        .navbar ul li {
+            display: inline-block;
+            margin-right: 1em;
+            margin-left: 1em;
         }
 
-        .footer a {
-            color: #fff;
+        .navbar {
+            font-weight: 600;
+            border-bottom: 1px solid rgb(232, 232, 232);
+        }
+
+        .button {
+            display: inline-block;
+            padding: .75em 1em .75em 1em;
+            border-radius: .5em;
             text-decoration: none;
-        }
-
-        main {
-            padding-left: 2rem;
-            padding-right: 2rem;
-            padding-top: 1rem;
-        }
-
-        button {
-            cursor: pointer;
-        }
-
-        .feature {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            margin-top: 2rem;
-            margin-bottom: 2rem;
-            justify-content: center;
-        }
-
-        .feature img {
-            max-width: 500px;
-        }
-
-        .flex-container {
-            display: flex;
-            flex-wrap: wrap;
-            flex-direction: row;
-            gap: 1rem;
-        }
-
-        .card {
-            flex: max(30%, 200px);
-            background-color: #f0f0f0;
-            padding: 1em;
-        }
-
-        section {
-            margin-bottom: 1rem;
+            margin: .25em;
+            font-weight: 500;
         }
 
         a {
-            color: inherit;
+            color: grey;
+            text-decoration: underline;
+        }
+
+        .button--light:hover {
+            background-color: rgb(244, 244, 244);
+        }
+
+        .button--light-border {
+            border: 1px solid #f4f6f8;
+        }
+
+        .button--dark {
+            background-color: #222;
+            color: white;
+        }
+
+        .button--primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+        }
+
+        .flex--container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1em;
+        }
+
+        .flex--info-container {
+            display: flex;
+            gap: 1em;
+            align-items: stretch;
+        }
+
+        .flex--info-child {
+            flex-basis: max(50%, 500px);
+            text-align: left;
+        }
+
+        .video {
+            aspect-ratio: 16 / 9;
+            width: 100%;
+        }
+
+        .card--container {
+            display: flex;
+            gap: 1em;
+        }
+
+        .card {
+            padding: 1em;
+            text-align: left;
+            background-color: #f4f6f8;
+            border: 2px solid #eff0f1;
+            border-radius: .5em;
+            text-decoration: none;
+            color: black;
+        }
+
+        .card:hover {
+            background-color: #f3f3f3;
+        }
+
+        .card--title {
+            text-decoration: underline;
+        }
+
+        .card--feature-container {
+            display: flex;
+            gap: 1em;
+        }
+
+        .card--feature {
+            border: 1px solid rgb(230, 230, 230);
+            background-color: #f9f9fa;
+            text-align: left;
+            padding: 1em;
+            border-radius: .5em;
+        }
+
+        .card--feature p,
+        .card p {
+            margin-top: .75em;
+        }
+
+        .card--feature i {
+            margin-bottom: .5em;
+            font-size: 2rem;
         }
     </style>
 </head>
 
 <body>
-    <main>
-        <section id="hero">
-            <h1>Smallville</h1>
-            <p>Create Generative Agents for video games and simulations in a web browser. Attempt of recreating
-                Generative Agents: Interactive Simulacra of Human Behavior
-            </p>
-        </section>
-        <section>
-            <div class="flex-container">
-                <a class="card" href="server/index.html">
-                    <h3>Server documentation</h3>
-                    <p>View the swagger documentation for the http endpoints</p>
-                </a>
-                <a class="card" href="out/index.html">
-                    <h3>Javascript Documentation</h3>
-                    <p>Documentation for the node package</p>
-                </a>
-                <a class="card" href="https://github.com/nickm980/smallville">
-                    <h3>GitHub</h3>
-                    <p>View the source code</p>
-                </a>
+    <nav class="navbar">
+        <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="https://github.com/nickm980/smallville/tree/main/example">Example</a></li>
+            <li><a href="https://discord.gg/ktXPsgbFp5">Discord</a></li>
+        </ul>
+        <a class="button button--light" href="https://github.com/nickm980/smallville">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="sbui-icon ">
+                <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                </polygon>
+            </svg>
+            Star us on GitHub
+        </a>
+    </nav>
+    <div class="hero">
+        <h1>Generative Agents For Games And Simulations</h1>
+        <p>Attempt recreating Generative Agents: Interactive Simulacra of Human Behavior</p>
+        <div>
+            <a class="button button--dark" href="out/">Documentation</a>
+            <a class="button button--primary" href="https://github.com/nickm980/smallville">View Code</a>
+        </div>
+    </div>
+    <div class="section">
+        <div class="flex--info-container">
+            <div class="flex--info-child">
+                <h2>What Are Generative Agents?</h2>
+                <p>Generative agents are virtual characters that react to their environment using stored memories. Using
+                    LLM
+                    models such
+                    as ChatGPT, agents are able to observe their surroundings, store memories, and react to state
+                    changes in the world
+                </p>
+                <p>Generative Agents save time programming individual interactions by hand and make NPC's more realistic
+                </p>
+                <a class="button button--dark" href="https://github.com/nickm980/smallville/tree/main/example">View Example Project</a>
             </div>
-            <div class="flex-container">
-                <div class="child">
-                    <h2>Dashboard & Memory Stream</h2>
-                    <p>Dashboard to view information about the simulation, hosted on http://localhost:8080/ by default
-                    </p>
-                    <ul>
-                        <li>Memory Stream</li>
-                        <li>Current Activity</li>
-                        <li>Location</li>
-                        <li>Plans</li>
-                        <li>Observations</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="flex-container">
-                <div class="child">
-                    <h2>Full Example Project</h2>
-                    <p>View an run the example phaser project <a
-                            href="https://github.com/nickm980/smallville/tree/main/example">here</a>. </p>
-                    <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/jS_YsytBbD8"
-                        title="YouTube video player" frameborder="0"
+            <div class="flex--info-child">
+                <h2>Getting Started</h2>
+                <div>
+                    <iframe class="video" width="560" height="315"
+                        src="https://www.youtube-nocookie.com/embed/jS_YsytBbD8" title="YouTube video player"
+                        frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         allowfullscreen></iframe>
                 </div>
             </div>
-            <div class="flex-container">
-                <div class="child">
-                    <h2>Getting Started</h2>
-                    <p>Below is an example of how to create custom generative agents</p>
-                <pre>
-                    <code lang="javascript">
-    import { Smallville } from 'smallville'
-                        
-    const smallville = new Smallville({
-        host: 'http://localhost:8080',
-        stateHandler: (state) => {
-            console.log(state)
-        }
-    });
-                        
-    const successful = await smallville.init()
-                        
-    if (successful) {
-        startSimulation()
-    }
-                        
-    async function startSimulation() {
-        await smallville.createLocation({
-            name: 'Forest',
-        })
+        </div>
 
-        await smallville.createObject({
-            parent: 'Forest',
-            name: 'Campfire',
-            state: 'on'
-        })
-                            
-        await smallville.createObject({
-            parent: 'Forest',
-            name: 'Branches',
-            state: 'broken'
-        })
-
-        await smallville.createAgent({
-            name: "Medina",
-            location: "Forest: Campfire",
-            activity: "Staying warm by the campfire",
-            memories: [
-                    "Initial Characteristics go here"
-                ]
-        })
-
-        await smallville.updateState()                        
-    }
-                    </code>
-                  </pre>
+    </div>
+    <div id="features" class="section section--colored">
+        <h1>Features</h1>
+        <div class="card--feature-container">
+            <div class="card--feature">
+                <i class="fa-regular fa-id-card"></i>
+                <br>
+                <b class="card--feature-title">Dashboard</b>
+                <p>Dashboard for memory stream, activities, and object states</p>
             </div>
-        </section>
-    </main>
-    <footer class="footer">
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Features</a></li>
-            <li><a href="#">Downloads</a></li>
-            <li><a href="#">Documentation</a></li>
-            <li><a href="#">Community</a></li>
-            <li><a href="#">Support</a></li>
-            <li><a href="#">Contact</a></li>
-        </ul>
-        <p>&copy; 2023 nickm980. All rights reserved.</p>
-    </footer>
+            <div class="card--feature">
+                <i class="fa-solid fa-code"></i>
+                <br>
+                <b class="card--feature-title">Javascript Client</b>
+                <p>Client to create custom simulations and games</p>
+            </div>
+            <div class="card--feature">
+                <i class="fa-regular fa-file-lines"></i>
+                <br>
+                <b class="card--feature-title">Configurable</b>
+                <p>Use local LLM's or ChatGPT and has an option to change prompts</p>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <h1>Create Custom Simulations</h1>
+        <div class="flex--container">
+            <div class="card--container">
+                <a class="card flex--child" href="server/">
+                    <b class="card--title">Server Documentation</b>
+                    <p>Interact with the server using http endpoints</p>
+                </a>
+                <a class="card flex--child" href="out/">
+                    <b class="card--title">JavaScript Client Documentation</b>
+                    <p>Create generative agents using the javascript client</p>
+                </a>
+            </div>
+        </div>
+        <div style="margin-top: 2em;">
+            <a class="button button--dark" href="https://discord.gg/ktXPsgbFp5">Join The Discord</a>
+        </div>
+    </div>
 </body>
 
 </html>
