@@ -88,6 +88,10 @@ button[disabled]{
     cursor: not-allowed;
 }
 
+button[disabled]{
+    cursor: not-allowed;
+}
+
 .container {
     padding: 1em;
     margin: 0 auto;
