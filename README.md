@@ -3,7 +3,7 @@
 My attempt at creating generative agent simulations for RPG games or research
 
 ## What are Generative Agents?
-Generative agents are virtual characters that can learn and adapt to their environment. Using LLM models such as ChatGPT or StableLM, agents are able to observe their surroundings, store memories, and react to state changes in the world
+Generative agents are virtual characters that can store memories and dynamically react to their environment. Using LLM models such as ChatGPT or StableLM, agents are able to observe their surroundings, store memories, and react to state changes in the world
 
 Generative Agents save time programming interactions by hand and make NPC's more realistic / dynamic
 
