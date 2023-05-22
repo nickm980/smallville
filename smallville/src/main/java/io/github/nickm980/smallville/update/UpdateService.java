@@ -1,14 +1,9 @@
 package io.github.nickm980.smallville.update;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.github.nickm980.smallville.World;
-import io.github.nickm980.smallville.config.Config;
-import io.github.nickm980.smallville.exceptions.SmallvilleException;
 import io.github.nickm980.smallville.llm.LLM;
 import io.github.nickm980.smallville.models.Agent;
 
@@ -43,12 +38,6 @@ public class UpdateService {
     public void updateAgent(Agent agent) {
 	LOG.info("Starting update for " + agent.getFullName());
 
-	if (updateInProgress) {
-	    throw new SmallvilleException("Cannot update agents at same time");
-	}
-
-	updateInProgress = true;
-
 	AgentUpdate update = new UpdateMemoryWeights()
 	    .setNext(new UpdateFuturePlans())
 	    .setNext(new UpdateCurrentActivity())
@@ -59,7 +48,6 @@ public class UpdateService {
 	update.start(chatService, world, agent);
 
 	LOG.info("Agent updated");
-	updateInProgress = false;
     }
 
     /**
@@ -74,12 +62,6 @@ public class UpdateService {
      * 
      */
     public void updateAgent(Agent agent, String observation) {
-	if (updateInProgress) {
-	    throw new SmallvilleException("Cannot update agents at same time");
-	}
-
-	updateInProgress = true;
-
 	AgentUpdate updater = new UpdateMemoryWeights()
 	    .setNext(new UpdateReaction(observation))
 	    .setNext(new UpdateConversation(observation))
@@ -88,7 +70,6 @@ public class UpdateService {
 	updater.start(chatService, world, agent);
 
 	LOG.info("Agent updated");
-	updateInProgress = false;
     }
 
     /**

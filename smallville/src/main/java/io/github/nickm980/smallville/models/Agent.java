@@ -15,7 +15,7 @@ public class Agent {
     public Agent(String name, List<Characteristic> characteristics, String currentAction, AgentLocation location) {
 	this.name = name;
 	this.memories = new MemoryStream();
-	this.memories.addCharacteristics(characteristics);
+	this.memories.add(characteristics);
 	this.location = location;
 	this.currentAction = new ActionHistory(currentAction);
     }

@@ -37,5 +37,4 @@ public class CurrentPlan {
     public void setEmoji(String emoji) {
 	this.emoji = emoji;
     }
-
 }

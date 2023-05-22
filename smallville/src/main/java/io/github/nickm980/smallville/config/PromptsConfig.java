@@ -13,6 +13,15 @@ public class PromptsConfig {
     private String pickLocation;
     private String createShortTermPlans;
     private String createMidTermPlans;
+    private String agentSummaryDescription;
+    
+    public String getAgentSummaryDescription() {
+        return agentSummaryDescription;
+    }
+
+    public void setAgentSummaryDescription(String agentSummaryDescription) {
+        this.agentSummaryDescription = agentSummaryDescription;
+    }
 
     public String getCreateMidTermPlans() {
 	return createMidTermPlans;

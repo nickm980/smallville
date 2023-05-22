@@ -53,8 +53,8 @@ public class UpdateConversation extends AgentUpdate {
 	Conversation conversation = service.getConversationIfExists(agent, other);
 
 	List<String> memories = conversation.getDialog().stream().map(Dialog::asNaturalLanguage).toList();
-	agent.getMemoryStream().addObservations(memories);
-	other.getMemoryStream().addObservations(memories);
+	agent.getMemoryStream().addAll(memories);
+	other.getMemoryStream().addAll(memories);
 
 	world.save(conversation);
 

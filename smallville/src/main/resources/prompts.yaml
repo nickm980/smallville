@@ -1,3 +1,12 @@
+agentSummaryDescription: |
+  Pretend you are %name%
+
+  Name: %name%
+  Description: %description%
+  Current Location: %location%
+  
+  [Current Time]
+
 createConversationWith: |
   [Agent Summary Description]
   [Future Plans]
@@ -70,32 +79,41 @@ createMemoryRankPrompt: >
 createShortTermPlans: >
   [World Description]
   [Agent Summary Description]
-  [Most Recent Plan]
-         
-  * Every plan should get its own line.
-  * When responding with a time, use the format " hh:mm a "
-
-  Break down what [Agent Name] will do for the next 10 minutes. Start at the current time. [Current Time]
   
+  * Every plan should get its own line.
+  * Give a start time for every plan and format the time as "hh:mm a"
+
+  [Future Plans]
+
+
+  [Last Activity]
+  What will [Agent Name] do every minute for the next 20 minutes? Start at the current time and end 20 minutes from now.
+  Respond with 20 plans.
+  [Current Time]
+
 createMidTermPlans: >
   [World Description]
   [Agent Summary Description]
-  [Most Recent Plan]
          
   * Every plan should get its own line.
   * When responding with a time, use the format " hh:mm a "
-
-  Break down what [Agent Name] will do for the next hour. Start at the current time. [Current Time]
+  
+  [Future Plans]
+  
+  List what [Agent Name] has planned every 20 minutes. Start at the current time. [Current Time]
   
 createFuturePlansPrompt: >
   [World Description]
   [Agent Summary Description]
-  
-  Today is Wednesday, February 13. What does [Agent Name] have planned for today?
-  
+    
   * Every plan should be on a new line
   * When responding with a time, use the format " hh:mm a "
-   Predict what [Agent Name] has planned for the entire day. Start at the current time. 
+  
+  
+   Today is Wednesday, February 13. What does [Agent Name] have planned for today? 
+   
+   * Start every plan on a new line with the start and ending time
+   * Include a plan for the current time
    [Current Time]
  
 createAskQuestionPrompt: |

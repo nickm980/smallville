@@ -49,6 +49,7 @@ public class SmallvilleServer {
 	app.get("/dashboard", (ctx) -> {
 	    Map<String, Object> model = new HashMap<>();
 	    model.put("agents", service.getAgents());
+	    model.put("objects", service.getChangedLocations());
 	    Mustache mustache = mf.compile("index.mustache");
 	    String output = mustache.execute(new StringWriter(), model).toString();
 	    ctx.html(output);
@@ -148,7 +149,7 @@ public class SmallvilleServer {
 
 	    ctx.json(Map.of("agents", agents, "location_states", locations, "conversations", conversations));
 	});
-	
+
 	app.get("/state", (ctx) -> {
 	    List<AgentStateResponse> agents = service.getAgents();
 	    List<LocationStateResponse> locations = service.getChangedLocations();
@@ -156,7 +157,7 @@ public class SmallvilleServer {
 
 	    ctx.json(Map.of("agents", agents, "location_states", locations, "conversations", conversations));
 	});
-	
+
 	app.start(port);
     }
 

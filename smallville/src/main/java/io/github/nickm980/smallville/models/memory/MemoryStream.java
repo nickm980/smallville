@@ -32,7 +32,16 @@ public class MemoryStream {
     }
 
     public List<Memory> getUnweightedMemories() {
-	return memories.stream().filter(memory -> memory.getImportance() == 0).toList();
+	return memories.stream().filter(memory -> {
+	    if (memory instanceof Plan) {
+		Plan p = (Plan) memory;
+		if (p.isShortTerm()) {
+		    return false;
+		}
+	    }
+
+	    return memory.getImportance() == 0;
+	}).toList();
     }
 
     public void addObservation(String memory) {
@@ -71,26 +80,32 @@ public class MemoryStream {
 	this.memories.addAll(plans);
     }
 
-    public void addObservations(List<String> memories) {
+    public void addAll(List<String> memories) {
 	this.memories.addAll(memories.stream().map(Observation::new).toList());
     }
 
-    public void addMemories(List<Memory> memories) {
+    public void add(List<? extends Memory> memories) {
 	this.memories.addAll(memories);
     }
 
-    public void addCharacteristics(List<Characteristic> characteristics) {
-	this.memories.addAll(characteristics);
-    }
+    public List<Plan> prunePlans() {
+	List<Plan> copies = new ArrayList<Plan>();
 
-    public void prunePlans() {
 	memories.removeIf((memory) -> {
 	    if (memory instanceof Plan) {
 		Plan plan = (Plan) memory;
-		return plan.getTime() != null && plan.getTime().compareTo(LocalDateTime.now()) < 0;
+		boolean hasPast = plan.getTime() != null && plan.getTime().compareTo(LocalDateTime.now()) < 0;
+
+		if (hasPast) {
+		    copies.add(plan);
+		}
+
+		return hasPast;
 	    }
 	    return false;
 	});
+
+	return copies;
     }
 
     public void setShortTermPlans(List<Plan> plans) {

@@ -20,6 +20,12 @@ public class Observation extends Memory implements TemporalMemory {
 	time = LocalDateTime.now();
     }
 
+    public Observation(String description, LocalDateTime time, int importance) {
+	super(description);
+	this.time = time;
+	super.setImportance(importance);
+    }
+
     @Override
     public LocalDateTime getTime() {
 	return time;

@@ -100,7 +100,7 @@ public class PromptBuilder implements IPromptBuilder {
 	    .replace("[Current Location's Objects]", atomicBuilder.getObjects(agent.getLocation().getObjects()))
 	    .replace("[Current Activity]", agent.getCurrentActivity())
 	    .replace("[Last Activity]", agent.getLastActivity())
-	    .replace("[Most Recent Plan]", atomicBuilder.getLatestPlan(agent))
+	    .replace("[Most Recent Plan]", atomicBuilder.getNextPlan(agent))
 	    .replace("[Future Plans]", "Plans: " + atomicBuilder.asNaturalLanguage(agent.getPlans()));
 
 	return new Prompt.User(prompt);

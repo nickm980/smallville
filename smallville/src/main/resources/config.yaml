@@ -1,7 +1,2 @@
-updateOrder:
-  - "Update Memory Weights"
-  - "Update Future Plans"
-  - "Update Current Activity"
-  - "Update Memory Weights"
-  - "Update Locations"
 apiPath: "https://api.openai.com/v1/chat/completions"
+timeFormat: "h:mm a"

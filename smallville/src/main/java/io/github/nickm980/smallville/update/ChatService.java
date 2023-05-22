@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -19,6 +20,8 @@ import io.github.nickm980.smallville.llm.LLM;
 import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.Conversation;
 import io.github.nickm980.smallville.models.Dialog;
+import io.github.nickm980.smallville.models.memory.Memory;
+import io.github.nickm980.smallville.models.memory.Observation;
 import io.github.nickm980.smallville.models.memory.Plan;
 import io.github.nickm980.smallville.prompts.Prompt;
 import io.github.nickm980.smallville.prompts.PromptBuilder;
@@ -26,7 +29,6 @@ import io.github.nickm980.smallville.prompts.response.CurrentPlan;
 import io.github.nickm980.smallville.prompts.response.ObjectChangeResponse;
 import io.github.nickm980.smallville.prompts.response.Reaction;
 
-//TODO: rename this class to a better name. Its hard to tell what it does
 public class ChatService {
 
     private final LLM chat;
@@ -70,6 +72,7 @@ public class ChatService {
 	Prompt prompt = new PromptBuilder()
 	    .withAgent(agent)
 	    .withLocations(world.getLocations())
+	    .withPrompt(Config.getPrompts().getCreateReactionSuggestion())
 	    .createReactionSuggestion(observation)
 	    .build();
 
@@ -190,29 +193,44 @@ public class ChatService {
 	String[] lines = input.split("\n");
 
 	for (String line : lines) {
-	    String[] splitPlan = line.split("\\d+", 2); // split after first number
+	    LocalDateTime start = null;
 
-	    if (splitPlan.length == 1) {
+	    try {
+		start = parseTime(input, line);
+	    } catch (Exception e) {
+		LOG.error("Could not parse time");
 		continue;
 	    }
 
-	    int index = input.indexOf(splitPlan[1]) - 2;
-
-	    if (index == -1) {
-		LOG.warn("Skipping plan which did not have a time");
+	    if (start == null) {
 		continue;
 	    }
-
-	    String time = input.substring(index, index + 8).trim();
-
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
-	    LocalDateTime start = LocalDateTime.of(LocalDate.now(), LocalTime.parse(time, formatter));
 
 	    Plan plan = new Plan(line, start);
 	    plans.add(plan);
 	}
 
 	return plans;
+    }
+
+    private LocalDateTime parseTime(String input, String line) throws DateTimeParseException {
+	String[] splitPlan = line.split("\\d+", 2); // split after first number
+
+	if (splitPlan.length == 1) {
+	    LOG.warn("Temporal memory possibly missing a time. " + line);
+	    return null;
+	}
+
+	int index = input.indexOf(splitPlan[1]) - 2;
+
+	if (index == -1) {
+	    LOG.warn("Temporal memory possibly missing a time. " + line);
+	    return null;
+	}
+
+	String time = input.substring(index, index + 8).trim().replace("(", "");
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+	return LocalDateTime.of(LocalDate.now(), LocalTime.parse(time, formatter));
     }
 
     public ObjectChangeResponse[] getObjectsChangedBy(Agent agent) {
@@ -242,7 +260,7 @@ public class ChatService {
 	    String value = parts[1].trim();
 	    LOG.debug("Trying to change " + item + " to " + value);
 
-	    if (item != null && value != null && !value.equals("Unchanged")) {
+	    if (item != null && value != null && !value.equalsIgnoreCase("Unchanged")) {
 		objects[i] = new ObjectChangeResponse(item, value);
 	    }
 	}
@@ -269,5 +287,42 @@ public class ChatService {
 	String response = chat.sendChat(prompt, .6);
 
 	return parsePlans(response);
+    }
+
+    // can be optimized to not need llm
+    public List<Memory> convertFuturePlansToMemories(Agent agent, List<Plan> plans) {
+	if (plans.isEmpty()) {
+	    return new ArrayList<Memory>();
+	}
+	String promptSentence = """
+		Convert the following future tense sentences to past tense. Each sentence will be on it's own new line.
+		Sentences are separated by semi colans (;)
+
+		%s""";
+
+	promptSentence = promptSentence
+	    .replace("%s", String.join("; ", plans.stream().map(plan -> plan.getDescription()).toList()));
+
+	Prompt prompt = new PromptBuilder().withAgent(agent).withPrompt(promptSentence).build();
+
+	String response = chat.sendChat(prompt, .1);
+
+	String[] lines = response.split("\n");
+	List<Memory> result = new ArrayList<Memory>();
+
+	for (int i = 0; i < lines.length - 1; i++) {
+	    LocalDateTime time = null;
+
+	    try {
+		time = parseTime(response, lines[i]);
+	    } catch (Exception e) {
+		LOG.error("Could not parse time");
+		continue;
+	    }
+
+	    result.add(new Observation(lines[i], time, (int) plans.get(i).getImportance()));
+	}
+
+	return result;
     }
 }

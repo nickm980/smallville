@@ -21,6 +21,7 @@ public class UpdateLocations extends AgentUpdate {
 	}
 
 	LOG.info("[Locations] Location states updated");
+
 	return next(converter, world, agent);
     }
 }

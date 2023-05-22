@@ -27,7 +27,7 @@ public class Plan extends Memory implements TemporalMemory, NaturalLanguageConve
 	super(description);
 	this.time = time;
 	this.isShortTerm = isShortTerm;
-	this.type = PlanType.OTHER;
+	this.type = PlanType.LONG_TERM;
     }
 
     public PlanType getType() {

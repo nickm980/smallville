@@ -15,12 +15,13 @@
 </head>
 
 <body>
+	<h1>Agents</h1>
     <table>
         <tr>
             <th>Name</th>
             <th>Action</th>
             <th>Location</th>
-            <th>Object State</th>
+            <th>Object</th>
             <th>Emoji</th>
         </tr>
         {{#agents}}
@@ -31,7 +32,22 @@
             <td>{{object}}</td>
             <td>{{emoji}}</td>
         </tr>
-        {{/agents}}
+        {{/agents}}        
+    </table>
+    
+        <h1>Objects</h1>
+    
+        <table>
+        <tr>
+            <th>Name</th>
+            <th>State</th>
+        </tr>
+        {{#objects}}
+        <tr>
+            <td>{{name}}</td>
+            <td>{{state}}</td>
+        </tr>
+        {{/objects}}
     </table>
 </body>
 

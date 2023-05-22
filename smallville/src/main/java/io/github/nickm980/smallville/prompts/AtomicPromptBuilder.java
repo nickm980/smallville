@@ -7,6 +7,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.github.nickm980.smallville.config.Config;
 import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.Location;
 import io.github.nickm980.smallville.models.NaturalLanguageConvertible;
@@ -21,6 +25,7 @@ import io.github.nickm980.smallville.models.memory.Plan;
  *
  */
 public class AtomicPromptBuilder {
+    private static final Logger LOG = LoggerFactory.getLogger(AtomicPromptBuilder.class);
     /**
      * [Current Time]
      * <p>
@@ -30,7 +35,7 @@ public class AtomicPromptBuilder {
      * @return Current time as natural language
      */
     public String getTimeAsString(LocalDateTime time) {
-	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Config.getConfig().getTimeFormat());
 	return "It is currently " + time.format(formatter);
     }
 
@@ -69,15 +74,7 @@ public class AtomicPromptBuilder {
      * @return
      */
     public String getAgentSummaryDescription(Agent person) {
-	var prompt = """
-		Pretend you are %name%
-
-		Name: %name%
-		Description: %description%
-		Current Location: %location%
-
-		[Current Time]
-		""";
+	var prompt = Config.getPrompts().getAgentSummaryDescription();
 
 	List<Characteristic> characteristics = person.getCharacteristics();
 	String descriptions = characteristics.stream().map(Memory::getDescription).collect(Collectors.joining("; "));
@@ -89,11 +86,12 @@ public class AtomicPromptBuilder {
 	    .replace("%location%", person.getLocation().getName());
 
 	if (!person.getPlans().isEmpty()) {
-	    prompt = prompt.replace("%plans%", "Future Plans: " + asNaturalLanguage(person.getPlans()));
+	    prompt = prompt
+		.replace("%plans%", "Future Plans: " + asNaturalLanguage(person.getMemoryStream().getShortTermPlans()));
+	} else {
+	    prompt = prompt.replace("%plans%", "");
 	}
-
-	prompt = prompt.replace("%plans%", "");
-
+	
 	return prompt;
     }
 
@@ -104,6 +102,7 @@ public class AtomicPromptBuilder {
 	    result += memory.getDescription();
 	}
 
+	LOG.info(agent.getFullName() + "'s relevant memories (" + observation + "): " + result);
 	return result;
     }
 
@@ -127,7 +126,7 @@ public class AtomicPromptBuilder {
 	return result;
     }
 
-    public CharSequence getLatestPlan(Agent agent) {
+    public CharSequence getNextPlan(Agent agent) {
 	String result = "";
 
 	Plan plan = agent.getPlans().stream().sorted(new Comparator<Plan>() {
