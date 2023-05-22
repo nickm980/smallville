@@ -21,6 +21,7 @@ public class Config {
 
     public static PromptsConfig getPrompts() {
 	if (prompts == null) {
+	    LOG.info("Loading prompts config file...");
 	    prompts = loadFile("prompts.yaml", PromptsConfig.class);
 	}
 
@@ -29,6 +30,7 @@ public class Config {
 
     public static GeneralConfig getConfig() {
 	if (config == null) {
+	    LOG.info("Loading general config file...");
 	    config = loadFile("config.yaml", GeneralConfig.class);
 	}
 
@@ -42,12 +44,14 @@ public class Config {
 	InputStream inputStream = null;
 
 	if (Files.exists(configFile)) {
+	    LOG.debug("Configuration file found");
 	    try {
 		inputStream = Files.newInputStream(configFile);
 	    } catch (IOException e) {
 		e.printStackTrace();
 	    }
 	} else {
+	    LOG.debug("Loading default configuration");
 	    inputStream = Config.class.getResourceAsStream("/" + file);
 	}
 

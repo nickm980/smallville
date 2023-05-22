@@ -15,7 +15,11 @@
   border: 3px solid black;
 } 
 
-.nes-btn:hover {
+.nes-btn:hover:not(button[disabled]) {
   box-shadow: inset -5px -5px rgba(63, 63, 63, 0.25);
   background-color: var(--button-color-secondary);
+}
+
+.loading {
+  content: "Loading...";
 }

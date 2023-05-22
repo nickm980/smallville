@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import io.github.nickm980.smallville.config.Config;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
 import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.Conversation;
@@ -39,11 +38,13 @@ public class PromptBuilder implements IPromptBuilder {
 	return this;
     }
 
+    public PromptBuilder withPrompt(String prompt) {
+	this.prompt = prompt;
+	return this;
+    }
+
     @Override
     public PromptBuilder createConversationWith(Agent other) {
-	// TODO: add relevant memories
-	prompt = Config.getPrompts().getCreateConversationWith();
-
 	prompt
 	    .replace("%other_summary_description%", atomicBuilder.getAgentSummaryDescription(other))
 	    .replace("%other_name%", other.getFullName());
@@ -52,10 +53,7 @@ public class PromptBuilder implements IPromptBuilder {
 
     @Override
     public PromptBuilder createReactionSuggestion(String observation) {
-	prompt = Config.getPrompts().getCreateReactionSuggestion();
-
 	prompt = prompt
-	    .replace("%current_activity%", data.getAgent().getCurrentActivity())
 	    .replace("%relevant_memories%", atomicBuilder.buildRelevantMemories(data.getAgent(), observation))
 	    .replace("%observation%", observation);
 
@@ -63,15 +61,7 @@ public class PromptBuilder implements IPromptBuilder {
     }
 
     @Override
-    public PromptBuilder createCurrentPlanPrompt() {
-	prompt = Config.getPrompts().getCreateCurrentPlanPrompt();
-	return this;
-    }
-
-    @Override
     public PromptBuilder createMemoryRankPrompt() {
-	prompt = Config.getPrompts().getCreateMemoryRankPrompt();
-
 	prompt = String
 	    .format(prompt,
 		    data
@@ -85,24 +75,11 @@ public class PromptBuilder implements IPromptBuilder {
     }
 
     @Override
-    public PromptBuilder createFuturePlansPrompt() {
-	prompt = Config.getPrompts().getCreateFuturePlansPrompt();
-	return this;
-    }
-
-    @Override
     public PromptBuilder createAskQuestionPrompt(String question) {
-	prompt = Config.getPrompts().getCreateAskQuestionPrompt();
-
 	prompt = prompt
 	    .replace("%question%", question)
 	    .replace("%relevant_memories%", atomicBuilder.buildRelevantMemories(data.getAgent(), question));
 
-	return this;
-    }
-
-    public PromptBuilder createPastAndPresent() {
-	prompt = Config.getPrompts().getCreatePastAndPresent();
 	return this;
     }
 
@@ -119,6 +96,7 @@ public class PromptBuilder implements IPromptBuilder {
 	    .replace("[Agent Summary Description]", atomicBuilder.getAgentSummaryDescription(agent))
 	    .replace("[Current Time]", atomicBuilder.getTimeAsString(LocalDateTime.now()))
 	    .replace("[Agent Name]", agent.getFullName())
+	    .replace("[Current Location]", agent.getLocation().getName())
 	    .replace("[Current Location's Objects]", atomicBuilder.getObjects(agent.getLocation().getObjects()))
 	    .replace("[Current Activity]", agent.getCurrentActivity())
 	    .replace("[Last Activity]", agent.getLastActivity())
@@ -129,20 +107,7 @@ public class PromptBuilder implements IPromptBuilder {
     }
 
     public PromptBuilder createObjectUpdates(String tenses) {
-	prompt = Config.getPrompts().getCreateObjectUpdates();
-
-	// tenses is "<name> is no longer <past activity> and is now <current activity>"
 	prompt = prompt.replace("%tenses%", tenses);
-	return this;
-    }
-
-    public PromptBuilder createExactLocation() {
-	prompt = Config.getPrompts().getPickLocation();
-	return this;
-    }
-    
-    public PromptBuilder createShortTermPlansPrompt() {
-	prompt = Config.getPrompts().getCreateShortTermPlans();
 	return this;
     }
 }

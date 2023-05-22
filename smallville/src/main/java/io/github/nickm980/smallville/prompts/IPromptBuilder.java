@@ -4,7 +4,6 @@ import java.util.List;
 
 import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.Conversation;
-import io.github.nickm980.smallville.models.Location;
 import io.github.nickm980.smallville.models.SimulatedLocation;
 
 /**
@@ -54,25 +53,11 @@ public interface IPromptBuilder {
     PromptBuilder createReactionSuggestion(String observation);
 
     /**
-     * Adds the current plan of the agent to the prompt.
-     * 
-     * @return the prompt builder instance
-     */
-    PromptBuilder createCurrentPlanPrompt();
-
-    /**
      * Ranks the memories of the agent and adds them to the prompt.
      * 
      * @return the prompt builder instance
      */
     PromptBuilder createMemoryRankPrompt();
-
-    /**
-     * Adds the future plans of the agent, given a time frame, to the prompt.
-     * 
-     * @return the prompt builder instance
-     */
-    PromptBuilder createFuturePlansPrompt();
 
     /**
      * 

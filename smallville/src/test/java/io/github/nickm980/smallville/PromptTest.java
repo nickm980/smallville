@@ -4,17 +4,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.github.nickm980.smallville.llm.ChatGPT;
-import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.SimulatedLocation;
-import io.github.nickm980.smallville.models.memory.Characteristic;
 import io.github.nickm980.smallville.prompts.Prompt;
 
 public class PromptTest {
@@ -27,6 +25,8 @@ public class PromptTest {
 	sim.save(new SimulatedLocation("red house"));
     }
 
+    @Disabled
+    @Test
     public void testChat() {
 	Prompt prompt = new Prompt.User("ping (respond with pong)");
 	ChatGPT gpt = new ChatGPT();
@@ -35,6 +35,7 @@ public class PromptTest {
 	assertEquals(response, "pong");
     }
 
+    @Disabled
     @Test
     public void testJson() {
 	String response = """

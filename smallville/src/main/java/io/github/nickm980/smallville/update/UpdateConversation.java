@@ -1,4 +1,4 @@
-package io.github.nickm980.smallville.llm.update;
+package io.github.nickm980.smallville.update;
 
 import java.util.List;
 
@@ -53,8 +53,8 @@ public class UpdateConversation extends AgentUpdate {
 	Conversation conversation = service.getConversationIfExists(agent, other);
 
 	List<String> memories = conversation.getDialog().stream().map(Dialog::asNaturalLanguage).toList();
-	agent.getMemoryStream().addAll(memories);
-	other.getMemoryStream().addAll(memories);
+	agent.getMemoryStream().addObservations(memories);
+	other.getMemoryStream().addObservations(memories);
 
 	world.save(conversation);
 

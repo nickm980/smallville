@@ -49,11 +49,18 @@ class UIScene extends Phaser.Scene {
 
     create() {
         function setupButtons(scene) {
-            let updateStateButton = scene.add.dom(149, 24).createFromHTML('<button class="nes-btn" id="smallville--next">Update State (1 min)</button>');
+            let updateStateButton = scene.add.dom(149, 24).createFromHTML('<button class="nes-btn" id="smallville--next">Update State</button>');
             updateStateButton.setScrollFactor(0,0);
             return [updateStateButton]
         }
 
+        function setupDebug(scene){
+            let debug = scene.add.dom(500, 0).createFromHTML('<div id="debug"><p>Mouse Coords <span id="smallville--debug-mouse">(0, 0)</span></p></div>');
+            debug.setScrollFactor(0,0);
+            return [debug]
+        }
+
+        setupDebug(this)
         setupButtons(this)
     }
 }

@@ -1,4 +1,4 @@
-package io.github.nickm980.smallville.llm.update;
+package io.github.nickm980.smallville.update;
 
 import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.models.Agent;
@@ -18,7 +18,7 @@ public class UpdateCurrentActivity extends AgentUpdate {
 	agent.setLocation(new AgentLocation(location));
 	agent.setCurrentActivity(plan.getCurrentActivity());
 	agent.setCurrentEmoji(plan.getEmoji());
-	agent.getMemoryStream().remember(plan.getLastActivity());
+	agent.getMemoryStream().addObservation(plan.getLastActivity());
 
 	return next(service, world, agent);
     }

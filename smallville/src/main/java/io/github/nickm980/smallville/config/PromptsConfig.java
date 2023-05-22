@@ -12,7 +12,16 @@ public class PromptsConfig {
     private String createObjectUpdates;
     private String pickLocation;
     private String createShortTermPlans;
-    
+    private String createMidTermPlans;
+
+    public String getCreateMidTermPlans() {
+	return createMidTermPlans;
+    }
+
+    public void setCreateMidTermPlans(String createMidTermPlans) {
+	this.createMidTermPlans = createMidTermPlans;
+    }
+
     public PromptsConfig() {
     }
 
@@ -83,9 +92,9 @@ public class PromptsConfig {
     public String getPickLocation() {
 	return pickLocation;
     }
-    
+
     public void setPickLocation(String pickLocation) {
-	this.pickLocation= pickLocation;
+	this.pickLocation = pickLocation;
     }
 
     public String getCreateShortTermPlans() {

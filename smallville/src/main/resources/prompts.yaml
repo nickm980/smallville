@@ -39,73 +39,65 @@ createCurrentPlanPrompt: |
   [Agent Summary Description]
   [Most Recent Plan]
   
-  For activity fill in the present tense of this sentence and remove any mention to time: [Most Recent Plan]
+  Based on the time of day [Current Time] fill in the activity field
   For last_activity fill in the past tense of this sentence: [Current Activity]
-  For emoji pick an emoji based on activity
-  
+  For emoji pick an emoji based on the activity. Not the location.
+
   Respond confidently in the following JSON format
 
   {
     "last_activity": "<fill in>"
     "activity": "I am <fill in>",
     "location": "<Location Name>",
-    "emoji": "<fill in>"
+    "emoji": "<fill in>",
   }
 
 pickLocation: |
   You are currently in the [Current Location]
-  Current Activity: Walking out the door
+  Current Activity: [Current Activity]
   Based on the following objects [Current Location's Objects] which one will you interact with?
   
   Do not include punctuation.
   
-createMemoryRankPrompt: |
+createMemoryRankPrompt: >
   On the scale of 1 to 10, where 1 is purely mundane
   (e.g., brushing teeth, making bed) and 10 is extremely poignant (e.g., a break up, college
-  acceptance), rate the likely poignancy of the following pieces of memory. Always answer with only a list of numbers. For example, if given the following memories Memories: John did nothing, John lin went to school, John lin saw a concert
-  respond with [1, 3, 5]. If just given one memory still respond in a list. Memories are separated by commas. Memories: %s
+  acceptance), rate the likely poignancy of the following pieces of memory. Always answer with only a list of numbers. For example, if given the following memories Memories: John did nothing; John lin went to school; John lin saw a concert
+  respond with [1, 2, 6]. If just given one memory still respond in a list. Memories are separated by semi colans (;) 
+  
+  Memories: %s
 
-createShortTermPlans: |
+createShortTermPlans: >
   [World Description]
   [Agent Summary Description]
   [Most Recent Plan]
+         
+  * Every plan should get its own line.
+  * When responding with a time, use the format " hh:mm a "
+
+  Break down what [Agent Name] will do for the next 10 minutes. Start at the current time. [Current Time]
   
-  Using the plan closest to the current time, predict what [Agent Name] will do for the next 20 minutes.
-  Only use the next 20 minutes. For example, do if the time is 8:00 AM do not tell me what happens at 9:05 AM 
-  or any time after 8:20 AM. I only want to know what happens for those 20 minutes.
-  
-  Respond using a list of 4-5 activities and times. Do not use pronouns. Only use the locations and objects given to you. 
-  No other locations exist in the world besides the ones listed. Only use the future tense. 
-  Only use the first person. Do not respond with more than 5. 
-  When responding with a time, use the format "hh:mm a"
-  
-  For example:
-  - Will walk to the school from 9:00 AM - 9:05 AM
-  - Will open the door to the classroom at 9:05 AM
-  - Will say hello to the teacher at 9:10 AM
-  - Will be seated at 9:15 AM
-  - Will start doing classwork at 9:20 AM
-  
-createFuturePlansPrompt: |
+createMidTermPlans: >
   [World Description]
   [Agent Summary Description]
-  Based on what you know and the current time, guess what will [Agent Name] do for the rest of the day?
+  [Most Recent Plan]
+         
+  * Every plan should get its own line.
+  * When responding with a time, use the format " hh:mm a "
 
-  The predictions must span an entire 24 hours and include sleeping hours.
+  Break down what [Agent Name] will do for the next hour. Start at the current time. [Current Time]
   
-  Respond using a list of 3-5 activities and times. Do not use pronouns. Only use the locations and objects given to you. 
-  No other locations exist in the world besides the ones listed. 
-  There are no other objects nearby besides the ones listed. Use the future tense. 
-  Use the first person. Do not respond with more than 5. 
-  When responding with a time, use the format "hh:mm a"
+createFuturePlansPrompt: >
+  [World Description]
+  [Agent Summary Description]
   
-  For example:
-  - Will walk to the school from 9:00 AM - 9:30 AM
-  - Will take a test from 12:00 PM - 12:30 PM
-  - Will go to lunch from 2:00 PM - 3:00 PM
-  - Will work on a project after school from 2:30 PM - 3:00 PM
-  - Will have dinner from 5:00 PM to 5:30 PM
+  Today is Wednesday, February 13. What does [Agent Name] have planned for today?
   
+  * Every plan should be on a new line
+  * When responding with a time, use the format " hh:mm a "
+   Predict what [Agent Name] has planned for the entire day. Start at the current time. 
+   [Current Time]
+ 
 createAskQuestionPrompt: |
   [World Description]
   [Agent Summary Description]

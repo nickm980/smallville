@@ -9,18 +9,18 @@ public abstract class Prompt {
     public Prompt(String content) {
 	this.content = content;
     }
-    
+
     abstract String getRole();
-    
+
     public String getContent() {
 	return content;
     }
-    
+
     public Map<String, String> build() {
 	Map<String, String> map = new HashMap<>();
 	map.put("role", getRole());
-	map.put("content", content.replace("\n", " "));
-	
+	map.put("content", content);
+
 	return map;
     }
 
@@ -46,4 +46,3 @@ public abstract class Prompt {
 	}
     }
 }
-

@@ -5,7 +5,6 @@ import java.util.List;
 
 import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.Conversation;
-import io.github.nickm980.smallville.models.Location;
 import io.github.nickm980.smallville.models.SimulatedLocation;
 
 public class PromptData {

@@ -32,12 +32,12 @@ import io.github.nickm980.smallville.models.ObjectState;
 import io.github.nickm980.smallville.models.SimulatedLocation;
 import io.github.nickm980.smallville.models.SimulatedObject;
 import io.github.nickm980.smallville.models.memory.Characteristic;
-import io.github.nickm980.smallville.prompts.PromptService;
+import io.github.nickm980.smallville.update.UpdateService;
 
 public class SimulationService {
 
     private final ModelMapper mapper;
-    private final PromptService prompts;
+    private final UpdateService prompts;
     private final World world;
     private final AccessTime time;
     private final Logger LOG = LoggerFactory.getLogger(SimulationService.class);
@@ -46,7 +46,7 @@ public class SimulationService {
 	this.world = world;
 	this.mapper = new ModelMapper();
 	this.time = new AccessTime();
-	this.prompts = new PromptService(llm, world);
+	this.prompts = new UpdateService(llm, world);
     }
 
     public void createMemory(CreateMemoryRequest request) {
@@ -54,7 +54,7 @@ public class SimulationService {
 	    react(request.getName(), request.getDescription());
 	} else {
 	    Agent agent = world.getAgent(request.getName()).orElseThrow();
-	    agent.getMemoryStream().remember(request.getDescription());
+	    agent.getMemoryStream().addObservation(request.getDescription());
 	}
     }
 

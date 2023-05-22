@@ -6,7 +6,6 @@ const smallville = new Smallville({
     host: 'http://localhost:8080',
     stateHandler: (state) => {
         console.log(state)
-        stopShowingLoadingCursor()
         state.agents.forEach((agent) => {
             updateAgent({
                 name: agent.name,
@@ -122,10 +121,15 @@ function stopShowingLoadingCursor() {
 
 document
     .getElementById('smallville--next')
-    .addEventListener('click', function () {
+    .addEventListener('click', async function () {
         showLoadingCursor()
         console.log('Updating the game state')
-        smallville.updateState()
+        this.innerHTML = "Loading..."
+        this.disabled = true
+        await smallville.updateState()
+        stopShowingLoadingCursor()
+        this.innerHTML = "Update State"
+        this.disabled = false
     })
 
 await smallville.sync()

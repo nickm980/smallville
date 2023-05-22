@@ -51,8 +51,8 @@ public class ChatGPT implements LLM {
 	    e1.printStackTrace();
 	}
 
-	LOG.debug(json);
-	
+	LOG.debug("[Chat Request]" + prompt.getContent().replaceAll("\n", " "));
+
 	RequestBody body = RequestBody.create(json.getBytes());
 	Request request = new Request.Builder()
 	    .url(Config.getConfig().getApiPath())
@@ -75,9 +75,9 @@ public class ChatGPT implements LLM {
 		throw new SmallvilleException("Invalid api token or rate limit reached.");
 	    }
 
-	    LOG.debug(responseBody.replace("\n", ""));
-
 	    result = node.get("choices").get(0).get("message").get("content").asText();
+
+	    LOG.debug("[Chat Response]" + result);
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}

@@ -1,4 +1,4 @@
-package io.github.nickm980.smallville.prompts;
+package io.github.nickm980.smallville.update;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,15 +10,6 @@ import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.config.Config;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
 import io.github.nickm980.smallville.llm.LLM;
-import io.github.nickm980.smallville.llm.update.AgentUpdate;
-import io.github.nickm980.smallville.llm.update.ChatService;
-import io.github.nickm980.smallville.llm.update.UpdateAgentExactLocation;
-import io.github.nickm980.smallville.llm.update.UpdateConversation;
-import io.github.nickm980.smallville.llm.update.UpdateCurrentActivity;
-import io.github.nickm980.smallville.llm.update.UpdateFuturePlans;
-import io.github.nickm980.smallville.llm.update.UpdateLocations;
-import io.github.nickm980.smallville.llm.update.UpdateMemoryWeights;
-import io.github.nickm980.smallville.llm.update.UpdateReaction;
 import io.github.nickm980.smallville.models.Agent;
 
 /**
@@ -28,14 +19,14 @@ import io.github.nickm980.smallville.models.Agent;
  * It provides methods for updating an agent's state based on different types of
  * observations as well as a method for asking a question to an agent
  */
-public class PromptService {
+public class UpdateService {
 
     private final World world;
     private final ChatService chatService;
-    private final Logger LOG = LoggerFactory.getLogger(PromptService.class);
+    private final Logger LOG = LoggerFactory.getLogger(UpdateService.class);
     private boolean updateInProgress;
 
-    public PromptService(LLM chat, World world) {
+    public UpdateService(LLM chat, World world) {
 	this.updateInProgress = false;
 	this.world = world;
 	this.chatService = new ChatService(world, chat);
