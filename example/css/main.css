@@ -42,8 +42,50 @@ canvas {
     display: block;
 }
 
-canvas:hover, .nes-btn:hover:not(button[disabled]) {
-    cursor: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABFklEQVRYR9WXURLDIAhE6/0PbSdOtUpcd1Gnpv1KGpTHBpCE1/cXq+vrMph7dGvXZTtpfW10DCA5jrH1H0Jhs5E0hnZdCR+vb5S8Nn8mQCeS9BdSalYJqMBjAGzq59xAESN7VFVUgV8AZB/dZBR7QTFDCqGquvUBVVoEtgIwpQRzmANSFHgWQKExHdIrPeuMvQNDarXe6nC/AutgV3JW+6bgqQLeV8FekRtgV+ToDKEKnACYKsfZjjkam7a0ZpYTytwmgainpC3HvwBocgKOxqRjehoR9DFKNFYtOwCGYCszobeCbl26N6yyQ6g8X/Wex/rBPsNEV6qAMaJPMynIHQCoSqS9JSMmwef51LflTgCRszU7DvAGiV6mHWfsaVUAAAAASUVORK5CYII=), auto;
+/* "cursor" and "cursor-click" icon source: https://nostalgic-css.github.io/NES.css/ */
+#phaser-container:hover {
+    cursor: url(../assets/cursor/cursor.png), auto;
+}
+
+.nes-btn:hover:not(button[disabled]) {
+    cursor: url(../assets/cursor/cursor-click.png), auto;
+}
+
+/* loading icon source: http://www.rw-designer.com/cursor-detail/112959 */
+#phaser-container.loading-cursor-frame-0:hover {
+    cursor: url(../assets/cursor/loading/frame_0_delay-0.16s.png), auto;
+}
+
+#phaser-container.loading-cursor-frame-1:hover {
+    cursor: url(../assets/cursor/loading/frame_1_delay-0.16s.png), auto;
+}
+
+#phaser-container.loading-cursor-frame-2:hover {
+    cursor: url(../assets/cursor/loading/frame_2_delay-0.16s.png), auto;
+}
+
+#phaser-container.loading-cursor-frame-3:hover {
+    cursor: url(../assets/cursor/loading/frame_3_delay-0.16s.png), auto;
+}
+
+#phaser-container.loading-cursor-frame-4:hover {
+    cursor: url(../assets/cursor/loading/frame_4_delay-0.16s.png), auto;
+}
+
+#phaser-container.loading-cursor-frame-5:hover {
+    cursor: url(../assets/cursor/loading/frame_5_delay-0.16s.png), auto;
+}
+
+#phaser-container.loading-cursor-frame-6:hover {
+    cursor: url(../assets/cursor/loading/frame_6_delay-0.16s.png), auto;
+}
+
+#phaser-container.loading-cursor-frame-7:hover {
+    cursor: url(../assets/cursor/loading/frame_7_delay-0.16s.png), auto;
+}
+
+button[disabled]{
+    cursor: not-allowed;
 }
 
 button[disabled]{
