@@ -27,8 +27,8 @@ public class ChatGPT implements LLM {
     public String sendChat(Prompt prompt, double temperature) {
 	OkHttpClient client = new OkHttpClient.Builder()
 	    .connectTimeout(10, TimeUnit.SECONDS)
-	    .writeTimeout(2, TimeUnit.MINUTES)
-	    .readTimeout(2, TimeUnit.MINUTES)
+	    .writeTimeout(3, TimeUnit.MINUTES)
+	    .readTimeout(3, TimeUnit.MINUTES)
 	    .build();
 
 	String json = """

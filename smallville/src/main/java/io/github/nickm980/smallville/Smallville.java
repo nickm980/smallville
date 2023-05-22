@@ -12,6 +12,7 @@ import io.github.nickm980.smallville.api.server.SmallvilleServer;
 import io.github.nickm980.smallville.config.CommandLineArgs;
 import io.github.nickm980.smallville.config.Config;
 import io.github.nickm980.smallville.llm.ChatGPT;
+import io.github.nickm980.smallville.nlp.LocalNLP;
 
 public class Smallville {
 
@@ -19,7 +20,7 @@ public class Smallville {
 
     public static void main(String[] args) throws IOException {
 	configureLogs();
-
+	
 	CommandLineArgs options = loadArgs(args);
 
 	int port = options.getPort();
@@ -27,11 +28,15 @@ public class Smallville {
 
 	Settings.setApiKey(key);
 
+	LOG.info("Starting server...");
+	
+	loadConfig();
+
+	LocalNLP.preLoad();
+	
 	startServer(port);
 
 	LOG.info("Smallville server started on port " + port);
-
-	loadConfig();
     }
 
     private static CommandLineArgs loadArgs(String[] args) {

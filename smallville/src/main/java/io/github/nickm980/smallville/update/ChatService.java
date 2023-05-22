@@ -23,13 +23,15 @@ import io.github.nickm980.smallville.models.Dialog;
 import io.github.nickm980.smallville.models.memory.Memory;
 import io.github.nickm980.smallville.models.memory.Observation;
 import io.github.nickm980.smallville.models.memory.Plan;
+import io.github.nickm980.smallville.nlp.LocalNLP;
+import io.github.nickm980.smallville.nlp.NLPCoreUtils;
 import io.github.nickm980.smallville.prompts.Prompt;
 import io.github.nickm980.smallville.prompts.PromptBuilder;
-import io.github.nickm980.smallville.prompts.response.CurrentPlan;
+import io.github.nickm980.smallville.prompts.response.CurrentActivity;
 import io.github.nickm980.smallville.prompts.response.ObjectChangeResponse;
 import io.github.nickm980.smallville.prompts.response.Reaction;
 
-public class ChatService {
+public class ChatService implements IChatService {
 
     private final LLM chat;
     private final static Logger LOG = LoggerFactory.getLogger(UpdateService.class);
@@ -40,7 +42,8 @@ public class ChatService {
 	this.chat = chat;
 	this.world = world;
     }
-
+    
+    @Override
     public int[] getWeights(Agent agent) {
 	Prompt prompt = new PromptBuilder()
 	    .withAgent(agent)
@@ -68,6 +71,7 @@ public class ChatService {
 	return result;
     }
 
+    @Override
     public Reaction getReaction(Agent agent, String observation) {
 	Prompt prompt = new PromptBuilder()
 	    .withAgent(agent)
@@ -100,6 +104,7 @@ public class ChatService {
 	return reaction;
     }
 
+    @Override
     public String ask(Agent agent, String question) {
 	Prompt prompt = new PromptBuilder()
 	    .withAgent(agent)
@@ -111,6 +116,7 @@ public class ChatService {
 	return chat.sendChat(prompt, .9);
     }
 
+    @Override
     public List<Plan> getPlans(Agent agent) {
 	Prompt prompt = new PromptBuilder()
 	    .withLocations(world.getLocations())
@@ -123,6 +129,7 @@ public class ChatService {
 	return parsePlans(response);
     }
 
+    @Override
     public List<Plan> getShortTermPlans(Agent agent) {
 	Prompt prompt = new PromptBuilder()
 	    .withLocations(world.getLocations())
@@ -135,14 +142,16 @@ public class ChatService {
 	return parsePlans(response);
     }
 
-    public CurrentPlan getCurrentPlan(Agent agent) {
-	CurrentPlan result = new CurrentPlan();
+    @Override
+    public CurrentActivity getCurrentPlan(Agent agent) {
+	CurrentActivity result = new CurrentActivity();
 	Prompt prompt = new PromptBuilder()
 	    .withAgent(agent)
 	    .withLocations(world.getLocations())
 	    .withPrompt(Config.getPrompts().getCreateCurrentPlanPrompt())
 	    .build();
-
+	NLPCoreUtils nlp = new LocalNLP();
+	
 	String response = chat.sendChat(prompt, .7);// higher value provides better results for emojis
 	response = response.substring(response.indexOf("{"));
 
@@ -157,7 +166,7 @@ public class ChatService {
 
 	result.setCurrentActivity(json.get("activity").asText());
 	result.setEmoji(json.get("emoji").asText());
-	result.setLastActivity(json.get("last_activity").asText());
+	result.setLastActivity(nlp.convertToPastTense(agent.getCurrentActivity()));
 	result.setLocation(json.get("location").asText());
 
 	LOG.info("[Activity]" + result.getCurrentActivity() + " location: " + agent.getLocation().getName());
@@ -165,6 +174,7 @@ public class ChatService {
 	return result;
     }
 
+    @Override
     public Conversation getConversationIfExists(Agent agent, Agent other) {
 	Prompt prompt = new PromptBuilder()
 	    .withAgent(agent)
@@ -187,6 +197,7 @@ public class ChatService {
 	return conversation;
     }
 
+    @Override
     public List<Plan> parsePlans(String input) {
 	List<Plan> plans = new ArrayList<>();
 
@@ -216,6 +227,10 @@ public class ChatService {
     private LocalDateTime parseTime(String input, String line) throws DateTimeParseException {
 	String[] splitPlan = line.split("\\d+", 2); // split after first number
 
+	if (line.isBlank()) {
+	    return null;
+	}
+
 	if (splitPlan.length == 1) {
 	    LOG.warn("Temporal memory possibly missing a time. " + line);
 	    return null;
@@ -233,6 +248,7 @@ public class ChatService {
 	return LocalDateTime.of(LocalDate.now(), LocalTime.parse(time, formatter));
     }
 
+    @Override
     public ObjectChangeResponse[] getObjectsChangedBy(Agent agent) {
 	Prompt tensesPrompt = new PromptBuilder()
 	    .withAgent(agent)
@@ -272,55 +288,25 @@ public class ChatService {
 	return objects;
     }
 
+    @Override
     public String getExactLocation(Agent agent) {
 	Prompt prompt = new PromptBuilder().withAgent(agent).withPrompt(Config.getPrompts().getPickLocation()).build();
 	return chat.sendChat(prompt, 0);
     }
 
-    public List<Plan> getMidTermPlans(Agent agent) {
-	Prompt prompt = new PromptBuilder()
-	    .withLocations(world.getLocations())
-	    .withAgent(agent)
-	    .withPrompt(Config.getPrompts().getCreateMidTermPlans())
-	    .build();
-
-	String response = chat.sendChat(prompt, .6);
-
-	return parsePlans(response);
-    }
-
-    // can be optimized to not need llm
-    public List<Memory> convertFuturePlansToMemories(Agent agent, List<Plan> plans) {
+    @Override
+    public List<Memory> convertFuturePlansToMemories(List<Plan> plans) {
 	if (plans.isEmpty()) {
 	    return new ArrayList<Memory>();
 	}
-	String promptSentence = """
-		Convert the following future tense sentences to past tense. Each sentence will be on it's own new line.
-		Sentences are separated by semi colans (;)
-
-		%s""";
-
-	promptSentence = promptSentence
-	    .replace("%s", String.join("; ", plans.stream().map(plan -> plan.getDescription()).toList()));
-
-	Prompt prompt = new PromptBuilder().withAgent(agent).withPrompt(promptSentence).build();
-
-	String response = chat.sendChat(prompt, .1);
-
-	String[] lines = response.split("\n");
+	LocalNLP nlp = new LocalNLP();
+	
 	List<Memory> result = new ArrayList<Memory>();
 
-	for (int i = 0; i < lines.length - 1; i++) {
-	    LocalDateTime time = null;
-
-	    try {
-		time = parseTime(response, lines[i]);
-	    } catch (Exception e) {
-		LOG.error("Could not parse time");
-		continue;
-	    }
-
-	    result.add(new Observation(lines[i], time, (int) plans.get(i).getImportance()));
+	for (Plan plan : plans) {
+	    String pastTense = nlp.convertToPastTense(plan.getDescription());
+	    
+	    result.add(new Observation(pastTense, plan.getTime(), (int) plan.getImportance()));
 	}
 
 	return result;

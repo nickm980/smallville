@@ -46,16 +46,14 @@ createReactionSuggestion: |
 createCurrentPlanPrompt: |
   [World Description]
   [Agent Summary Description]
-  [Most Recent Plan]
+  Most Recent Plan: [Most Recent Plan]
   
-  Based on the time of day [Current Time] fill in the activity field
-  For last_activity fill in the past tense of this sentence: [Current Activity]
-  For emoji pick an emoji based on the activity. Not the location.
+  Based on the time of day [Current Time] and the most recent plan, what will you be doing now?
+  Also choose an emoji based on the activity.
 
   Respond confidently in the following JSON format
 
   {
-    "last_activity": "<fill in>"
     "activity": "I am <fill in>",
     "location": "<Location Name>",
     "emoji": "<fill in>",

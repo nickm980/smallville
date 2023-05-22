@@ -18,7 +18,7 @@ public abstract class AgentUpdate {
 	return handler;
     }
 
-    public boolean start(ChatService service, World world, Agent agent) {
+    public boolean start(IChatService service, World world, Agent agent) {
 	AgentUpdate node = this;
 
 	while (node.parent != null) {
@@ -28,13 +28,13 @@ public abstract class AgentUpdate {
 	return node.update(service, world, agent);
     }
 
-    protected abstract boolean update(ChatService converter, World world, Agent agent);
+    protected abstract boolean update(IChatService converter, World world, Agent agent);
 
-    protected boolean next(ChatService converter, World world, Agent agent) {
+    protected boolean next(IChatService converter, World world, Agent agent) {
 	if (handler != null) {
 	    return handler.update(converter, world, agent);
 	} else {
-	    return false;
+	    return true;
 	}
     }
 }

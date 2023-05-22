@@ -1,62 +1,67 @@
-package io.github.nickm980.smallville.math;
+package io.github.nickm980.smallville.nlp;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
+import edu.stanford.nlp.ling.IndexedWord;
 import edu.stanford.nlp.pipeline.Annotation;
+import edu.stanford.nlp.pipeline.CoreDocument;
+import edu.stanford.nlp.pipeline.CoreSentence;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
-import edu.stanford.nlp.trees.Tree;
-import edu.stanford.nlp.trees.TreeCoreAnnotations;
+import edu.stanford.nlp.semgraph.SemanticGraph;
+import edu.stanford.nlp.semgraph.SemanticGraphEdge;
+import edu.stanford.nlp.simple.Sentence;
 import edu.stanford.nlp.util.CoreMap;
+import simplenlg.features.Feature;
+import simplenlg.features.Tense;
+import simplenlg.framework.InflectedWordElement;
+import simplenlg.framework.LexicalCategory;
+import simplenlg.framework.WordElement;
+import simplenlg.lexicon.XMLLexicon;
+import simplenlg.realiser.english.Realiser;
 
-public class SentenceTokenizer {
+public class LocalNLP implements NLPCoreUtils {
 
-    /**
-     * Find the named entities (people and locations) from a text
-     * 
-     * @param text
-     */
-    public String getNamedEntities(String text) {
-	Properties props = new Properties();
-	props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner");
-	StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-	Annotation annotation = new Annotation(text);
+    private static StanfordCoreNLP pipeline;
 
-	pipeline.annotate(annotation);
-
-	List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
-	StringBuilder sb = new StringBuilder();
-	for (CoreMap sentence : sentences) {
-	    List<CoreLabel> tokens = sentence.get(CoreAnnotations.TokensAnnotation.class);
-	    for (int i = 0; i < tokens.size(); i++) {
-		String ner = tokens.get(i).get(CoreAnnotations.NamedEntityTagAnnotation.class);
-		if (ner.equals("PERSON")) {
-		    // Check if the current token is part of a multi-word named entity
-		    if (i < tokens.size() - 1
-			    && tokens.get(i + 1).get(CoreAnnotations.NamedEntityTagAnnotation.class).equals("PERSON")) {
-			// Merge the current and next tokens into a single named entity
-			sb.append("Name: ");
-			while (i < tokens.size()
-				&& tokens.get(i).get(CoreAnnotations.NamedEntityTagAnnotation.class).equals("PERSON")) {
-			    sb.append(tokens.get(i).word() + " ");
-			    i++; // Increment the index to skip the next token
-			}
-			sb.append("\n");
-		    } else {
-			sb.append("Name: " + tokens.get(i).word() + "\n");
-		    }
-		} else if (ner.equals("LOCATION")) {
-		    sb.append("Location: " + tokens.get(i).word() + "\n");
-		}
-	    }
+    private static StanfordCoreNLP getPipeline() {
+	if (pipeline == null) {
+	    Properties props = new Properties();
+	    props.setProperty("annotators", "tokenize, ssplit, parse, pos, lemma, ner");
+	    pipeline = new StanfordCoreNLP(props);
 	}
 
-	return sb.toString();
+	return pipeline;
     }
 
-    public String extractName(String observation) {
+    public static void preLoad() {
+	getPipeline();
+    }
+
+    enum Verbs {
+	GERUND("VBG"), VERB("V");
+
+	private String token;
+
+	Verbs(String token) {
+	    this.token = token;
+	}
+
+	String getToken() {
+	    return token;
+	}
+    }
+
+    @Override
+    public String convertToPastTense(String sentence) {
+	return convertSentence(sentence);
+    }
+
+    @Override
+    public String extractLastOccurenceOfName(String observation) {
 	String input = getNamedEntities(observation);
 
 	String[] lines = input.split("\n");
@@ -71,61 +76,107 @@ public class SentenceTokenizer {
 
 	return result;
     }
-    
-    public String convertToPastTense(String sentence) {
-        Properties props = new Properties();
-        props.setProperty("annotators", "tokenize, ssplit, pos, lemma, parse");
-        StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
 
-        // Create an Annotation object with the input sentence
-        Annotation document = new Annotation(sentence);
+    /**
+     * Find the named entities (people and locations) from a text
+     * 
+     * @param text
+     */
+    public String getNamedEntities(String text) {
+	Annotation annotation = new Annotation(text);
 
-        // Run the pipeline on the Annotation object
-        pipeline.annotate(document);
+	getPipeline().annotate(annotation);
 
-        // Get the list of sentences from the Annotation object
-        CoreMap sentenceMap = document.get(CoreAnnotations.SentencesAnnotation.class).get(0);
-        // Get the parse tree of the sentence
-        Tree tree = sentenceMap.get(TreeCoreAnnotations.TreeAnnotation.class);
+	List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
+	StringBuilder sb = new StringBuilder();
+	for (CoreMap sentence : sentences) {
+	    List<CoreLabel> tokens = sentence.get(CoreAnnotations.TokensAnnotation.class);
+	    for (int i = 0; i < tokens.size(); i++) {
+		String ner = tokens.get(i).get(CoreAnnotations.NamedEntityTagAnnotation.class);
+		if (ner.equals("PERSON")) {
+		    if (i < tokens.size() - 1
+			    && tokens.get(i + 1).get(CoreAnnotations.NamedEntityTagAnnotation.class).equals("PERSON")) {
 
-        // Convert verbs to past tense
-        convertVerbsToPastTense(tree);
+			sb.append("Name: ");
+			while (i < tokens.size()
+				&& tokens.get(i).get(CoreAnnotations.NamedEntityTagAnnotation.class).equals("PERSON")) {
+			    sb.append(tokens.get(i).word() + " ");
+			    i++;
+			}
+			sb.append("\n");
+		    } else {
+			sb.append("Name: " + tokens.get(i).word() + "\n");
+		    }
+		} else if (ner.equals("LOCATION")) {
+		    sb.append("Location: " + tokens.get(i).word() + "\n");
+		}
+	    }
+	}
 
-        // Print the converted sentence
-        return tree.toString();
+	return sb.toString();
     }
 
-    private static void convertVerbsToPastTense(Tree tree) {
-        if (tree.isLeaf()) {
-            String word = tree.value();
-            System.out.println(word + " word");
-            String pos = tree.parent(tree).label().value();
-            String pastTense = getPastTense(word, pos);
-            if (pastTense != null) {
-                tree.setValue(pastTense);
-            }
-        } else {
-            for (Tree child : tree.children()) {
-                convertVerbsToPastTense(child);
-            }
-        }
+    public String inflectStem(String verb) {
+	XMLLexicon lexicon = new XMLLexicon();
+	WordElement word = lexicon.getWord(verb, LexicalCategory.VERB);
+	InflectedWordElement infl = new InflectedWordElement(word);
+	infl.setFeature(Feature.TENSE, Tense.PAST);
+	Realiser realiser = new Realiser(lexicon);
+	String result = realiser.realise(infl).getRealisation();
+
+	return result;
     }
 
-    private static String getPastTense(String word, String pos) {
-        if (pos.startsWith("VB")) {
-            switch (pos) {
-                case "VBD": // Past tense verb
-                    return word;
-                case "VBG": // Gerund or present participle verb
-                    return word + "ed";
-                case "VBN": // Past participle verb
-                    return word;
-                case "VBP": // Non-third person singular present tense verb
-                case "VBZ": // Third person singular present tense verb
-                    // Add 'ed' suffix to convert to past tense
-                    return word + "ed";
-            }
-        }
-        return null; // Not a verb or not supported
+    private String convertSentence(String sentence) {
+	if (sentence.contains(" am ")) {
+	    return sentence.replace(" am ", " was ");
+	}
+
+	sentence = sentence.replaceAll("this", "the").replace(".", "").replaceAll("\\s+", " ").trim();
+
+	CoreDocument document = getPipeline().processToCoreDocument(sentence);
+	String modified = "";
+
+	CoreSentence coreSentence = document.sentences().get(0);
+	SemanticGraph semanticGraph = coreSentence.dependencyParse();
+
+	List<Integer> xcomp = new ArrayList<Integer>();
+
+	List<SemanticGraphEdge> edges = semanticGraph.edgeListSorted();
+	for (SemanticGraphEdge edge : edges) {
+	    IndexedWord dependent = edge.getDependent();
+
+	    if (edge.getRelation().getShortName().equals("xcomp")) {
+		int index = dependent.index();
+		xcomp.add(index);
+	    }
+	}
+
+	for (CoreLabel tok : document.tokens()) {
+	    String word = tok.word();
+	    String tag = tok.tag();
+
+	    if (tag.startsWith(Verbs.VERB.getToken()) && !xcomp.contains(tok.index())) {
+		String lemma = new Sentence(word).lemma(0);
+
+		if (tok.tag().equals(Verbs.GERUND.getToken())) {
+		    modified += word + " ";
+		    continue;
+		}
+
+		modified += inflectStem(lemma) + " ";
+	    } else {
+
+		modified += word + " ";
+	    }
+	}
+
+	modified = modified
+	    .replaceAll("will", "")
+	    .replaceAll(" am ", "")
+	    .replace(".", "")
+	    .replaceAll("\\s+", " ")
+	    .trim();
+	return modified;
     }
 }

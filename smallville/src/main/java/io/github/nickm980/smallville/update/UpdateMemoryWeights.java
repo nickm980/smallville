@@ -9,7 +9,7 @@ import io.github.nickm980.smallville.models.memory.Memory;
 public class UpdateMemoryWeights extends AgentUpdate {
 
     @Override
-    public boolean update(ChatService converter, World world, Agent agent) {
+    public boolean update(IChatService converter, World world, Agent agent) {
 	LOG.info("[Memory] Updating memory weights");
 
 	List<Memory> memories = agent.getMemoryStream().getUnweightedMemories();

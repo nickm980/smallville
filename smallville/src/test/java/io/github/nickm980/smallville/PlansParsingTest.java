@@ -40,7 +40,6 @@ public class PlansParsingTest {
 		\n- Have dinner at home at 6:00 PM.
 		""");
 
-	System.out.println(plans.get(3).getTime());
 	assertTrue(plans.size() == 5);
     }
 
@@ -54,10 +53,9 @@ public class PlansParsingTest {
 				""");
 	MemoryStream stream = new MemoryStream();
 
-	stream.setPlans(plans);
+	stream.addPlans(plans);
 
 	stream.prunePlans();
-	System.out.println(stream.getPlans().size());
 	assertTrue(stream.getPlans().size() == 1);
     }
 }

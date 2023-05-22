@@ -13,7 +13,7 @@ public class UpdateReaction extends AgentUpdate {
     }
 
     @Override
-    public boolean update(ChatService service, World world, Agent agent) {
+    public boolean update(IChatService service, World world, Agent agent) {
 	LOG.info("[Updater / Reaction] Checking if an agent will react to an observation");
 
 	Reaction reaction = service.getReaction(agent, observation);

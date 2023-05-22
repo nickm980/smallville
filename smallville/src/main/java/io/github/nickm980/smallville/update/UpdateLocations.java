@@ -7,7 +7,7 @@ import io.github.nickm980.smallville.prompts.response.ObjectChangeResponse;
 public class UpdateLocations extends AgentUpdate {
 
     @Override
-    public boolean update(ChatService converter, World world, Agent agent) {
+    public boolean update(IChatService converter, World world, Agent agent) {
 	LOG.info("[Locations] Updating location states");
 
 	ObjectChangeResponse[] objects = converter.getObjectsChangedBy(agent);

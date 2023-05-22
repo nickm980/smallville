@@ -1,6 +1,5 @@
 package io.github.nickm980.smallville.models.memory;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -76,10 +75,6 @@ public class MemoryStream {
 	}).sorted(new TemporalMemoryComparator()).collect(Collectors.toList());
     }
 
-    public void setPlans(List<Plan> plans) {
-	this.memories.addAll(plans);
-    }
-
     public void addAll(List<String> memories) {
 	this.memories.addAll(memories.stream().map(Observation::new).toList());
     }
@@ -91,20 +86,18 @@ public class MemoryStream {
     public List<Plan> prunePlans() {
 	List<Plan> copies = new ArrayList<Plan>();
 
-	memories.removeIf((memory) -> {
+	for (Memory memory : memories) {
 	    if (memory instanceof Plan) {
 		Plan plan = (Plan) memory;
-		boolean hasPast = plan.getTime() != null && plan.getTime().compareTo(LocalDateTime.now()) < 0;
+		boolean isOld = plan.getTime() != null && plan.getTime().compareTo(LocalDateTime.now()) < 0;
 
-		if (hasPast) {
+		if (isOld) {
 		    copies.add(plan);
 		}
-
-		return hasPast;
 	    }
-	    return false;
-	});
+	}
 
+	memories.removeAll(copies);
 	return copies;
     }
 

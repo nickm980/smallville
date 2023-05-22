@@ -4,7 +4,6 @@ import java.util.List;
 
 import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.models.Agent;
-import io.github.nickm980.smallville.models.memory.Memory;
 import io.github.nickm980.smallville.models.memory.Observation;
 import io.github.nickm980.smallville.models.memory.Plan;
 import io.github.nickm980.smallville.models.memory.PlanType;
@@ -12,23 +11,19 @@ import io.github.nickm980.smallville.models.memory.PlanType;
 public class UpdateFuturePlans extends AgentUpdate {
 
     @Override
-    public boolean update(ChatService converter, World world, Agent agent) {
+    public boolean update(IChatService converter, World world, Agent agent) {
 	LOG.info("[Plans] Updating plans");
 	List<Plan> memories = agent.getMemoryStream().prunePlans();
 
-	List<Observation> observations = memories.stream().map(memory -> {
-	    int importance = (int) memory.getImportance();
-	    if (importance == 0) {
-		importance = 1;
-	    }
-	    return new Observation(memory.asNaturalLanguage(), memory.getTime(), importance);
-	}).toList();
+	LOG.info("[Plans] Pruned " + memories.size() + " old plans");
 
-	agent.getMemoryStream().add(observations);
+	agent.getMemoryStream().add(converter.convertFuturePlansToMemories(memories));
 
 	if (agent.getPlans().isEmpty() || agent.getPlans().size() < 3) {
+	    LOG.info("[Plans] Updating long term plans");
+
 	    List<Plan> plans = converter.getPlans(agent);
-	    agent.setPlans(plans);
+	    agent.addPlans(plans);
 
 	    for (Plan plan : plans) {
 		LOG.info("[Plans] " + plan.getType() + " " + plan.asNaturalLanguage());
@@ -38,6 +33,8 @@ public class UpdateFuturePlans extends AgentUpdate {
 	}
 
 	if (agent.getMemoryStream().getPlans(PlanType.SHORT_TERM).isEmpty()) {
+	    LOG.info("[Plans] Updating short term plans");
+
 	    List<Plan> plans = converter.getShortTermPlans(agent);
 
 	    for (Plan plan : plans) {
@@ -45,7 +42,7 @@ public class UpdateFuturePlans extends AgentUpdate {
 		LOG.info("[Plans] " + plan.getType() + " " + plan.asNaturalLanguage());
 	    }
 
-	    agent.setShortTermPlans(plans);
+	    agent.getMemoryStream().setShortTermPlans(plans);
 
 	    LOG.info("[Plans] Recursively updated short term plans");
 	}

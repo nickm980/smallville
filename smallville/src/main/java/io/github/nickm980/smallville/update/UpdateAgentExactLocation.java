@@ -8,7 +8,7 @@ import io.github.nickm980.smallville.models.SimulatedObject;
 public class UpdateAgentExactLocation extends AgentUpdate {
 
     @Override
-    public boolean update(ChatService converter, World world, Agent agent) {
+    public boolean update(IChatService converter, World world, Agent agent) {
 	String objectName = converter.getExactLocation(agent);
 	SimulatedObject object = world.getObjectByName(objectName);
 	agent.setLocation(new AgentLocation(agent.getLocation(), object));

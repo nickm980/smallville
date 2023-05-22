@@ -64,15 +64,11 @@ public class Agent {
 	return memories.getCharacteristics();
     }
 
-    public void setPlans(List<Plan> plans) {
-	memories.setPlans(plans);
+    public void addPlans(List<Plan> plans) {
+	memories.addPlans(plans);
     }
 
     public List<Plan> getPlans() {
 	return memories.getPlans();
-    }
-
-    public void setShortTermPlans(List<Plan> plans) {
-	this.getMemoryStream().setShortTermPlans(plans);
     }
 }

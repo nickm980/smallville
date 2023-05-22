@@ -3,15 +3,16 @@ package io.github.nickm980.smallville.update;
 import java.util.List;
 
 import io.github.nickm980.smallville.World;
-import io.github.nickm980.smallville.math.SentenceTokenizer;
 import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.Conversation;
 import io.github.nickm980.smallville.models.Dialog;
+import io.github.nickm980.smallville.nlp.LocalNLP;
+import io.github.nickm980.smallville.nlp.NLPCoreUtils;
 
 public class UpdateConversation extends AgentUpdate {
 
     private String observation;
-    private static final SentenceTokenizer TOKENIZER = new SentenceTokenizer();
+    private static final NLPCoreUtils TOKENIZER = new LocalNLP();
 
     public UpdateConversation(String observation) {
 	this.observation = observation;
@@ -22,14 +23,14 @@ public class UpdateConversation extends AgentUpdate {
     }
 
     @Override
-    public boolean update(ChatService service, World world, Agent agent) {
+    public boolean update(IChatService service, World world, Agent agent) {
 	LOG.info("[Updater / Conversation] Checking for any conversations and initating dialog");
 
 	if (observation == null) {
 	    observation = agent.getCurrentActivity();
 	}
 
-	String subject = TOKENIZER.extractName(observation);
+	String subject = TOKENIZER.extractLastOccurenceOfName(observation);
 
 	if (agent.getFullName().equals(subject)) {
 	    LOG.warn("[Updater / Conversation] Agent attempted to have a conversation with themself.");

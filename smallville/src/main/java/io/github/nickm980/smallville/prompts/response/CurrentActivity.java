@@ -1,6 +1,6 @@
 package io.github.nickm980.smallville.prompts.response;
 
-public class CurrentPlan {
+public class CurrentActivity {
     private String lastActivity;
     private String currentActivity;
     private String emoji;

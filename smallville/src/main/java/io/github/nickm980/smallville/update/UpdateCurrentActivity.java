@@ -4,17 +4,17 @@ import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.models.Agent;
 import io.github.nickm980.smallville.models.AgentLocation;
 import io.github.nickm980.smallville.models.SimulatedLocation;
-import io.github.nickm980.smallville.prompts.response.CurrentPlan;
+import io.github.nickm980.smallville.prompts.response.CurrentActivity;
 
 public class UpdateCurrentActivity extends AgentUpdate {
 
     @Override
-    public boolean update(ChatService service, World world, Agent agent) {
+    public boolean update(IChatService service, World world, Agent agent) {
 	LOG.info("[Activity] Updating current activity and emoji");
 
-	CurrentPlan plan = service.getCurrentPlan(agent);
+	CurrentActivity plan = service.getCurrentPlan(agent);
 	SimulatedLocation location = world.getLocation(plan.getLocation()).orElse(agent.getLocation());
-
+	
 	agent.setLocation(new AgentLocation(location));
 	agent.setCurrentActivity(plan.getCurrentActivity());
 	agent.setCurrentEmoji(plan.getEmoji());

@@ -5,17 +5,14 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.github.nickm980.smallville.llm.ChatGPT;
 import io.github.nickm980.smallville.models.SimulatedLocation;
-import io.github.nickm980.smallville.prompts.Prompt;
 
-public class PromptTest {
+public class JacksonJsonTest {
 
     private static World sim;
 
@@ -25,17 +22,6 @@ public class PromptTest {
 	sim.save(new SimulatedLocation("red house"));
     }
 
-    @Disabled
-    @Test
-    public void testChat() {
-	Prompt prompt = new Prompt.User("ping (respond with pong)");
-	ChatGPT gpt = new ChatGPT();
-	String response = gpt.sendChat(prompt, 0);
-	System.out.println(gpt.sendChat(prompt, 0));
-	assertEquals(response, "pong");
-    }
-
-    @Disabled
     @Test
     public void testJson() {
 	String response = """

@@ -171,5 +171,10 @@
 			<artifactId>commons-cli</artifactId>
 			<version>1.4</version>
 		</dependency>
+		<dependency>
+			<groupId>uk.ac.abdn</groupId>
+			<artifactId>SimpleNLG</artifactId>
+			<version>4.5.0</version>
+		</dependency>
 	</dependencies>
 </project>

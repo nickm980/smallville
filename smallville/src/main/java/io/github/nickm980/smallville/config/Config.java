@@ -21,7 +21,7 @@ public class Config {
 
     public static PromptsConfig getPrompts() {
 	if (prompts == null) {
-	    LOG.info("Loading prompts config file...");
+	    LOG.info("Loading prompts");
 	    prompts = loadFile("prompts.yaml", PromptsConfig.class);
 	}
 
@@ -30,7 +30,7 @@ public class Config {
 
     public static GeneralConfig getConfig() {
 	if (config == null) {
-	    LOG.info("Loading general config file...");
+	    LOG.info("Loading config.yaml");
 	    config = loadFile("config.yaml", GeneralConfig.class);
 	}
 
