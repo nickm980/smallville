@@ -67,7 +67,7 @@ class Smallville {
     /**
      * Syncs the game with the server to preserve state when reloading the page
     */
-    async sync(){
+    async sync() {
         const response = await fetch(this.host + "/state", {
             method: 'GET',
             headers: {
@@ -78,7 +78,7 @@ class Smallville {
         const json = await response.json()
         this.stateHandler(json)
     }
-    
+
     /**
      * Checks if server is alive and sends requests until a response is received or after 10 attempts
      * 
@@ -119,7 +119,7 @@ class Smallville {
 
         return connected
     }
-    
+
     /**
      * Creates a new agent with the given name, description and initial location.
      * 
@@ -257,6 +257,33 @@ class Smallville {
     }
 
     /**
+     * Sets a goal for the agent to keep in mind
+     * 
+     * @param {Object} options - Question information
+     * @param {string} options.name - Name of the agent to ask
+    * @param {string} options.goal - Goal to send. Ex "run for mayor"
+     */
+    async whisper({ name: name, goal: goal }) {
+        const url = `${this.host}/agent/${name}/whisper`
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                goal: goal
+            })
+        })
+
+        const result = await response.json()
+
+        if (result.error){
+            console.log(result.error)
+        }
+    }
+
+    /**
      * Asks an agent a question without saving the question or response to
      * the agent's memory stream
      * 
@@ -283,6 +310,7 @@ class Smallville {
         return result.answer
     }
 }
+
 
 /**
  * Usually on object or item in the simulation such as an expresso machine,
