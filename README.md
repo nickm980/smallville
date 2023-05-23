@@ -100,10 +100,8 @@ The example is under the example directory. This example isn't finished yet but 
 ## TODO:
 - Reflections
 - Improve conversations
-- Finish example game
 - Improve memory retrieval
 - Improve token embeddings
-- Add option to use self hosted LLM models
 - Bug fixes on location state updates
 - Improve test coverage
 
