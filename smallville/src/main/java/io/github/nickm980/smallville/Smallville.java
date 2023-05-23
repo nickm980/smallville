@@ -17,6 +17,7 @@ import io.github.nickm980.smallville.nlp.LocalNLP;
 public class Smallville {
 
     private static final Logger LOG = LoggerFactory.getLogger(Smallville.class);
+    private static SmallvilleServer server;
 
     public static void main(String[] args) throws IOException {
 	configureLogs();
@@ -35,10 +36,9 @@ public class Smallville {
 	LocalNLP.preLoad();
 
 	startServer(port);
-	
+
 	Updater.checkLatestVersion();
 	LOG.info("Smallville server started on port " + port);
-	
     }
 
     private static CommandLineArgs loadArgs(String[] args) {
@@ -61,8 +61,12 @@ public class Smallville {
     }
 
     private static void startServer(int port) {
-	SmallvilleServer server = new SmallvilleServer(new ChatGPT(), new World());
+	server = new SmallvilleServer(new ChatGPT(), new World());
 
 	server.start(port);
+    }
+
+    public static SmallvilleServer getServer() {
+	return server;
     }
 }

@@ -1,9 +1,10 @@
 package io.github.nickm980.smallville.entities;
 
 import java.time.LocalDateTime;
+import io.github.nickm980.smallville.Smallville;
 
 public class AccessTime {
-    public static final LocalDateTime START = LocalDateTime.now();
+    public static final LocalDateTime START = Smallville.getServer().getSimulationService().getTimekeeper().getSimulationTime();
     
     private LocalDateTime lastAccessed;
     private LocalDateTime createdAt;

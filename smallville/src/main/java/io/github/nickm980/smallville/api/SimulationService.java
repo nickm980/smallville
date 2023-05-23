@@ -1,11 +1,13 @@
 package io.github.nickm980.smallville.api;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import io.github.nickm980.smallville.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,12 +21,15 @@ import io.github.nickm980.smallville.entities.Conversation;
 import io.github.nickm980.smallville.entities.ObjectState;
 import io.github.nickm980.smallville.entities.SimulatedLocation;
 import io.github.nickm980.smallville.entities.SimulatedObject;
+import io.github.nickm980.smallville.entities.Timekeeper;
 import io.github.nickm980.smallville.entities.memory.Characteristic;
 import io.github.nickm980.smallville.exceptions.AgentNotFoundException;
 import io.github.nickm980.smallville.exceptions.LocationNotFoundException;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
 import io.github.nickm980.smallville.llm.LLM;
 import io.github.nickm980.smallville.update.UpdateService;
+
+import java.util.concurrent.TimeUnit;
 
 public class SimulationService {
 
@@ -34,11 +39,14 @@ public class SimulationService {
     private final AccessTime time;
     private final Logger LOG = LoggerFactory.getLogger(SimulationService.class);
 
+    private Timekeeper timekeeper;
+
     public SimulationService(LLM llm, World world) {
 	this.world = world;
 	this.mapper = new ModelMapper();
 	this.time = new AccessTime();
 	this.prompts = new UpdateService(llm, world);
+	this.timekeeper = new Timekeeper();
     }
 
     public void createMemory(CreateMemoryRequest request) {
@@ -149,5 +157,15 @@ public class SimulationService {
 
     public void setGoal(String name, String goal) {
 	world.getAgent(name).orElseThrow().setGoal(goal);
+    }
+
+    public Timekeeper getTimekeeper() {
+	return timekeeper;
+    }
+
+    public void setTimestep(SetTimestepRequest request) {
+	long durationValue = Long.parseLong(request.getNumOfMinutes());
+	Duration duration = Duration.ofMinutes(durationValue);
+	timekeeper.setTimestepDuration(duration);
     }
 }

@@ -11,7 +11,7 @@ import okhttp3.Response;
 
 public class Updater {
 
-    private static final String VERSION = "v1.0.0";
+    private static final String VERSION = "v1.2.0";
     private final static Logger LOG = LoggerFactory.getLogger(Updater.class);
 
     private Updater() {
