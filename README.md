@@ -97,6 +97,34 @@ The server will start on the default port 8080 unless specified otherwise. The d
 The example is under the example directory. This example isn't finished yet but is a basic example of how to get started.
 [example javascript project](/example)
 
+## Configuration
+### Prompt Templates
+| Template Variable | Description |
+| --- | --- |
+| agent.name | Full name of the agent |
+| agent.memories | List of all the memories (has child of {{description}}) |
+| agent.activity | What the agent is currently doing |
+| agent.lastActivity | What the agent was last doing |
+| agent.summary | Cached summary from prompts.yaml |
+| agent.description | Comma delimited characteristics |
+| agent.locationName | The current location |
+| agent.locationChildren | List of objects contained by the current location |
+| agent.plans | List of the two most recent plans |
+| tenses | For example, x is no longer {past tense} and is now {current activity} |
+| memories.unranked | Memories with a weight of 0 (except short term plans) |
+| memories.characteristics | Initial memories added to the agent |
+| memories.relevant | The three most relevant memories to an observation |
+| date.full | Full date (as formatted in config.yaml) |
+| date.time | Time of day (as formatted in config.yaml) |
+| date.yesterday | Yesterday’s full date (as formatted in config.yaml) |
+| world.description | World description (includes available locations) |
+| question | Question asked to agent |
+| tenses | For example, x is no longer {past tense} and is now {current activity} |
+| memories.characteristics | Initial memories added to the agent |
+
+### Config
+Change the URL which ChatGPT requests are sent to by changing apiKey the config.yaml. The default value is "https://api.openai.com/v1/chat/completions"
+
 ## TODO:
 - Reflections
 - Improve conversations
