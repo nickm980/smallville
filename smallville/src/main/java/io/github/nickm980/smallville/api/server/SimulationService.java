@@ -1,38 +1,27 @@
 package io.github.nickm980.smallville.api.server;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import io.github.nickm980.smallville.api.*;
+import io.github.nickm980.smallville.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.github.nickm980.smallville.Util;
 import io.github.nickm980.smallville.World;
-import io.github.nickm980.smallville.api.AgentStateResponse;
-import io.github.nickm980.smallville.api.ConversationResponse;
-import io.github.nickm980.smallville.api.CreateAgentRequest;
-import io.github.nickm980.smallville.api.CreateLocationRequest;
-import io.github.nickm980.smallville.api.CreateMemoryRequest;
-import io.github.nickm980.smallville.api.CreateObjectRequest;
-import io.github.nickm980.smallville.api.LocationStateResponse;
-import io.github.nickm980.smallville.api.MemoryResponse;
-import io.github.nickm980.smallville.api.ModelMapper;
 import io.github.nickm980.smallville.exceptions.AgentNotFoundException;
 import io.github.nickm980.smallville.exceptions.LocationNotFoundException;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
 import io.github.nickm980.smallville.llm.LLM;
-import io.github.nickm980.smallville.models.AccessTime;
-import io.github.nickm980.smallville.models.Agent;
-import io.github.nickm980.smallville.models.AgentLocation;
-import io.github.nickm980.smallville.models.Conversation;
-import io.github.nickm980.smallville.models.ObjectState;
-import io.github.nickm980.smallville.models.SimulatedLocation;
-import io.github.nickm980.smallville.models.SimulatedObject;
 import io.github.nickm980.smallville.models.memory.Characteristic;
 import io.github.nickm980.smallville.update.UpdateService;
+
+import java.util.concurrent.TimeUnit;
 
 public class SimulationService {
 
@@ -42,11 +31,14 @@ public class SimulationService {
     private final AccessTime time;
     private final Logger LOG = LoggerFactory.getLogger(SimulationService.class);
 
+	private Timekeeper timekeeper;
+
     public SimulationService(LLM llm, World world) {
 	this.world = world;
 	this.mapper = new ModelMapper();
 	this.time = new AccessTime();
 	this.prompts = new UpdateService(llm, world);
+	this.timekeeper = new Timekeeper();
     }
 
     public void createMemory(CreateMemoryRequest request) {
@@ -154,4 +146,15 @@ public class SimulationService {
 
 	world.save(object);
     }
+
+	public Timekeeper getTimekeeper() {
+		return timekeeper;
+	}
+
+
+	public void setTimestep(SetTimestepRequest request) {
+		long durationValue = Long.parseLong(request.getNumOfMinutes());
+		Duration duration = Duration.ofMinutes(durationValue);
+		timekeeper.setTimestepDuration(duration);
+	}
 }

@@ -29,6 +29,10 @@ public class SmallvilleServer {
 	this.service = new SimulationService(llm, sim);
     }
 
+	public SimulationService getSimulationService() {
+		return service;
+	}
+
     public void start() {
 	start(8080);
     }
@@ -156,6 +160,13 @@ public class SmallvilleServer {
 	    List<ConversationResponse> conversations = service.getConversations();
 
 	    ctx.json(Map.of("agents", agents, "location_states", locations, "conversations", conversations));
+	});
+
+	// Set how many minutes each state update will increment time by
+	app.post("/set-timestep", (ctx) -> {
+		String requestBody = ctx.body();
+
+
 	});
 
 	app.start(port);

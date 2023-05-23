@@ -58,9 +58,14 @@ public class Smallville {
 	PropertyConfigurator.configure(Smallville.class.getClassLoader().getResource("log4j.properties"));
     }
 
+	private static SmallvilleServer server;
     private static void startServer(int port) {
-	SmallvilleServer server = new SmallvilleServer(new ChatGPT(), new World());
+	server = new SmallvilleServer(new ChatGPT(), new World());
 
 	server.start(port);
     }
+
+	public static SmallvilleServer getServer() {
+		return server;
+	}
 }
