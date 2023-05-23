@@ -122,9 +122,6 @@ The example is under the example directory. This example isn't finished yet but 
 | tenses | For example, x is no longer {past tense} and is now {current activity} |
 | memories.characteristics | Initial memories added to the agent |
 
-### Config
-Change the URL which ChatGPT requests are sent to by changing apiKey the config.yaml. The default value is "https://api.openai.com/v1/chat/completions"
-
 ## TODO:
 - Reflections
 - Improve conversations
