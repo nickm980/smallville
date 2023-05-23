@@ -3,8 +3,8 @@ package io.github.nickm980.smallville.update;
 import java.util.List;
 
 import io.github.nickm980.smallville.World;
-import io.github.nickm980.smallville.models.Agent;
-import io.github.nickm980.smallville.models.memory.Memory;
+import io.github.nickm980.smallville.entities.Agent;
+import io.github.nickm980.smallville.entities.memory.Memory;
 
 public class UpdateMemoryWeights extends AgentUpdate {
 

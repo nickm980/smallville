@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.github.nickm980.smallville.World;
-import io.github.nickm980.smallville.models.Agent;
+import io.github.nickm980.smallville.entities.Agent;
 
 public abstract class AgentUpdate {
 

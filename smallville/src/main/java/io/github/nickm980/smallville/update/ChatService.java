@@ -15,21 +15,21 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.github.nickm980.smallville.World;
-import io.github.nickm980.smallville.config.Config;
+import io.github.nickm980.smallville.config.SmallvilleConfig;
+import io.github.nickm980.smallville.entities.Agent;
+import io.github.nickm980.smallville.entities.Conversation;
+import io.github.nickm980.smallville.entities.Dialog;
+import io.github.nickm980.smallville.entities.memory.Memory;
+import io.github.nickm980.smallville.entities.memory.Observation;
+import io.github.nickm980.smallville.entities.memory.Plan;
 import io.github.nickm980.smallville.llm.LLM;
-import io.github.nickm980.smallville.models.Agent;
-import io.github.nickm980.smallville.models.Conversation;
-import io.github.nickm980.smallville.models.Dialog;
-import io.github.nickm980.smallville.models.memory.Memory;
-import io.github.nickm980.smallville.models.memory.Observation;
-import io.github.nickm980.smallville.models.memory.Plan;
 import io.github.nickm980.smallville.nlp.LocalNLP;
 import io.github.nickm980.smallville.nlp.NLPCoreUtils;
 import io.github.nickm980.smallville.prompts.Prompt;
 import io.github.nickm980.smallville.prompts.PromptBuilder;
-import io.github.nickm980.smallville.prompts.response.CurrentActivity;
-import io.github.nickm980.smallville.prompts.response.ObjectChangeResponse;
-import io.github.nickm980.smallville.prompts.response.Reaction;
+import io.github.nickm980.smallville.prompts.dto.CurrentActivity;
+import io.github.nickm980.smallville.prompts.dto.ObjectChangeResponse;
+import io.github.nickm980.smallville.prompts.dto.Reaction;
 
 public class ChatService implements IChatService {
 
@@ -42,13 +42,12 @@ public class ChatService implements IChatService {
 	this.chat = chat;
 	this.world = world;
     }
-    
+
     @Override
     public int[] getWeights(Agent agent) {
 	Prompt prompt = new PromptBuilder()
 	    .withAgent(agent)
-	    .withPrompt(Config.getPrompts().getCreateMemoryRankPrompt())
-	    .createMemoryRankPrompt()
+	    .setPrompt(SmallvilleConfig.getPrompts().getMisc().getRankMemories())
 	    .build();
 
 	String response = chat.sendChat(prompt, .1);
@@ -76,8 +75,7 @@ public class ChatService implements IChatService {
 	Prompt prompt = new PromptBuilder()
 	    .withAgent(agent)
 	    .withLocations(world.getLocations())
-	    .withPrompt(Config.getPrompts().getCreateReactionSuggestion())
-	    .createReactionSuggestion(observation)
+	    .setPrompt(SmallvilleConfig.getPrompts().getReactions().getReaction())
 	    .build();
 
 	String response = chat.sendChat(prompt, 1);
@@ -109,8 +107,7 @@ public class ChatService implements IChatService {
 	Prompt prompt = new PromptBuilder()
 	    .withAgent(agent)
 	    .withLocations(world.getLocations())
-	    .withPrompt(Config.getPrompts().getCreateAskQuestionPrompt())
-	    .createAskQuestionPrompt(question)
+	    .setPrompt(SmallvilleConfig.getPrompts().getAgent().getAskQuestion())
 	    .build();
 
 	return chat.sendChat(prompt, .9);
@@ -121,11 +118,11 @@ public class ChatService implements IChatService {
 	Prompt prompt = new PromptBuilder()
 	    .withLocations(world.getLocations())
 	    .withAgent(agent)
-	    .withPrompt(Config.getPrompts().getCreateFuturePlansPrompt())
+	    .setPrompt(SmallvilleConfig.getPrompts().getPlans().getLongTerm())
 	    .build();
 
-	String response = chat.sendChat(prompt, .4);
-
+	String response = chat.sendChat(prompt, .2);
+	LOG.info(response);
 	return parsePlans(response);
     }
 
@@ -134,7 +131,7 @@ public class ChatService implements IChatService {
 	Prompt prompt = new PromptBuilder()
 	    .withLocations(world.getLocations())
 	    .withAgent(agent)
-	    .withPrompt(Config.getPrompts().getCreateShortTermPlans())
+	    .setPrompt(SmallvilleConfig.getPrompts().getPlans().getShortTerm())
 	    .build();
 
 	String response = chat.sendChat(prompt, .7);
@@ -148,10 +145,10 @@ public class ChatService implements IChatService {
 	Prompt prompt = new PromptBuilder()
 	    .withAgent(agent)
 	    .withLocations(world.getLocations())
-	    .withPrompt(Config.getPrompts().getCreateCurrentPlanPrompt())
+	    .setPrompt(SmallvilleConfig.getPrompts().getPlans().getCurrent())
 	    .build();
 	NLPCoreUtils nlp = new LocalNLP();
-	
+
 	String response = chat.sendChat(prompt, .7);// higher value provides better results for emojis
 	response = response.substring(response.indexOf("{"));
 
@@ -178,8 +175,7 @@ public class ChatService implements IChatService {
     public Conversation getConversationIfExists(Agent agent, Agent other) {
 	Prompt prompt = new PromptBuilder()
 	    .withAgent(agent)
-	    .withPrompt(Config.getPrompts().getCreateConversationWith())
-	    .createConversationWith(other)
+	    .setPrompt(SmallvilleConfig.getPrompts().getReactions().getConversation())
 	    .build();
 
 	String response = chat.sendChat(prompt, .7);
@@ -252,16 +248,16 @@ public class ChatService implements IChatService {
     public ObjectChangeResponse[] getObjectsChangedBy(Agent agent) {
 	Prompt tensesPrompt = new PromptBuilder()
 	    .withAgent(agent)
-	    .withPrompt(Config.getPrompts().getCreatePastAndPresent())
-	    .build();
+	    .setPrompt(SmallvilleConfig.getPrompts().getMisc().getCombineSentences())
+	    .build(); // might be able to use LocalNLP for this
 
 	String tenses = chat.sendChat(tensesPrompt, .1);
 
 	Prompt changedPrompt = new PromptBuilder()
 	    .withAgent(agent)
+	    .withTense(tenses)
 	    .withLocations(world.getLocations())
-	    .withPrompt(Config.getPrompts().getCreateObjectUpdates())
-	    .createObjectUpdates(tenses)
+	    .setPrompt(SmallvilleConfig.getPrompts().getWorld().getObjectStates())
 	    .build();
 
 	String response = chat.sendChat(changedPrompt, .3);
@@ -290,7 +286,10 @@ public class ChatService implements IChatService {
 
     @Override
     public String getExactLocation(Agent agent) {
-	Prompt prompt = new PromptBuilder().withAgent(agent).withPrompt(Config.getPrompts().getPickLocation()).build();
+	Prompt prompt = new PromptBuilder()
+	    .withAgent(agent)
+	    .setPrompt(SmallvilleConfig.getPrompts().getWorld().getLocation())
+	    .build();
 	return chat.sendChat(prompt, 0);
     }
 
@@ -300,12 +299,12 @@ public class ChatService implements IChatService {
 	    return new ArrayList<Memory>();
 	}
 	LocalNLP nlp = new LocalNLP();
-	
+
 	List<Memory> result = new ArrayList<Memory>();
 
 	for (Plan plan : plans) {
 	    String pastTense = nlp.convertToPastTense(plan.getDescription());
-	    
+
 	    result.add(new Observation(pastTense, plan.getTime(), (int) plan.getImportance()));
 	}
 

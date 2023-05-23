@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.github.nickm980.smallville.Settings;
-import io.github.nickm980.smallville.config.Config;
+import io.github.nickm980.smallville.config.SmallvilleConfig;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
 import io.github.nickm980.smallville.prompts.Prompt;
 import okhttp3.OkHttpClient;
@@ -25,6 +25,8 @@ public class ChatGPT implements LLM {
 
     @Override
     public String sendChat(Prompt prompt, double temperature) {
+	long start = System.currentTimeMillis();
+
 	OkHttpClient client = new OkHttpClient.Builder()
 	    .connectTimeout(10, TimeUnit.SECONDS)
 	    .writeTimeout(3, TimeUnit.MINUTES)
@@ -55,7 +57,7 @@ public class ChatGPT implements LLM {
 
 	RequestBody body = RequestBody.create(json.getBytes());
 	Request request = new Request.Builder()
-	    .url(Config.getConfig().getApiPath())
+	    .url(SmallvilleConfig.getConfig().getApiPath())
 	    .addHeader("Content-Type", "application/json")
 	    .addHeader("Authorization", "Bearer " + Settings.getApiKey())
 	    .post(body)
@@ -82,6 +84,8 @@ public class ChatGPT implements LLM {
 	    e.printStackTrace();
 	}
 
+	long end = System.currentTimeMillis();
+	LOG.info("[Chat] Response took " + String.valueOf(start - end) + "ms");
 	return result;
     }
 

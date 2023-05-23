@@ -1,145 +1,159 @@
-agentSummaryDescription: |
-  Pretend you are %name%
+reactions:
+  conversation: |
+    {{agent.summary}}
+    {{other.summary}}
 
-  Name: %name%
-  Description: %description%
-  Current Location: %location%
-  
-  [Current Time]
+    First, decide whether or not {{agent.name}} is going to initiate a conversation.
 
-createConversationWith: |
-  [Agent Summary Description]
-  [Future Plans]
-  
-  %other_summary_description%
-  First, decide whether or not [Agent Name] is going to initiate a conversation.
+    If {{agent.name}} is not going to initiate a conversation respond with "No conversation"
 
-  If [Agent Name] is not going to initiate a conversation respond with "No conversation"
+    Otherwise, create a fake conversation between {{agent.name}} and {{other.name}}
 
-  Otherwise, create a fake conversation between [Agent Name] and %other_name%
+    For example, a conversation between people named A and B would look like this
 
-  For example, a conversation between people named A and B would look like this
+    A: Hello, how are you today?
+    B: I am good, and you?
+  reaction: |
+    {{world.description}} 
+    {{agent.summary}}
 
-  A: Hello, how are you today?
-  B: I am good, and you?
+    Observation: {{observation}}
+    Summary of relevant context from {{agent.name}}'s memory: {{memories.relevant}}
 
-createReactionSuggestion: |
-  [World Description]
-  [Agent Summary Description]
-  [Future Plans]
-  [Agent Name]’s status: [Current Activity]
-  Observation: %observation%
-  Summary of relevant context from [Agent Name]’s memory: %relevant_memories%
+    Should {{agent.name}} react to the observation? If the agent is observing another agent, should they initiate a conversation?
+    * Prefer to stay in a close by area
 
-  Should [Agent Name] react to the observation, and if so, what would the reaction be?
-  
-  * Prefer to stay in a close by area
+    Respond in the following JSON format:
 
-  Respond in the following JSON format:
+    {
+      "react": "<yes/no>",
+      "action": "I am <your current activity>",
+      "emoji": "<pick an emoji to represent your current activity>",
+    }
 
-  {
-    "react": "<yes/no>",
-    "action": "I am <your current activity>",
-    "emoji": "<pick an emoji to represent your current activity>",
-  }
+world:
+  location: |
+    You were last in the {{agent.locationName}}
 
-createCurrentPlanPrompt: |
-  [World Description]
-  [Agent Summary Description]
-  Most Recent Plan: [Most Recent Plan]
-  
-  Based on the time of day [Current Time] and the most recent plan, what will you be doing now?
-  Also choose an emoji based on the activity.
+    Current Activity: {{agent.activity}}
+    Available Objects: {{#agent.locationChildren}}{{name}}; {{/agent.locationChildren}} 
 
-  Respond confidently in the following JSON format
+    Which one will you interact with?
 
-  {
-    "activity": "I am <fill in>",
-    "location": "<Location Name>",
-    "emoji": "<fill in>",
-  }
+    Do not include punctuation.
+  objectStates: |
+    {{world.description}}
 
-pickLocation: |
-  You are currently in the [Current Location]
-  Current Activity: [Current Activity]
-  Based on the following objects [Current Location's Objects] which one will you interact with?
-  
-  Do not include punctuation.
-  
-createMemoryRankPrompt: >
-  On the scale of 1 to 10, where 1 is purely mundane
-  (e.g., brushing teeth, making bed) and 10 is extremely poignant (e.g., a break up, college
-  acceptance), rate the likely poignancy of the following pieces of memory. Always answer with only a list of numbers. For example, if given the following memories Memories: John did nothing; John lin went to school; John lin saw a concert
-  respond with [1, 2, 6]. If just given one memory still respond in a list. Memories are separated by semi colans (;) 
-  
-  Memories: %s
+    {{tenses}}
 
-createShortTermPlans: >
-  [World Description]
-  [Agent Summary Description]
-  
-  * Every plan should get its own line.
-  * Give a start time for every plan and format the time as "hh:mm a"
+    What are the new states of the objects?
+    Respond in the following format:
 
-  [Future Plans]
+    <Object>: <State>
+    <Object2>: <State>
+    ...
 
+    For example, if you are no longer cooking coffee and are now taking a shower
 
-  [Last Activity]
-  What will [Agent Name] do every minute for the next 20 minutes? Start at the current time and end 20 minutes from now.
-  Respond with 20 plans.
-  [Current Time]
+    Coffee Machine: Off
+    Shower: On
 
-createMidTermPlans: >
-  [World Description]
-  [Agent Summary Description]
-         
-  * Every plan should get its own line.
-  * When responding with a time, use the format " hh:mm a "
-  
-  [Future Plans]
-  
-  List what [Agent Name] has planned every 20 minutes. Start at the current time. [Current Time]
-  
-createFuturePlansPrompt: >
-  [World Description]
-  [Agent Summary Description]
-    
-  * Every plan should be on a new line
-  * When responding with a time, use the format " hh:mm a "
-  
-  
-   Today is Wednesday, February 13. What does [Agent Name] have planned for today? 
-   
-   * Start every plan on a new line with the start and ending time
-   * Include a plan for the current time
-   [Current Time]
- 
-createAskQuestionPrompt: |
-  [World Description]
-  [Agent Summary Description]
-  %relevant_memories%
-  
-  Pretend you are [Agent Name] and answer the following question in the first person: %question%
+plans:
+  shortTerm: |
+    {{world.description}}
+    {{agent.summary}}
 
-createPastAndPresent: |
-  [Agent Name]'s current status: [Current Activity]
-  [Agent Name]'s past status: [Last Activity]
-  
-  Format the current and past activity to say x is no longer {past status} and is now {current status}
+    * Every plan should get its own line.
+    * Give a start time for every plan and format the time as "hh:mm a"
 
-createObjectUpdates: |
-  [World Description]
+    Last Activity: {{agent.lastActivity}}
 
-  %tenses%
+    Plans: {{#agent.plans}}{{description}};{{/agent.plans}}
 
-  What are the new states of the objects?
-  Respond in the following format:
+    What will you do every minute for the next 20 minutes? Start at the current time and end 20 minutes from now.
+    Respond with 20 plans.
 
-  <Object>: <State>
-  <Object2>: <State>
-  ...
+    It is currently {{date.time}}
 
-  For example, if you are no longer cooking coffee and are now taking a shower
-  
-  Coffee Machine: Off
-  Shower: On
+  midTerm: |
+    {{world.description}}
+    {{agent.summary}}
+          
+    * Every plan should get its own line.
+    * When responding with a time, use the format " hh:mm a "
+
+    {{#agent.plans}}
+    - {{description}}
+    {{/agent.plans}}
+
+    List what {{agent.name}} has planned every hour. Start at {{date.time}}.
+
+  longTerm: |
+    {{world.description}}
+    {{agent.summary}}
+      
+    * Every plan should be on a new line
+    * When responding with a time, use the format "hh:mm a"
+
+    Today is {{date.full}}. What does {{agent.name}} have planned for today in broad strokes? 
+
+    * Start every plan on a new line with the start and ending time
+    * Include a plan for the current time
+
+  current: |
+    {{world.description}}
+    {{agent.summary}}
+
+    Last Activity: {{agent.lastActivity}}
+    Most Recent Plan: {{agent.lastPlan}}
+
+    What are you doing now? It is currently {{date.time}}
+
+    Respond confidently in the following JSON format and choose an emoji to represent the activity.
+
+    {
+      "activity": "I am <fill in>",
+      "location": "<Location Name>",
+      "emoji": "<fill in>",
+    }
+
+agent:
+  characteristics: |
+    How would one describe {{agent.name}}'s core characteristics
+    given the following statements?
+    {{#memories.characteristics}}
+     - {{description}}
+    {{/memories.characteristics}}
+
+  summary: |
+    Pretend you are {{agent.name}}
+
+    Name: {{agent.name}}
+    Description: {{agent.description}}
+    Current Location: {{agent.locationName}}
+
+    {{date.full}}
+  askQuestion: |
+    {{memories.relevant}}
+
+    Pretend you are {{agent.name}} and answer the following question in the first person: {{question}}
+
+misc:
+  combineSentences: |
+    {{agent.name}}'s current status: {{agent.activity}}
+    {{agent.name}}'s past status: {{agent.lastActivity}}
+
+    Format the current and past activity to say x is no longer {past status} and is now {current status}
+  rankMemories: |
+    On the scale of 1 to 10, where 1 is purely mundane
+    (e.g., brushing teeth, making bed) and 10 is extremely poignant (e.g., a break up, college
+    acceptance), rate the likely poignancy of the following pieces of memory. Always answer with only a list of numbers. For example, if given the following memories Memories: John did nothing; John lin went to school; John lin saw a concert
+    respond with [1, 2, 6]. If just given one memory still respond in a list. Memories are separated by semi colans (;) 
+
+    Memories: {{#memories.unranked}}{{description}}; {{/memories.unranked}}
+
+  debug: |
+    Ping {{ping}}
+
+  relationship: |
+    What is {{agent.name}}'s relationship with the {{entity}}?

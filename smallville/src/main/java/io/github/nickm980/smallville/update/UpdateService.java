@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.github.nickm980.smallville.World;
+import io.github.nickm980.smallville.entities.Agent;
 import io.github.nickm980.smallville.llm.LLM;
-import io.github.nickm980.smallville.models.Agent;
 
 /**
  * 
@@ -19,10 +19,8 @@ public class UpdateService {
     private final World world;
     private final ChatService chatService;
     private final Logger LOG = LoggerFactory.getLogger(UpdateService.class);
-    private boolean updateInProgress;
 
     public UpdateService(LLM chat, World world) {
-	this.updateInProgress = false;
 	this.world = world;
 	this.chatService = new ChatService(world, chat);
     }

@@ -3,10 +3,9 @@ package io.github.nickm980.smallville.update;
 import java.util.List;
 
 import io.github.nickm980.smallville.World;
-import io.github.nickm980.smallville.models.Agent;
-import io.github.nickm980.smallville.models.memory.Observation;
-import io.github.nickm980.smallville.models.memory.Plan;
-import io.github.nickm980.smallville.models.memory.PlanType;
+import io.github.nickm980.smallville.entities.Agent;
+import io.github.nickm980.smallville.entities.memory.Plan;
+import io.github.nickm980.smallville.entities.memory.PlanType;
 
 public class UpdateFuturePlans extends AgentUpdate {
 

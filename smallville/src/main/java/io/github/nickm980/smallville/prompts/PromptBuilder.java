@@ -1,113 +1,101 @@
 package io.github.nickm980.smallville.prompts;
 
-import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
-
+import java.util.Map;
+import io.github.nickm980.smallville.World;
+import io.github.nickm980.smallville.entities.Agent;
+import io.github.nickm980.smallville.entities.Conversation;
+import io.github.nickm980.smallville.entities.SimulatedLocation;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
-import io.github.nickm980.smallville.models.Agent;
-import io.github.nickm980.smallville.models.Conversation;
-import io.github.nickm980.smallville.models.SimulatedLocation;
+import io.github.nickm980.smallville.prompts.dto.DateModel;
+import io.github.nickm980.smallville.prompts.dto.WorldModel;
 
-public class PromptBuilder implements IPromptBuilder {
+public class PromptBuilder {
 
-    private PromptData data;
-    private AtomicPromptBuilder atomicBuilder;
+    private Map<String, Object> data;
     private String prompt;
+    private final MiniPrompts prompts;
 
     public PromptBuilder() {
-	this.atomicBuilder = new AtomicPromptBuilder();
-	this.data = new PromptData();
+	this.data = new HashMap<>();
+	this.prompts = new MiniPrompts();
+
+	data.put("ping", "pong");
+	data.put("date", new DateModel());
     }
 
-    @Override
     public PromptBuilder withAgent(Agent agent) {
-	data.setAgent(agent);
+	data.put("agent", prompts.fromAgent(agent));
+
+	if (data.get("memories.unranked") == null) {
+	    data.put("memories.unranked", agent.getMemoryStream().getCharacteristics());
+	}
+
+	if (data.get("memories.characteristics") == null) {
+	    data.put("memories.characteristics", agent.getMemoryStream().getMemories());
+	}
+
+	if (data.get("observation") != null) {
+	    data.put("memories.relevant", prompts.buildRelevantMemories(agent, (String) data.get("observation")));
+	}
+
 	return this;
     }
 
-    @Override
     public PromptBuilder withLocations(List<SimulatedLocation> locations) {
-	data.setLocations(locations);
+	data.put("locations", locations);
 	return this;
     }
 
-    @Override
     public PromptBuilder withConversation(Conversation conversation) {
-	data.setConversation(conversation);
+	data.put("conversation", conversation);
 	return this;
     }
 
-    public PromptBuilder withPrompt(String prompt) {
+    public PromptBuilder withOther(Agent other) {
+	data.put("other", prompts.fromAgent(other));
+	return this;
+    }
+
+    public PromptBuilder withWorld(World world) {
+	data.put("world", WorldModel.fromWorld(world));
+
+	if (data.get("locations") == null) {
+	    data.put("locations", world.getLocations());
+	}
+
+	return this;
+    }
+
+    public PromptBuilder withQuestion(String question) {
+	data.put("question", question);
+	return this;
+    }
+
+    public PromptBuilder withObservation(String observation) {
+	data.put("observation", observation);
+	return this;
+    }
+
+    public PromptBuilder setPrompt(String prompt) {
 	this.prompt = prompt;
 	return this;
     }
 
-    @Override
-    public PromptBuilder createConversationWith(Agent other) {
-	prompt
-	    .replace("%other_summary_description%", atomicBuilder.getAgentSummaryDescription(other))
-	    .replace("%other_name%", other.getFullName());
+    public PromptBuilder withTense(String tenses) {
+	data.put("tenses", tenses);
 	return this;
     }
 
-    @Override
-    public PromptBuilder createReactionSuggestion(String observation) {
-	prompt = prompt
-	    .replace("%relevant_memories%", atomicBuilder.buildRelevantMemories(data.getAgent(), observation))
-	    .replace("%observation%", observation);
-
-	return this;
-    }
-
-    @Override
-    public PromptBuilder createMemoryRankPrompt() {
-	prompt = String
-	    .format(prompt,
-		    data
-			.getAgent()
-			.getMemoryStream()
-			.getUnweightedMemories()
-			.stream()
-			.map(memory -> memory.getDescription())
-			.collect(Collectors.joining(", ")));
-	return this;
-    }
-
-    @Override
-    public PromptBuilder createAskQuestionPrompt(String question) {
-	prompt = prompt
-	    .replace("%question%", question)
-	    .replace("%relevant_memories%", atomicBuilder.buildRelevantMemories(data.getAgent(), question));
-
-	return this;
-    }
-
-    @Override
     public Prompt build() {
 	if (prompt == null || prompt.isEmpty()) {
 	    throw new SmallvilleException("Must call a creation function to make a new prompt first");
 	}
 
-	Agent agent = data.getAgent();
-
-	prompt = prompt
-	    .replace("[World Description]", atomicBuilder.getWorldDescription(data.getLocations()))
-	    .replace("[Agent Summary Description]", atomicBuilder.getAgentSummaryDescription(agent))
-	    .replace("[Current Time]", atomicBuilder.getTimeAsString(LocalDateTime.now()))
-	    .replace("[Agent Name]", agent.getFullName())
-	    .replace("[Current Location]", agent.getLocation().getName())
-	    .replace("[Current Location's Objects]", atomicBuilder.getObjects(agent.getLocation().getObjects()))
-	    .replace("[Current Activity]", agent.getCurrentActivity())
-	    .replace("[Last Activity]", agent.getLastActivity())
-	    .replace("[Most Recent Plan]", atomicBuilder.getNextPlan(agent))
-	    .replace("[Future Plans]", "Plans: " + atomicBuilder.asNaturalLanguage(agent.getPlans()));
+	TemplateEngine engine = new TemplateEngine();
+	prompt = engine.format(prompt, data);
 
 	return new Prompt.User(prompt);
-    }
-
-    public PromptBuilder createObjectUpdates(String tenses) {
-	prompt = prompt.replace("%tenses%", tenses);
-	return this;
     }
 }

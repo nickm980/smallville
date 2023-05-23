@@ -10,7 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.github.nickm980.smallville.models.SimulatedLocation;
+import io.github.nickm980.smallville.entities.SimulatedLocation;
 
 public class JacksonJsonTest {
 

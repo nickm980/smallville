@@ -12,14 +12,14 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.github.nickm980.smallville.entities.Agent;
+import io.github.nickm980.smallville.entities.Conversation;
+import io.github.nickm980.smallville.entities.Dialog;
+import io.github.nickm980.smallville.entities.Location;
+import io.github.nickm980.smallville.entities.SimulatedLocation;
+import io.github.nickm980.smallville.entities.SimulatedObject;
 import io.github.nickm980.smallville.exceptions.LocationNotFoundException;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
-import io.github.nickm980.smallville.models.Agent;
-import io.github.nickm980.smallville.models.Conversation;
-import io.github.nickm980.smallville.models.Dialog;
-import io.github.nickm980.smallville.models.Location;
-import io.github.nickm980.smallville.models.SimulatedLocation;
-import io.github.nickm980.smallville.models.SimulatedObject;
 
 /**
  * Creates an interactive Simulation for Generative Agents

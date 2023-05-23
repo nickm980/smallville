@@ -1,18 +1,16 @@
 package io.github.nickm980.smallville.update;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 
-import io.github.nickm980.smallville.models.Agent;
-import io.github.nickm980.smallville.models.Conversation;
-import io.github.nickm980.smallville.models.memory.Memory;
-import io.github.nickm980.smallville.models.memory.Plan;
-import io.github.nickm980.smallville.prompts.response.CurrentActivity;
-import io.github.nickm980.smallville.prompts.response.ObjectChangeResponse;
-import io.github.nickm980.smallville.prompts.response.Reaction;
+import io.github.nickm980.smallville.entities.Agent;
+import io.github.nickm980.smallville.entities.Conversation;
+import io.github.nickm980.smallville.entities.memory.Memory;
+import io.github.nickm980.smallville.entities.memory.Plan;
+import io.github.nickm980.smallville.prompts.dto.CurrentActivity;
+import io.github.nickm980.smallville.prompts.dto.ObjectChangeResponse;
+import io.github.nickm980.smallville.prompts.dto.Reaction;
 
-interface IChatService {
+public interface IChatService {
 
     String getExactLocation(Agent agent);
 

@@ -1,2 +1,4 @@
 apiPath: "https://api.openai.com/v1/chat/completions"
 timeFormat: "h:mm a"
+fullTimeFormat: "EEEE, MMMM d, h:mm a"
+yesterdayFormat: "EEEE MMMM d"

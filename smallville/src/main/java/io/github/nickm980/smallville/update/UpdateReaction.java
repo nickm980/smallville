@@ -1,8 +1,8 @@
 package io.github.nickm980.smallville.update;
 
 import io.github.nickm980.smallville.World;
-import io.github.nickm980.smallville.models.Agent;
-import io.github.nickm980.smallville.prompts.response.Reaction;
+import io.github.nickm980.smallville.entities.Agent;
+import io.github.nickm980.smallville.prompts.dto.Reaction;
 
 public class UpdateReaction extends AgentUpdate {
 

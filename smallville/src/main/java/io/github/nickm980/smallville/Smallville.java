@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.JCommander;
 
-import io.github.nickm980.smallville.api.server.SmallvilleServer;
+import io.github.nickm980.smallville.api.SmallvilleServer;
 import io.github.nickm980.smallville.config.CommandLineArgs;
-import io.github.nickm980.smallville.config.Config;
+import io.github.nickm980.smallville.config.SmallvilleConfig;
 import io.github.nickm980.smallville.llm.ChatGPT;
 import io.github.nickm980.smallville.nlp.LocalNLP;
 
@@ -20,7 +20,7 @@ public class Smallville {
 
     public static void main(String[] args) throws IOException {
 	configureLogs();
-	
+
 	CommandLineArgs options = loadArgs(args);
 
 	int port = options.getPort();
@@ -29,14 +29,16 @@ public class Smallville {
 	Settings.setApiKey(key);
 
 	LOG.info("Starting server...");
-	
+
 	loadConfig();
 
 	LocalNLP.preLoad();
-	
-	startServer(port);
 
+	startServer(port);
+	
+	Updater.checkLatestVersion();
 	LOG.info("Smallville server started on port " + port);
+	
     }
 
     private static CommandLineArgs loadArgs(String[] args) {
@@ -48,8 +50,8 @@ public class Smallville {
     }
 
     private static void loadConfig() {
-	Config.getConfig();
-	Config.getPrompts();
+	SmallvilleConfig.getConfig();
+	SmallvilleConfig.getPrompts();
     }
 
     private static void configureLogs() {

@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.junit.Test;
 
+import io.github.nickm980.smallville.entities.memory.MemoryStream;
+import io.github.nickm980.smallville.entities.memory.Plan;
 import io.github.nickm980.smallville.llm.ChatGPT;
-import io.github.nickm980.smallville.models.memory.MemoryStream;
-import io.github.nickm980.smallville.models.memory.Plan;
 import io.github.nickm980.smallville.update.ChatService;
 
 public class PlansParsingTest {

@@ -6,11 +6,12 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.nickm980.smallville.models.ObjectState;
-import io.github.nickm980.smallville.models.SimulatedLocation;
-import io.github.nickm980.smallville.models.SimulatedObject;
+import io.github.nickm980.smallville.entities.ObjectState;
+import io.github.nickm980.smallville.entities.SimulatedLocation;
+import io.github.nickm980.smallville.entities.SimulatedObject;
 
 public class ObjectsTest {
+    
     @Test
     public void testObjectLoads() {
 	World world = new World();

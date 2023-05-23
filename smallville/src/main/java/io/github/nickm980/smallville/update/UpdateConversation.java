@@ -3,9 +3,9 @@ package io.github.nickm980.smallville.update;
 import java.util.List;
 
 import io.github.nickm980.smallville.World;
-import io.github.nickm980.smallville.models.Agent;
-import io.github.nickm980.smallville.models.Conversation;
-import io.github.nickm980.smallville.models.Dialog;
+import io.github.nickm980.smallville.entities.Agent;
+import io.github.nickm980.smallville.entities.Conversation;
+import io.github.nickm980.smallville.entities.Dialog;
 import io.github.nickm980.smallville.nlp.LocalNLP;
 import io.github.nickm980.smallville.nlp.NLPCoreUtils;
 
