@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import io.github.nickm980.smallville.Smallville;
 
 public class AccessTime {
-    public static final LocalDateTime START = Smallville.getServer().getSimulationService().getTimekeeper().getSimulationTime();
+    public static final LocalDateTime START = Timekeeper.start();
     
     private LocalDateTime lastAccessed;
     private LocalDateTime createdAt;
