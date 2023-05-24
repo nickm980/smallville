@@ -28,9 +28,9 @@ public class Smallville {
 
 	Settings.setApiKey(key);
 
-	LOG.info("Starting server...");
-
 	loadConfig();
+
+	LOG.info("Starting server...");
 
 	LocalNLP.preLoad();
 
