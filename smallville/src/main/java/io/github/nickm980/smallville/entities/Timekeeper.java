@@ -5,48 +5,45 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class Timekeeper {
-    private static final LocalDateTime START = LocalDateTime.now();
+    private static boolean isRealTime = true;
+    private static LocalDateTime simulationTime;
+    private static Duration timestepDuration;
 
-    private boolean isRealTime = true;
-    private LocalDateTime simulationTime;
-    private Duration timestepDuration;
-
-    public Timekeeper() {
-	isRealTime = true;
+    public void initialize() {
+        isRealTime = true;
     }
 
-    public Timekeeper(LocalDateTime simulationTime, Duration timestepDuration) {
+    public static void initialize(LocalDateTime simulationTime, Duration timestepDuration) {
 
-	this.simulationTime = simulationTime;
-	this.timestepDuration = timestepDuration;
+        Timekeeper.simulationTime = simulationTime;
+        Timekeeper.timestepDuration = timestepDuration;
     }
 
-    public LocalDateTime getSimulationTime() {
-	if (!isRealTime) {
-	    return simulationTime;
-	} else if (isRealTime) {
-	    return LocalDateTime.now();
-	}
-	return null;
+
+    public static LocalDateTime getSimulationTime() {
+        if (!isRealTime) {
+            return simulationTime;
+        } else if (isRealTime) {
+            return LocalDateTime.now();
+        }
+        System.out.println("simulationTime: " + simulationTime);
+        return null;
     }
 
-    public void setSimulationTime(LocalDateTime simulationTime) {
-	this.simulationTime = simulationTime;
+    public static void setSimulationTime(LocalDateTime simulationTime) {
+        Timekeeper.simulationTime = simulationTime;
     }
 
-    public Duration getTimestepDuration() {
-	return timestepDuration;
+    public static Duration getTimestepDuration() {
+        return timestepDuration;
     }
 
-    public void setTimestepDuration(Duration timestepDuration) {
-	this.timestepDuration = timestepDuration;
+    public static void setTimestepDuration(Duration timestepDuration) {
+        Timekeeper.timestepDuration = timestepDuration;
     }
 
-    public void incrementSimulationTime() {
-	simulationTime = simulationTime.plus(timestepDuration);
+    public static void incrementSimulationTime() {
+        simulationTime = simulationTime.plus(timestepDuration);
     }
 
-    public static LocalDateTime start() {
-	return START;
-    }
 }

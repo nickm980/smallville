@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.github.nickm980.smallville.entities.Timekeeper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,275 +41,275 @@ public class ChatService implements IChatService {
     private final World world;
 
     public ChatService(World world, LLM chat) {
-	this.chat = chat;
-	this.world = world;
+        this.chat = chat;
+        this.world = world;
     }
 
     @Override
     public int[] getWeights(Agent agent) {
-	Prompt prompt = new PromptBuilder()
-	    .withAgent(agent)
-	    .setPrompt(SmallvilleConfig.getPrompts().getMisc().getRankMemories())
-	    .build();
+        Prompt prompt = new PromptBuilder()
+                .withAgent(agent)
+                .setPrompt(SmallvilleConfig.getPrompts().getMisc().getRankMemories())
+                .build();
 
-	String response = chat.sendChat(prompt, .1);
+        String response = chat.sendChat(prompt, .1);
 
-	ObjectMapper objectMapper = new ObjectMapper();
-	int[] result = new int[0];
+        ObjectMapper objectMapper = new ObjectMapper();
+        int[] result = new int[0];
 
-	if (!response.contains("[")) {
-	    result = new int[1];
-	    result[0] = Integer.parseInt(response);
-	    return result;
-	}
+        if (!response.contains("[")) {
+            result = new int[1];
+            result[0] = Integer.parseInt(response);
+            return result;
+        }
 
-	try {
-	    result = objectMapper.readValue(response, int[].class);
-	} catch (JsonProcessingException e) {
-	    LOG.error("Failed to parse json for memory ranking. Continuing anyways...");
-	}
+        try {
+            result = objectMapper.readValue(response, int[].class);
+        } catch (JsonProcessingException e) {
+            LOG.error("Failed to parse json for memory ranking. Continuing anyways...");
+        }
 
-	return result;
+        return result;
     }
 
     @Override
     public Reaction getReaction(Agent agent, String observation) {
-	Prompt prompt = new PromptBuilder()
-	    .withAgent(agent)
-	    .withLocations(world.getLocations())
-	    .setPrompt(SmallvilleConfig.getPrompts().getReactions().getReaction())
-	    .build();
+        Prompt prompt = new PromptBuilder()
+                .withAgent(agent)
+                .withLocations(world.getLocations())
+                .setPrompt(SmallvilleConfig.getPrompts().getReactions().getReaction())
+                .build();
 
-	String response = chat.sendChat(prompt, 1);
-	ObjectMapper mapper = new ObjectMapper();
-	Reaction reaction = new Reaction();
+        String response = chat.sendChat(prompt, 1);
+        ObjectMapper mapper = new ObjectMapper();
+        Reaction reaction = new Reaction();
 
-	try {
-	    JsonNode json = mapper.readTree(response);
-	    boolean willReact = json.get("react").asBoolean();
+        try {
+            JsonNode json = mapper.readTree(response);
+            boolean willReact = json.get("react").asBoolean();
 
-	    if (willReact) {
-		String currentActivity = json.get("reaction").asText();
-		String emoji = json.get("emoji").asText();
+            if (willReact) {
+                String currentActivity = json.get("reaction").asText();
+                String emoji = json.get("emoji").asText();
 
-		reaction.setEmoji(emoji);
-		reaction.setCurrentActivity(currentActivity);
-	    }
+                reaction.setEmoji(emoji);
+                reaction.setCurrentActivity(currentActivity);
+            }
 
-	    reaction.setReact(willReact);
-	} catch (JsonProcessingException e) {
-	    LOG.error("Failed to parse json for memory ranking. Continuing anyways...");
-	}
+            reaction.setReact(willReact);
+        } catch (JsonProcessingException e) {
+            LOG.error("Failed to parse json for memory ranking. Continuing anyways...");
+        }
 
-	return reaction;
+        return reaction;
     }
 
     @Override
     public String ask(Agent agent, String question) {
-	Prompt prompt = new PromptBuilder()
-	    .withAgent(agent)
-	    .withLocations(world.getLocations())
-	    .setPrompt(SmallvilleConfig.getPrompts().getAgent().getAskQuestion())
-	    .build();
+        Prompt prompt = new PromptBuilder()
+                .withAgent(agent)
+                .withLocations(world.getLocations())
+                .setPrompt(SmallvilleConfig.getPrompts().getAgent().getAskQuestion())
+                .build();
 
-	return chat.sendChat(prompt, .9);
+        return chat.sendChat(prompt, .9);
     }
 
     @Override
     public List<Plan> getPlans(Agent agent) {
-	Prompt prompt = new PromptBuilder()
-	    .withLocations(world.getLocations())
-	    .withAgent(agent)
-	    .setPrompt(SmallvilleConfig.getPrompts().getPlans().getLongTerm())
-	    .build();
+        Prompt prompt = new PromptBuilder()
+                .withLocations(world.getLocations())
+                .withAgent(agent)
+                .setPrompt(SmallvilleConfig.getPrompts().getPlans().getLongTerm())
+                .build();
 
-	String response = chat.sendChat(prompt, .2);
-	LOG.info(response);
-	return parsePlans(response);
+        String response = chat.sendChat(prompt, .2);
+        LOG.info(response);
+        return parsePlans(response);
     }
 
     @Override
     public List<Plan> getShortTermPlans(Agent agent) {
-	Prompt prompt = new PromptBuilder()
-	    .withLocations(world.getLocations())
-	    .withAgent(agent)
-	    .setPrompt(SmallvilleConfig.getPrompts().getPlans().getShortTerm())
-	    .build();
+        Prompt prompt = new PromptBuilder()
+                .withLocations(world.getLocations())
+                .withAgent(agent)
+                .setPrompt(SmallvilleConfig.getPrompts().getPlans().getShortTerm())
+                .build();
 
-	String response = chat.sendChat(prompt, .7);
+        String response = chat.sendChat(prompt, .7);
 
-	return parsePlans(response);
+        return parsePlans(response);
     }
 
     @Override
     public CurrentActivity getCurrentPlan(Agent agent) {
-	CurrentActivity result = new CurrentActivity();
-	Prompt prompt = new PromptBuilder()
-	    .withAgent(agent)
-	    .withLocations(world.getLocations())
-	    .setPrompt(SmallvilleConfig.getPrompts().getPlans().getCurrent())
-	    .build();
-	NLPCoreUtils nlp = new LocalNLP();
+        CurrentActivity result = new CurrentActivity();
+        Prompt prompt = new PromptBuilder()
+                .withAgent(agent)
+                .withLocations(world.getLocations())
+                .setPrompt(SmallvilleConfig.getPrompts().getPlans().getCurrent())
+                .build();
+        NLPCoreUtils nlp = new LocalNLP();
 
-	String response = chat.sendChat(prompt, .7);// higher value provides better results for emojis
-	response = response.substring(response.indexOf("{"));
+        String response = chat.sendChat(prompt, .7);// higher value provides better results for emojis
+        response = response.substring(response.indexOf("{"));
 
-	JsonNode json = null;
+        JsonNode json = null;
 
-	try {
-	    json = objectMapper.readTree(response);
-	} catch (JsonProcessingException e) {
-	    LOG.error("Returning empty current plan because could not parse the result");
-	    return result;
-	}
+        try {
+            json = objectMapper.readTree(response);
+        } catch (JsonProcessingException e) {
+            LOG.error("Returning empty current plan because could not parse the result");
+            return result;
+        }
 
-	result.setCurrentActivity(json.get("activity").asText());
-	result.setEmoji(json.get("emoji").asText());
-	result.setLastActivity(nlp.convertToPastTense(agent.getCurrentActivity()));
-	result.setLocation(json.get("location").asText());
+        result.setCurrentActivity(json.get("activity").asText());
+        result.setEmoji(json.get("emoji").asText());
+        result.setLastActivity(nlp.convertToPastTense(agent.getCurrentActivity()));
+        result.setLocation(json.get("location").asText());
 
-	LOG.info("[Activity]" + result.getCurrentActivity() + " location: " + agent.getLocation().getName());
+        LOG.info("[Activity]" + result.getCurrentActivity() + " location: " + agent.getLocation().getName());
 
-	return result;
+        return result;
     }
 
     @Override
     public Conversation getConversationIfExists(Agent agent, Agent other) {
-	Prompt prompt = new PromptBuilder()
-	    .withAgent(agent)
-	    .setPrompt(SmallvilleConfig.getPrompts().getReactions().getConversation())
-	    .build();
+        Prompt prompt = new PromptBuilder()
+                .withAgent(agent)
+                .setPrompt(SmallvilleConfig.getPrompts().getReactions().getConversation())
+                .build();
 
-	String response = chat.sendChat(prompt, .7);
-	String[] lines = response.split("\\r?\\n");
+        String response = chat.sendChat(prompt, .7);
+        String[] lines = response.split("\\r?\\n");
 
-	List<Dialog> dialogs = new ArrayList<>();
-	for (String line : lines) {
-	    String[] parts = line.split(":\\s+", 2);
-	    if (parts.length == 2) { // ignores all lines before the conversation
-		dialogs.add(new Dialog(parts[0], parts[1]));
-	    }
-	}
+        List<Dialog> dialogs = new ArrayList<>();
+        for (String line : lines) {
+            String[] parts = line.split(":\\s+", 2);
+            if (parts.length == 2) { // ignores all lines before the conversation
+                dialogs.add(new Dialog(parts[0], parts[1]));
+            }
+        }
 
-	Conversation conversation = new Conversation(agent.getFullName(), other.getFullName(), dialogs);
-	return conversation;
+        Conversation conversation = new Conversation(agent.getFullName(), other.getFullName(), dialogs);
+        return conversation;
     }
 
     @Override
     public List<Plan> parsePlans(String input) {
-	List<Plan> plans = new ArrayList<>();
+        List<Plan> plans = new ArrayList<>();
 
-	String[] lines = input.split("\n");
+        String[] lines = input.split("\n");
 
-	for (String line : lines) {
-	    LocalDateTime start = null;
+        for (String line : lines) {
+            LocalDateTime start = null;
 
-	    try {
-		start = parseTime(input, line);
-	    } catch (Exception e) {
-		LOG.error("Could not parse time");
-		continue;
-	    }
+            try {
+                start = parseTime(input, line);
+            } catch (Exception e) {
+                LOG.error("Could not parse time");
+                continue;
+            }
 
-	    if (start == null) {
-		continue;
-	    }
+            if (start == null) {
+                continue;
+            }
 
-	    Plan plan = new Plan(line, start);
-	    plans.add(plan);
-	}
+            Plan plan = new Plan(line, start);
+            plans.add(plan);
+        }
 
-	return plans;
+        return plans;
     }
 
     private LocalDateTime parseTime(String input, String line) throws DateTimeParseException {
-	String[] splitPlan = line.split("\\d+", 2); // split after first number
+        String[] splitPlan = line.split("\\d+", 2); // split after first number
 
-	if (line.isBlank()) {
-	    return null;
-	}
+        if (line.isBlank()) {
+            return null;
+        }
 
-	if (splitPlan.length == 1) {
-	    LOG.warn("Temporal memory possibly missing a time. " + line);
-	    return null;
-	}
+        if (splitPlan.length == 1) {
+            LOG.warn("Temporal memory possibly missing a time. " + line);
+            return null;
+        }
 
-	int index = input.indexOf(splitPlan[1]) - 2;
+        int index = input.indexOf(splitPlan[1]) - 2;
 
-	if (index == -1) {
-	    LOG.warn("Temporal memory possibly missing a time. " + line);
-	    return null;
-	}
+        if (index == -1) {
+            LOG.warn("Temporal memory possibly missing a time. " + line);
+            return null;
+        }
 
-	String time = input.substring(index, index + 8).trim().replace("(", "");
-	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
-	return LocalDateTime.of(LocalDate.now(), LocalTime.parse(time, formatter));
+        String time = input.substring(index, index + 8).trim().replace("(", "");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+        return LocalDateTime.of(Timekeeper.getSimulationTime().toLocalDate(), LocalTime.parse(time, formatter));
     }
 
     @Override
     public ObjectChangeResponse[] getObjectsChangedBy(Agent agent) {
-	Prompt tensesPrompt = new PromptBuilder()
-	    .withAgent(agent)
-	    .setPrompt(SmallvilleConfig.getPrompts().getMisc().getCombineSentences())
-	    .build(); // might be able to use LocalNLP for this
+        Prompt tensesPrompt = new PromptBuilder()
+                .withAgent(agent)
+                .setPrompt(SmallvilleConfig.getPrompts().getMisc().getCombineSentences())
+                .build(); // might be able to use LocalNLP for this
 
-	String tenses = chat.sendChat(tensesPrompt, .1);
+        String tenses = chat.sendChat(tensesPrompt, .1);
 
-	Prompt changedPrompt = new PromptBuilder()
-	    .withAgent(agent)
-	    .withTense(tenses)
-	    .withLocations(world.getLocations())
-	    .setPrompt(SmallvilleConfig.getPrompts().getWorld().getObjectStates())
-	    .build();
+        Prompt changedPrompt = new PromptBuilder()
+                .withAgent(agent)
+                .withTense(tenses)
+                .withLocations(world.getLocations())
+                .setPrompt(SmallvilleConfig.getPrompts().getWorld().getObjectStates())
+                .build();
 
-	String response = chat.sendChat(changedPrompt, .3);
+        String response = chat.sendChat(changedPrompt, .3);
 
-	String[] lines = response.split("\n");
-	ObjectChangeResponse[] objects = new ObjectChangeResponse[lines.length];
+        String[] lines = response.split("\n");
+        ObjectChangeResponse[] objects = new ObjectChangeResponse[lines.length];
 
-	for (int i = 0; i < lines.length; i++) {
-	    String line = lines[i];
-	    String[] parts = line.split(":");
-	    String item = parts[0].trim();
-	    String value = parts[1].trim();
-	    LOG.debug("Trying to change " + item + " to " + value);
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            String[] parts = line.split(":");
+            String item = parts[0].trim();
+            String value = parts[1].trim();
+            LOG.debug("Trying to change " + item + " to " + value);
 
-	    if (item != null && value != null && !value.equalsIgnoreCase("Unchanged")) {
-		objects[i] = new ObjectChangeResponse(item, value);
-	    }
-	}
+            if (item != null && value != null && !value.equalsIgnoreCase("Unchanged")) {
+                objects[i] = new ObjectChangeResponse(item, value);
+            }
+        }
 
-	if (objects.length == 0) {
-	    LOG.warn("No objects were updated");
-	}
+        if (objects.length == 0) {
+            LOG.warn("No objects were updated");
+        }
 
-	return objects;
+        return objects;
     }
 
     @Override
     public String getExactLocation(Agent agent) {
-	Prompt prompt = new PromptBuilder()
-	    .withAgent(agent)
-	    .setPrompt(SmallvilleConfig.getPrompts().getWorld().getLocation())
-	    .build();
-	return chat.sendChat(prompt, 0);
+        Prompt prompt = new PromptBuilder()
+                .withAgent(agent)
+                .setPrompt(SmallvilleConfig.getPrompts().getWorld().getLocation())
+                .build();
+        return chat.sendChat(prompt, 0);
     }
 
     @Override
     public List<Memory> convertFuturePlansToMemories(List<Plan> plans) {
-	if (plans.isEmpty()) {
-	    return new ArrayList<Memory>();
-	}
-	LocalNLP nlp = new LocalNLP();
+        if (plans.isEmpty()) {
+            return new ArrayList<Memory>();
+        }
+        LocalNLP nlp = new LocalNLP();
 
-	List<Memory> result = new ArrayList<Memory>();
+        List<Memory> result = new ArrayList<Memory>();
 
-	for (Plan plan : plans) {
-	    String pastTense = nlp.convertToPastTense(plan.getDescription());
+        for (Plan plan : plans) {
+            String pastTense = nlp.convertToPastTense(plan.getDescription());
 
-	    result.add(new Observation(pastTense, plan.getTime(), (int) plan.getImportance()));
-	}
+            result.add(new Observation(pastTense, plan.getTime(), (int) plan.getImportance()));
+        }
 
-	return result;
+        return result;
     }
 }

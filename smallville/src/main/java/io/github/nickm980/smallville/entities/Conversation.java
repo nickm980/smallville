@@ -22,7 +22,7 @@ public class Conversation {
 
 	this.agent = agent;
 	this.other = other;
-	this.createdAt = LocalDateTime.now();
+	this.createdAt = Timekeeper.getSimulationTime();
 	this.messages = messages;
     }
 

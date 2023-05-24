@@ -1,5 +1,7 @@
 package io.github.nickm980.smallville.entities.memory;
 
+import io.github.nickm980.smallville.entities.Timekeeper;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -89,7 +91,7 @@ public class MemoryStream {
 	for (Memory memory : memories) {
 	    if (memory instanceof Plan) {
 		Plan plan = (Plan) memory;
-		boolean isOld = plan.getTime() != null && plan.getTime().compareTo(LocalDateTime.now()) < 0;
+		boolean isOld = plan.getTime() != null && plan.getTime().compareTo(Timekeeper.getSimulationTime()) < 0;
 
 		if (isOld) {
 		    copies.add(plan);

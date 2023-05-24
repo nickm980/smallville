@@ -2,16 +2,17 @@ package io.github.nickm980.smallville.entities;
 
 import java.time.LocalDateTime;
 import io.github.nickm980.smallville.Smallville;
+import io.github.nickm980.smallville.entities.Timekeeper;
 
 public class AccessTime {
-    public static final LocalDateTime START = Timekeeper.start();
+    public static LocalDateTime START = Timekeeper.getSimulationTime();
     
     private LocalDateTime lastAccessed;
     private LocalDateTime createdAt;
     
     public AccessTime() {
-	this.lastAccessed = LocalDateTime.now();
-	this.createdAt = LocalDateTime.now();
+	    this.lastAccessed = Timekeeper.getSimulationTime();
+	    this.createdAt = Timekeeper.getSimulationTime();
     }
     
     public LocalDateTime createdAt() {
@@ -19,7 +20,7 @@ public class AccessTime {
     }
     
     public void update() {
-	this.lastAccessed = LocalDateTime.now();
+	this.lastAccessed = Timekeeper.getSimulationTime();
     }
     
     public LocalDateTime getLastAccessed() {

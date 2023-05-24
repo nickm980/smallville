@@ -5,14 +5,10 @@ import static org.junit.Assert.assertEquals;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import io.github.nickm980.smallville.entities.*;
 import org.junit.jupiter.api.Test;
 
 import io.github.nickm980.smallville.config.SmallvilleConfig;
-import io.github.nickm980.smallville.entities.Agent;
-import io.github.nickm980.smallville.entities.AgentLocation;
-import io.github.nickm980.smallville.entities.ObjectState;
-import io.github.nickm980.smallville.entities.SimulatedLocation;
-import io.github.nickm980.smallville.entities.SimulatedObject;
 import io.github.nickm980.smallville.entities.memory.Characteristic;
 import io.github.nickm980.smallville.entities.memory.Plan;
 import io.github.nickm980.smallville.prompts.Prompt;
@@ -48,17 +44,17 @@ public class PromptBuilderTest {
 	world.save(obj);
 	world.save(location);
 	
-	Agent ageng = new Agent("name", List.of(new Characteristic("desc")), prompt, new AgentLocation(location));
-	ageng.setGoal("Run for president");
-	ageng.setCurrentActivity("Doing nothing");
-	ageng.setCurrentActivity("making dinner");
-	ageng.addPlans(List.of(new Plan("plan", LocalDateTime.now())));
+	Agent agent = new Agent("name", List.of(new Characteristic("desc")), prompt, new AgentLocation(location));
+	agent.setGoal("Run for president");
+	agent.setCurrentActivity("Doing nothing");
+	agent.setCurrentActivity("making dinner");
+	agent.addPlans(List.of(new Plan("plan", Timekeeper.getSimulationTime())));
 	
-	world.save(ageng);
+	world.save(agent);
 
 	Prompt builder = new PromptBuilder()
 	    .withObservation("walked to the moon")
-	    .withAgent(ageng)
+	    .withAgent(agent)
 	    .withWorld(world)
 	    .withQuestion("hello there!")
 	    .withLocations(world.getLocations())

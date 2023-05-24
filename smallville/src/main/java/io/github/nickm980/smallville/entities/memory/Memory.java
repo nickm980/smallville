@@ -3,67 +3,68 @@ package io.github.nickm980.smallville.entities.memory;
 import io.github.nickm980.smallville.math.SmallvilleMath;
 
 public abstract class Memory implements Comparable<Memory> {
-    
+
     private String description;
     private int weight;
-    
+
     public Memory(String description) {
-	this.description = description;
-	this.weight = 0;
+        this.description = description;
+        this.weight = 0;
     }
 
     /**
      * Calculate the score of a memory based on a query score = a * recency + a *
      * importance + a * relevancy
-     * 
+     *
      * @param observation
      * @return A value between 0 and 1 where 1 is the strongest score
      */
     public double getScore(String observation) {
-	int a1 = 1;
-	int a2 = 1;
-	int a3 = 1;
-	double score = a1 * getRecency() + a2 * getImportance() + a3 * getRelevancy(observation);
-	return score;
+        int a1 = 1;
+        int a2 = 1;
+        int a3 = 1;
+        double score = a1 * getRecency() + a2 * getImportance() + a3 * getRelevancy(observation);
+        return score;
     }
 
     /**
      * How recent the memory was. A larger number is more recent
-     * 
-     * @return double bounded between SIMULATION_START_TIME and LocalDateTime.now()
+     *
+     * @return double bounded between SIMULATION_START_TIME and Timekeeper.getSimulationTime();
      */
+
     abstract double getRecency();
 
     public double getImportance() {
-	return weight;
+        return weight;
     }
 
     private double getRelevancy(String observation) {
-	return SmallvilleMath.calculateSentenceSimilarity(observation, description);
+        return SmallvilleMath.calculateSentenceSimilarity(observation, description);
     }
-    
+
     public String getDescription() {
-	return description;
+        return description;
     }
 
     public void setDescription(String description) {
-	this.description = description;
+        this.description = description;
     }
 
     public void setImportance(int weight) {
-	this.weight = weight;
+        this.weight = weight;
     }
 
     @Override
     public int compareTo(Memory o) {
-	double score = getScore(description);
-	double other = getScore(o.getDescription());
-	if (score > other) {
-	    return 1;
-	}
-	if (score < other) {
-	    return -1;
-	}
-	return 0;
+        double score = getScore(description);
+        double other = getScore(o.getDescription());
+        if (score > other) {
+            return 1;
+        }
+        if (score < other) {
+            return -1;
+        }
+        return 0;
     }
 }

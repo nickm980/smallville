@@ -5,6 +5,7 @@ import java.time.temporal.ChronoUnit;
 
 import io.github.nickm980.smallville.entities.AccessTime;
 import io.github.nickm980.smallville.entities.NaturalLanguageConvertible;
+import io.github.nickm980.smallville.entities.Timekeeper;
 import io.github.nickm980.smallville.math.SmallvilleMath;
 
 /**
@@ -44,7 +45,7 @@ public class Plan extends Memory implements TemporalMemory, NaturalLanguageConve
 
     @Override
     double getRecency() {
-	var now = LocalDateTime.now();
+	var now = Timekeeper.getSimulationTime();
 	var a = ChronoUnit.SECONDS.between(time, AccessTime.START);
 	var b = ChronoUnit.SECONDS.between(now, time);
 	var timeSinceStart = ChronoUnit.SECONDS.between(now, AccessTime.START);
