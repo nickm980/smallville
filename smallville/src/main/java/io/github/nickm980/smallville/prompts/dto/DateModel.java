@@ -4,19 +4,22 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import io.github.nickm980.smallville.config.SmallvilleConfig;
+import io.github.nickm980.smallville.entities.SimulationTime;
 
 public class DateModel {
 
     public String getTime() {
-	return format(LocalDateTime.now(), SmallvilleConfig.getConfig().getTimeFormat());
+	return format(SimulationTime.getInstance().getSimulationTime(), SmallvilleConfig.getConfig().getTimeFormat());
     }
 
     public String getFull() {
-	return format(LocalDateTime.now(), SmallvilleConfig.getConfig().getFullTimeFormat());
+	return format(SimulationTime.getInstance().getSimulationTime(),
+		SmallvilleConfig.getConfig().getFullTimeFormat());
     }
 
     public String getYesterday() {
-	return format(LocalDateTime.now().minusDays(1), SmallvilleConfig.getConfig().getYesterdayFormat());
+	return format(SimulationTime.getInstance().getSimulationTime().minusDays(1),
+		SmallvilleConfig.getConfig().getYesterdayFormat());
     }
 
     private String format(LocalDateTime time, String pattern) {

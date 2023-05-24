@@ -169,10 +169,9 @@ public class SmallvilleServer {
 	// Set how many minutes each state update will increment time by
 	app.post("/timestep", (ctx) -> {
 	    SetTimestepRequest request = ctx.bodyAsClass(SetTimestepRequest.class);
-	    
-	    
+	    int minutes = Integer.valueOf(request.getNumOfMinutes());
 	});
-
+	
 	app.start(port);
     }
 

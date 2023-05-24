@@ -21,7 +21,7 @@ import io.github.nickm980.smallville.entities.Conversation;
 import io.github.nickm980.smallville.entities.ObjectState;
 import io.github.nickm980.smallville.entities.SimulatedLocation;
 import io.github.nickm980.smallville.entities.SimulatedObject;
-import io.github.nickm980.smallville.entities.Timekeeper;
+import io.github.nickm980.smallville.entities.SimulationTime;
 import io.github.nickm980.smallville.entities.memory.Characteristic;
 import io.github.nickm980.smallville.exceptions.AgentNotFoundException;
 import io.github.nickm980.smallville.exceptions.LocationNotFoundException;
@@ -39,14 +39,14 @@ public class SimulationService {
     private final AccessTime time;
     private final Logger LOG = LoggerFactory.getLogger(SimulationService.class);
 
-    private Timekeeper timekeeper;
+    private SimulationTime timekeeper;
 
     public SimulationService(LLM llm, World world) {
 	this.world = world;
 	this.mapper = new ModelMapper();
 	this.time = new AccessTime();
 	this.prompts = new UpdateService(llm, world);
-	this.timekeeper = new Timekeeper();
+	this.timekeeper = new SimulationTime();
     }
 
     public void createMemory(CreateMemoryRequest request) {
@@ -159,7 +159,7 @@ public class SimulationService {
 	world.getAgent(name).orElseThrow().setGoal(goal);
     }
 
-    public Timekeeper getTimekeeper() {
+    public SimulationTime getTimekeeper() {
 	return timekeeper;
     }
 

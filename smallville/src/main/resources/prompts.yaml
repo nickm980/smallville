@@ -3,11 +3,7 @@ reactions:
     {{agent.summary}}
     {{other.summary}}
 
-    First, decide whether or not {{agent.name}} is going to initiate a conversation.
-
-    If {{agent.name}} is not going to initiate a conversation respond with "No conversation"
-
-    Otherwise, create a fake conversation between {{agent.name}} and {{other.name}}
+    Create a fake conversation between {{agent.name}} and {{other.name}}
 
     For example, a conversation between people named A and B would look like this
 
@@ -16,20 +12,13 @@ reactions:
   reaction: |
     {{world.description}} 
     {{agent.summary}}
-
-    Observation: {{observation}}
-    Summary of relevant context from {{agent.name}}'s memory: {{memories.relevant}}
-
-    Should {{agent.name}} react to the observation? If the agent is observing another agent, should they initiate a conversation?
-    * Prefer to stay in a close by area
-
-    Respond in the following JSON format:
-
-    {
-      "react": "<yes/no>",
-      "action": "I am <your current activity>",
-      "emoji": "<pick an emoji to represent your current activity>",
-    }
+    Should {{agent.name}} react to the observation, and if so, what would be an appropriate reaction? Respond in one line.
+    
+    If the action is to engage in dialogue, write:
+    SAY: "what to say"
+    otherwise, write:
+    REACT: {agent_name}'s reaction (if anything).
+    Either do nothing, react, or say something but not both.
 
 world:
   location: |
