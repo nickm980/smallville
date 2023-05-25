@@ -40,16 +40,20 @@ const locations = {
  * @returns {{x: number, y: number}} - The coordinates of the location.
  */
 function getCoordinates(name) {
-    const location = getLeafLocation(name)
+    var location = getLeafLocation(name)
     if (locations[location] == undefined){
-        console.error(name + " does not exist")
-        return
+        location = name.split(":")[0]
     }
-
+    
     return { x: locations[location].x, y: locations[location].y }
 }
 
 function getLeafLocation(location) {
+    const parts = location.split(':');
+    return parts[parts.length - 1].trim().replace(":", "");
+}
+
+function getRootLocation(location) {
     const parts = location.split(':');
     return parts[parts.length - 1].trim().replace(":", "");
 }

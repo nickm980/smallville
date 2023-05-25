@@ -60,12 +60,14 @@ async function startSimulation() {
         name: 'Branches',
         state: 'broken',
     })
+
     /********************************
      *                              *
      * Add the agents to the server *
      *                              *
      ********************************/
     agents.forEach(async (agent) => {
+        console.log(agent)
         await smallville.createAgent({
             name: agent.name,
             location: agent.location,
@@ -81,11 +83,11 @@ let currentCursorFrameNum
 let prevCursorFrameNum
 let phaserContainer = document.getElementById('phaser-container')
 function showLoadingCursor() {
-    
-    
+
+
     prevCursorFrameNum = finalFrame
     currentCursorFrameNum = 0
-    
+
     if (
         !phaserContainer.classList.contains(
             `loading-cursor-frame-${currentCursorFrameNum}`
@@ -126,7 +128,14 @@ document
         console.log('Updating the game state')
         this.innerHTML = "Loading..."
         this.disabled = true
-        await smallville.updateState()
+        
+        try {
+            await smallville.updateState()
+        }
+        catch (err){
+            console.error(err)
+        }
+
         stopShowingLoadingCursor()
         this.innerHTML = "Update State"
         this.disabled = false

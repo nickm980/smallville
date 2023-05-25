@@ -1,5 +1,5 @@
-import { getCoordinates } from "./locations.js"
-
+import { getCoordinates } from './locations.js'
+import { updateHTMLElement } from '../dom.js'
 /**
  * An array of Agent objects.
  * @type {Agent[]}
@@ -29,7 +29,7 @@ class Agent {
         this.name = name
         this.agent = agent
         this.text = text
-        this.emoji = "😀"
+        this.emoji = '😀'
         this.activity = activity
         this.memories = memories
         this.location = location
@@ -40,15 +40,12 @@ class Agent {
 
         this.agent.setX(coords.x)
         this.agent.setY(coords.y)
-        this.text.setY(coords.y - 20)
-        this.text.setX(coords.x)
 
-        console.log(this.name + " moved to " + locationName)
+        console.log(this.name + ' moved to ' + locationName)
     }
 
-
     say(message) {
-        this.text.setText(this.name + ": " + message + " " + this.emoji)
+        this.text.setText(this.name[0] + ': ' + this.emoji)
     }
 
     setEmoji(emoji) {
@@ -57,13 +54,13 @@ class Agent {
     }
 
     setActivity(activity) {
-        console.log(this.name + " activity")
+        console.log(this.name + ' activity')
         this.activity = activity
         this.say(activity)
     }
 
     getAgent() {
-        return this.agent;
+        return this.agent
     }
 }
 
@@ -77,15 +74,16 @@ class Agent {
  * @returns {void}
  */
 function updateAgent({ name, location, activity, emoji }) {
-    const agent = agents.find(agent => {
+    const agent = agents.find((agent) => {
         return name == agent.name
     })
 
     if (!agent) {
         console.error(`No agent found with name ${name}`)
-        return;
+        return
     }
 
+    updateHTMLElement({ name, location, activity })
     agent.moveTo(location)
     agent.setEmoji(emoji)
     agent.setActivity(activity)
@@ -101,40 +99,63 @@ function updateAgent({ name, location, activity, emoji }) {
  *   @param {string[]} options.memories - The memories of the agent.
  */
 function createAgent({ scene, name, location, activity, memories }) {
-    const coords = getCoordinates(location)
-    const player = scene.add.sprite(coords.x, coords.y, 'player');
-    player.frame = 28
+    updateHTMLElement({ name, location, activity })
+    var player = scene.add.sprite(0, 0, 'player')
+    player.setFrame(28)
+    var group = scene.add.container()
 
-    const text = scene.add.text(coords.x, coords.y - 20, "[" + name + "]: " + activity, { font: '12px Arial', fill: '#ffffff' });
-    text.setStyle({ backgroundColor: '#111111' });
-    text.setOrigin(.5);
+    var dialog = scene.add.sprite(25, -30, 'dialog')
+    var emoji = scene.add.text(0, -42, name[0] + ':😀', {
+        font: '16px Courier New',
+        fill: '#00000',
+    })
+    var activityText = scene.add.text(0, 0, "Game hasn't started!", {
+        font: '16px Courier New',
+        fill: '#00000',
+    })
+    // dialog.addChild(text)
+    // player.addChild(dialog)
+    activityText.visible = false
+    player.setInteractive()
+    player.on('click', function () {
+        activity.visible = true
+    })
+    player.on('click', function () {
+        activity.visible = false
+    })
+
+    dialog.setScale(0.75)
+    group.add(dialog)
+    group.add(activityText)
+    group.add(emoji)
+    group.add(player)
 
     const agent = new Agent({
         name: name,
-        agent: player,
-        text: text,
+        agent: group,
+        text: emoji,
         activity: activity,
         location: location,
-        memories: memories
+        memories: memories,
     })
 
     agents.push(agent)
-    player.play('idle');
+    player.play('idle')
 
     moveAgent({ name: name, location: location })
-    console.log("Created a new agent " + name)
+    console.log('Created a new agent ' + name)
 }
 
 function moveAgent({ name, location }) {
-    const agent = agents.find(agent => {
+    const agent = agents.find((agent) => {
         return name == agent.name
     })
 
     if (!agent) {
         console.error(`No agent found with name ${name}`)
-        return;
+        return
     }
-    
+
     console.log(location)
     agent.moveTo(location)
 }
@@ -142,31 +163,43 @@ function moveAgent({ name, location }) {
 function loadAnimations(scene) {
     scene.anims.create({
         key: 'idle',
-        frames: scene.anims.generateFrameNumbers('player', { start: 42, end: 47 }),
+        frames: scene.anims.generateFrameNumbers('player', {
+            start: 42,
+            end: 47,
+        }),
         frameRate: 10,
-        repeat: -1
-    });
+        repeat: -1,
+    })
 
     scene.anims.create({
         key: 'walk-down',
-        frames: scene.anims.generateFrameNumbers('player', { start: 48, end: 53 }),
+        frames: scene.anims.generateFrameNumbers('player', {
+            start: 48,
+            end: 53,
+        }),
         frameRate: 10,
-        repeat: -1
-    });
+        repeat: -1,
+    })
 
     scene.anims.create({
         key: 'walk-left',
-        frames: scene.anims.generateFrameNumbers('player', { start: 61, end: 64 }),
+        frames: scene.anims.generateFrameNumbers('player', {
+            start: 61,
+            end: 64,
+        }),
         frameRate: 10,
-        repeat: -1
-    });
+        repeat: -1,
+    })
 
     scene.anims.create({
         key: 'walk-up',
-        frames: scene.anims.generateFrameNumbers('player', { start: 54, end: 59 }),
+        frames: scene.anims.generateFrameNumbers('player', {
+            start: 54,
+            end: 59,
+        }),
         frameRate: 10,
-        repeat: -1
-    });
+        repeat: -1,
+    })
 }
 
 export { updateAgent, createAgent, agents, moveAgent, loadAnimations }

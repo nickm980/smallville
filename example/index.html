@@ -1,48 +1,31 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="utf-8">
-    <title>Smallville | An opensource project to create custom generative agents</title>
-    <script>
-        if (/Mobi/.test(navigator.userAgent)) {
-            window.location.href = "mobile.html";
-        }
-    </script>
-    <link rel="stylesheet" href="css/pixelated.css">
-    <link rel="stylesheet" href="css/main.css">
-
-    <script src="javascript/phaser.min.js"></script>
-</head>
-
-<body>
-    <div class="container">
-        <div id="phaser-container"></div>
-        <p id="myLog"></p>
-    </div>
-
-    <script>
-        var old = console.log
-        var oldError = console.error
-
-        window.console = {
-            log: function (str) {
-                old(str)
-                var node = document.createElement("div");
-                node.appendChild(document.createTextNode(JSON.stringify(str)));
-                document.getElementById("myLog").appendChild(node);
-            },
-            error: function (str) {
-                oldError(str)
-                var node = document.createElement("div");
-                node.appendChild(document.createTextNode(JSON.stringify(str)));
-                document.getElementById("myLog").appendChild(node);
+    <head>
+        <meta charset="utf-8" />
+        <title>
+            Smallville | An opensource project to create custom generative
+            agents
+        </title>
+        <script>
+            if (/Mobi/.test(navigator.userAgent)) {
+                window.location.href = 'mobile.html'
             }
-        }
-    </script>
-    <script type="module" src="javascript/game.js"></script>
-    <script type="module" src="javascript/smallville.js"></script>
-    <script type="module" src="javascript/commands.js"></script>
-</body>
+        </script>
+        <link rel="stylesheet" href="css/pixelated.css" />
+        <link rel="stylesheet" href="css/main.css" />
 
+        <script src="javascript/phaser.min.js"></script>
+    </head>
+
+    <body>
+        <div class="container">
+            <div id="phaser-container"></div>
+            <div id="characters">
+            </div>
+        </div>
+
+        <script type="module" src="javascript/game.js"></script>
+        <script type="module" src="javascript/smallville.js"></script>
+        <script type="module" src="javascript/commands.js"></script>
+    </body>
 </html>

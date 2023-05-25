@@ -7,6 +7,7 @@ class GameScene extends Phaser.Scene {
 
     preload() {
         this.load.tilemapTiledJSON('my_map', 'assets/map.json');
+        this.load.image('dialog', 'assets/dailog.png');
         this.load.image('my_tileset', 'assets/sprites.png');
         this.load.spritesheet('player', 'assets/Adam_16x16.png', {
             frameWidth: 16,
@@ -34,9 +35,10 @@ class GameScene extends Phaser.Scene {
             location: "Forest: Campfire",
             activity: "Staying warm by the campfire",
             memories: [
-                "Does not know anyone",
                 "Loves to cook",
-                "Likes to sometimes hang out by campfires"
+                "Hates to be around campfires",
+                "Loves to hang out inside the Green House",
+                "Has a friend that lives in the Red House"
             ]
         })
     }
@@ -77,8 +79,10 @@ var config = {
         width: 800,
         height: 500,
     },
+    
     scene: [GameScene, UIScene],
     parent: 'phaser-container',
+    antialias: true,
     dom: {
         createContainer: true
     }
