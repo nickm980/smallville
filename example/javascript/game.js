@@ -32,16 +32,17 @@ class GameScene extends Phaser.Scene {
             map.createLayer('structs', tileset)
             const wallLayer = map.createLayer('wall', tileset)
             const objectLayer = map.getObjectLayer('walls')
-            wallLayer.setCollisionByProperty({ collides: true }) // Or, however you set tiles to collide.
+            wallLayer.setCollisionByProperty({ collides: true })
 
             scene.navMesh = scene.navMeshPlugin.buildMeshFromTiled(
                 'mesh',
-                objectLayer
+                objectLayer,
+                [wallLayer]
             )
 
             scene.navMesh.debugDrawMesh({
                 drawCentroid: true,
-                drawBounds: false,
+                drawBounds: true,
                 drawNeighbors: true,
                 drawPortals: true,
             })
@@ -64,7 +65,7 @@ class GameScene extends Phaser.Scene {
             ],
         })
 
-        console.log("Setup")
+        console.log('Setup')
     }
 }
 

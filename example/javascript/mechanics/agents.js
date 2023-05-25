@@ -87,6 +87,7 @@ function createAgent({ scene, name, location, activity, memories }) {
     updateHTMLElement({ name, location, activity })
     var player = scene.add.sprite(0, 0, 'player')
     player.setFrame(28)
+
     var group = scene.add.container()
 
     var dialog = scene.add.sprite(25, -30, 'dialog')
@@ -157,7 +158,7 @@ function moveAgent({ scene, name, location }) {
         { x: coords.x, y: coords.y }
     )
 
-    let navMeshPolys = scene.navMesh.navMesh.getPolygons() //possibly it is this.navMesh.navMesh.getPolygons();
+    let navMeshPolys = scene.navMesh.navMesh.getPolygons()
     let newPath = []
 
     if (path == undefined) {
@@ -173,6 +174,7 @@ function moveAgent({ scene, name, location }) {
         })
     })
 
+    newPath = path
     let i = 1 // Initialize the index at 0
 
     const moveNext = () => {

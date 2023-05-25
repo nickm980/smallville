@@ -3,6 +3,20 @@
  "infinite":true,
  "layers":[
         {
+         "chunks":[],
+         "height":64,
+         "id":12,
+         "name":"wall",
+         "opacity":1,
+         "startx":-16,
+         "starty":-16,
+         "type":"tilelayer",
+         "visible":true,
+         "width":64,
+         "x":0,
+         "y":0
+        }, 
+        {
          "chunks":[
                 {
                  "data":[32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32,
@@ -42550,23 +42564,9 @@
          "visible":true,
          "x":0,
          "y":0
-        }, 
-        {
-         "chunks":[],
-         "height":0,
-         "id":12,
-         "name":"wall",
-         "opacity":1,
-         "startx":0,
-         "starty":0,
-         "type":"tilelayer",
-         "visible":false,
-         "width":0,
-         "x":0,
-         "y":0
         }],
  "nextlayerid":13,
- "nextobjectid":188,
+ "nextobjectid":191,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",
