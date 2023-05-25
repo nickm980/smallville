@@ -8,30 +8,30 @@
  * @type {Locations}
  */
 const locations = {
-    "Red House": {
+    'Red House': {
         x: -100,
-        y: 100
+        y: 100,
     },
-    "Green House": {
+    'Green House': {
         x: -296,
-        y: -140
+        y: -140,
     },
-    "Campfire": {
+    Campfire: {
         x: 590,
-        y: 380
+        y: 380,
     },
-    "Forest": {
+    Forest: {
         x: 490,
-        y: 500
+        y: 500,
     },
-    "Branches": {
+    Branches: {
         x: 810,
-        y: 355
+        y: 355,
     },
-    "Main Island": {
+    'Main Island': {
         x: 330,
-        y: 110
-    }
+        y: 110,
+    },
 }
 
 /**
@@ -41,23 +41,32 @@ const locations = {
  */
 function getCoordinates(name) {
     var location = getLeafLocation(name)
-    if (locations[location] == undefined){
-        location = name.split(":")[0]
+    if (locations[location] == undefined) {
+        location = name.split(':')[0]
     }
-    
+
     return { x: locations[location].x, y: locations[location].y }
 }
 
 function getLeafLocation(location) {
-    const parts = location.split(':');
-    return parts[parts.length - 1].trim().replace(":", "");
+    const parts = location.split(':')
+    return parts[parts.length - 1].trim().replace(':', '')
 }
 
 function getRootLocation(location) {
-    const parts = location.split(':');
-    return parts[parts.length - 1].trim().replace(":", "");
+    const parts = location.split(':')
+    return parts[parts.length - 1].trim().replace(':', '')
 }
 
-export { getCoordinates }
+function updateLocations(locations) {
+    const element = document.getElementById('locations')
+    var str
+    element.innerHTML = ''
 
+    for (const location of locations) {
+        element.innerHTML += `
+            <p><b>${location.name}:</b> ${location.state}</p>`
+    }
+}
 
+export { getCoordinates, updateLocations }

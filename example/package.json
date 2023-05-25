@@ -1,5 +1,5 @@
 {
-  "name": "towny",
+  "name": "smallville-example",
   "version": "1.0.0",
   "description": "",
   "type": "module",
@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "navmesh": "^2.3.1",
     "nes.css": "^2.3.0",
     "phaser": "^3.60.0",
     "phaser-navmesh": "^2.3.1",

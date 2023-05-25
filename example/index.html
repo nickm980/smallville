@@ -2,15 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>
-            Smallville | An opensource project to create custom generative
-            agents
-        </title>
-        <script>
-            if (/Mobi/.test(navigator.userAgent)) {
-                window.location.href = 'mobile.html'
-            }
-        </script>
+        <title>Smallville generative agents</title>
         <link rel="stylesheet" href="css/pixelated.css" />
         <link rel="stylesheet" href="css/main.css" />
 
@@ -20,12 +12,12 @@
     <body>
         <div class="container">
             <div id="phaser-container"></div>
-            <div id="characters">
-            </div>
+            <div id="locations"></div>
+            <div id="characters"></div>
         </div>
 
+        <script src="javascript/phaser-navmesh-plugin.js"></script>
         <script type="module" src="javascript/game.js"></script>
         <script type="module" src="javascript/smallville.js"></script>
-        <script type="module" src="javascript/commands.js"></script>
     </body>
 </html>

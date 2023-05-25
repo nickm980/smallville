@@ -22,10 +22,6 @@ function enableCameraControlls(game, scene, uiElements) {
     });
     // add a pointer move listener
     scene.input.on('pointermove', () => {
-        const debug = document.getElementById("smallville--debug-mouse")
-        debug.innerHTML = `(${Math.round(scene.input.mousePointer.worldX)}, ${Math.round(scene.input.mousePointer.worldY)})`;
-
-
         if (isMouseDown) { // only pan the camera when mouse is down
             const deltaX = scene.input.mousePointer.x - prevX;
             const deltaY = scene.input.mousePointer.y - prevY;
@@ -38,7 +34,7 @@ function enableCameraControlls(game, scene, uiElements) {
         }
     });
 
-    const zoomSpeed = 0.001;
+    const zoomSpeed = 0.002;
     const minZoom = .5;
     const maxZoom = 1;
     let zoomLevel = 1;

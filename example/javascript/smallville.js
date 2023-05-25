@@ -1,11 +1,16 @@
 import { Smallville } from '../../javascript-adapter/dist/index.js'
 import { agents } from './mechanics/agents.js'
 import { updateAgent } from './mechanics/index.js'
-
+import {updateLocations} from './mechanics/locations.js'
+import {showLoadingCursor, stopShowingLoadingCursor} from './dom.js'
 const smallville = new Smallville({
     host: 'http://localhost:8080',
     stateHandler: (state) => {
         console.log(state)
+        if (state.agents == undefined){
+            console.log("No connection to server")
+            return
+        }
         state.agents.forEach((agent) => {
             updateAgent({
                 name: agent.name,
@@ -14,6 +19,7 @@ const smallville = new Smallville({
                 emoji: agent.emoji,
             })
         })
+        updateLocations(state.location_states)
     },
 })
 
@@ -77,68 +83,24 @@ async function startSimulation() {
     })
 }
 
-let loadingCursorIntervalId
-const finalFrame = 7
-let currentCursorFrameNum
-let prevCursorFrameNum
-let phaserContainer = document.getElementById('phaser-container')
-function showLoadingCursor() {
 
-
-    prevCursorFrameNum = finalFrame
-    currentCursorFrameNum = 0
-
-    if (
-        !phaserContainer.classList.contains(
-            `loading-cursor-frame-${currentCursorFrameNum}`
-        )
-    ) {
-        phaserContainer.classList.add(
-            `loading-cursor-frame-${currentCursorFrameNum}`
-        )
-    }
-    loadingCursorIntervalId = setInterval(() => {
-        phaserContainer.classList.replace(
-            `loading-cursor-frame-${prevCursorFrameNum}`,
-            `loading-cursor-frame-${currentCursorFrameNum}`
-        ) // Add the class for the current cursor
-        currentCursorFrameNum =
-            currentCursorFrameNum + 1 <= finalFrame
-                ? currentCursorFrameNum + 1
-                : 0
-
-        prevCursorFrameNum =
-            currentCursorFrameNum - 1 > -1
-                ? currentCursorFrameNum - 1
-                : finalFrame
-    }, 160) // Change cursor every 160 milliseconds (0.16 seconds)
-}
-
-function stopShowingLoadingCursor() {
-    clearInterval(loadingCursorIntervalId)
-    phaserContainer.classList.remove(
-        `loading-cursor-frame-${currentCursorFrameNum}`, `loading-cursor-frame-${prevCursorFrameNum}`
-    )
-}
+await smallville.sync()
 
 document
     .getElementById('smallville--next')
     .addEventListener('click', async function () {
         showLoadingCursor()
         console.log('Updating the game state')
-        this.innerHTML = "Loading..."
+        this.innerHTML = 'Loading...'
         this.disabled = true
-        
+
         try {
             await smallville.updateState()
-        }
-        catch (err){
+        } catch (err) {
             console.error(err)
         }
 
         stopShowingLoadingCursor()
-        this.innerHTML = "Update State"
+        this.innerHTML = 'Update State'
         this.disabled = false
     })
-
-await smallville.sync()
