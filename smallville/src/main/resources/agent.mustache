@@ -9,12 +9,18 @@
     <style>
         th,
         td {
-            border: 1px solid black;
+            border: none;
+            padding: .25em;
+            box-sizing: border-box;
+        }
+        table {
+            background-color: #eeeeee;
         }
     </style>
 </head>
 
 <body>
+    <h1>Memory Stream</h1>
     <table>
         <tr>
             <th>Time</th>
@@ -28,10 +34,10 @@
             <td>{{type}}</td>
             <td>{{importance}}</td>
             <td>{{description}}</td>
-            
         </tr>
         {{/memories}}
     </table>
+    <h1>Plans</h1>
 </body>
 
 </html>
