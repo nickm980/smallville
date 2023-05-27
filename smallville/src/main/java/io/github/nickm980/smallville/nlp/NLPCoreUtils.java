@@ -6,4 +6,5 @@ public interface NLPCoreUtils {
 
     String convertToPastTense(String sentence);
 
+    String convertToPresentTense(String description);
 }

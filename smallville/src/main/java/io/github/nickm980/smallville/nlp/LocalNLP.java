@@ -41,23 +41,22 @@ public class LocalNLP implements NLPCoreUtils {
 	getPipeline();
     }
 
-    enum Verbs {
-	GERUND("VBG"), VERB("V");
-
-	private String token;
-
-	Verbs(String token) {
-	    this.token = token;
-	}
-
-	String getToken() {
-	    return token;
-	}
-    }
-
     @Override
     public String convertToPastTense(String sentence) {
-	return convertSentence(sentence);
+	// Most of the responses either contain am or will, this is a hacky fix but it
+	// will work for most plans.
+	if (sentence.contains(" am ")) {
+	    return sentence.replace(" am ", " was ");
+	}
+
+	String result = convertSentence(sentence, Tense.PAST)
+	    .replaceAll("will", "")
+	    .replaceAll(" am ", "")
+	    .replace(".", "")
+	    .replaceAll("\\s+", " ")
+	    .trim();
+
+	return result;
     }
 
     @Override
@@ -75,6 +74,32 @@ public class LocalNLP implements NLPCoreUtils {
 	}
 
 	return result;
+    }
+
+    @Override
+    public String convertToPresentTense(String sentence) {
+	String result = convertSentence(sentence, Tense.PRESENT)
+	    .replaceAll("will", "am")
+	    .replaceAll("I am", "")
+	    .replace(".", "")
+	    .replaceAll("\\s+", " ")
+	    .trim();
+
+	return result;
+    }
+
+    private enum Verbs {
+	GERUND("VBG"), VERB("V");
+
+	private String token;
+
+	Verbs(String token) {
+	    this.token = token;
+	}
+
+	String getToken() {
+	    return token;
+	}
     }
 
     /**
@@ -116,20 +141,20 @@ public class LocalNLP implements NLPCoreUtils {
 	return sb.toString();
     }
 
-    public String inflectStem(String verb) {
+    public String inflectStem(String verb, Tense tense) {
 	XMLLexicon lexicon = new XMLLexicon();
 	WordElement word = lexicon.getWord(verb, LexicalCategory.VERB);
 	InflectedWordElement infl = new InflectedWordElement(word);
-	infl.setFeature(Feature.TENSE, Tense.PAST);
+	infl.setFeature(Feature.TENSE, tense);
 	Realiser realiser = new Realiser(lexicon);
 	String result = realiser.realise(infl).getRealisation();
 
 	return result;
     }
 
-    private String convertSentence(String sentence) {
-	if (sentence.contains(" am ")) {
-	    return sentence.replace(" am ", " was ");
+    private String convertSentence(String sentence, Tense tense) {
+	if (sentence == null || sentence.isEmpty()) {
+	    return sentence;
 	}
 
 	sentence = sentence.replaceAll("this", "the").replace(".", "").replaceAll("\\s+", " ").trim();
@@ -164,19 +189,13 @@ public class LocalNLP implements NLPCoreUtils {
 		    continue;
 		}
 
-		modified += inflectStem(lemma) + " ";
+		modified += inflectStem(lemma, tense) + " ";
 	    } else {
 
 		modified += word + " ";
 	    }
 	}
 
-	modified = modified
-	    .replaceAll("will", "")
-	    .replaceAll(" am ", "")
-	    .replace(".", "")
-	    .replaceAll("\\s+", " ")
-	    .trim();
 	return modified;
     }
 }
