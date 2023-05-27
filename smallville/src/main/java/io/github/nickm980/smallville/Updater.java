@@ -9,10 +9,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class Updater {
+public final class Updater {
 
-    private static final String VERSION = "v1.2.0";
+    private final static String VERSION = "v1.2.0";
     private final static Logger LOG = LoggerFactory.getLogger(Updater.class);
+    private final static String REPO_URL = "https://api.github.com/repos/nickm980/smallville/releases/latest";
 
     private Updater() {
 
@@ -20,12 +21,10 @@ public class Updater {
 
     public static void checkLatestVersion() {
 	OkHttpClient client = new OkHttpClient();
-	String url = "https://api.github.com/repos/nickm980/smallville/releases/latest";
-	Request request = new Request.Builder().url(url).build();
+	Request request = new Request.Builder().url(REPO_URL).build();
 
 	try {
 	    Response response = client.newCall(request).execute();
-	    // Check if the request was successful
 	    if (response.isSuccessful()) {
 		String body = response.body().string();
 
