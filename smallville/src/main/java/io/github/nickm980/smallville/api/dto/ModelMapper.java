@@ -1,5 +1,6 @@
 package io.github.nickm980.smallville.api.dto;
 
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,7 +55,7 @@ public class ModelMapper {
 	}
 
 	if (memory instanceof TemporalMemory) {
-	    result.setTime(((TemporalMemory) memory).getTime());
+	    result.setTime(((TemporalMemory) memory).getTime().format(DateTimeFormatter.ofPattern("hh:mm a")));
 	}
 
 	return result;
