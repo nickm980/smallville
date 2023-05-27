@@ -6,21 +6,30 @@ public class GeneralConfig {
     private String timeFormat;
     private String fullTimeFormat;
     private String yesterdayFormat;
-    
+    private String model;
+
+    public String getModel() {
+	return model;
+    }
+
+    public void setModel(String model) {
+	this.model = model;
+    }
+
     public String getYesterdayFormat() {
-        return yesterdayFormat;
+	return yesterdayFormat;
     }
 
     public void setYesterdayFormat(String yesterdayFormat) {
-        this.yesterdayFormat = yesterdayFormat;
+	this.yesterdayFormat = yesterdayFormat;
     }
 
     public String getFullTimeFormat() {
-        return fullTimeFormat;
+	return fullTimeFormat;
     }
 
     public void setFullTimeFormat(String fullTimeFormat) {
-        this.fullTimeFormat = fullTimeFormat;
+	this.fullTimeFormat = fullTimeFormat;
     }
 
     public String getTimeFormat() {
@@ -38,4 +47,5 @@ public class GeneralConfig {
     public void setApiPath(String path) {
 	this.apiPath = path;
     }
+
 }

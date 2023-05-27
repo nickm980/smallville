@@ -22,7 +22,7 @@ import okhttp3.Response;
 public class ChatGPT implements LLM {
     private final static Logger LOG = LoggerFactory.getLogger(ChatGPT.class);
     private final static ObjectMapper MAPPER = new ObjectMapper();
-
+    
     @Override
     public String sendChat(Prompt prompt, double temperature) {
 	long start = System.currentTimeMillis();
@@ -35,7 +35,7 @@ public class ChatGPT implements LLM {
 
 	String json = """
 		{
-			"model": "gpt-3.5-turbo",
+			"model": "%model",
 			"messages": [
 				%messages
 			], "temperature": %temperature, "max_tokens": 1000
@@ -48,7 +48,7 @@ public class ChatGPT implements LLM {
 	    json = json.strip();
 	    json = json.replace("%messages", MAPPER.writeValueAsString(prompt.build()));
 	    json = json.replace("%temperature", String.valueOf(temperature));
-
+	    json = json.replace("%model", SmallvilleConfig.getConfig().getModel());
 	} catch (JsonProcessingException e1) {
 	    e1.printStackTrace();
 	}
