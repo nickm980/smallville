@@ -122,8 +122,10 @@ The example is under the example directory. This example isn't finished yet but 
 | tenses | For example, x is no longer {past tense} and is now {current activity} |
 | memories.characteristics | Initial memories added to the agent |
 
+### Running Locally
+Start LocalAI and change the apiPath and model options to the correct values
+
 ## TODO:
-- Reflections
 - Improve conversations
 - Improve memory retrieval
 - Improve token embeddings
