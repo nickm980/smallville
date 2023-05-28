@@ -134,6 +134,7 @@ Start LocalAI and change the apiPath and model options to the correct values
 
 ## Info
 Code based on Generative Agents: Interactive Simulacra of Human Behavior https://arxiv.org/pdf/2304.03442.pdf
+Tileset made by LimeZu
 
 ## Getting Help
 If you need help getting started with smallville you can join our community discord https://discord.gg/ktXPsgbFp5
