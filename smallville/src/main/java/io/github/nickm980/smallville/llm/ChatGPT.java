@@ -22,7 +22,7 @@ import okhttp3.Response;
 public class ChatGPT implements LLM {
     private final static Logger LOG = LoggerFactory.getLogger(ChatGPT.class);
     private final static ObjectMapper MAPPER = new ObjectMapper();
-    
+
     @Override
     public String sendChat(Prompt prompt, double temperature) {
 	long start = System.currentTimeMillis();
@@ -85,7 +85,7 @@ public class ChatGPT implements LLM {
 	}
 
 	long end = System.currentTimeMillis();
-	LOG.info("[Chat] Response took " + String.valueOf(start - end) + "ms");
+	LOG.debug("[Chat] Response took " + String.valueOf(start - end) + "ms");
 	return result;
     }
 
