@@ -64,8 +64,6 @@ class GameScene extends Phaser.Scene {
                 'Has a friend that lives in the Red House',
             ],
         })
-
-        console.log('Setup')
     }
 }
 
@@ -82,13 +80,13 @@ class UIScene extends Phaser.Scene {
                     '<button class="nes-btn is-primary" id="smallville--next">Update State</button>'
                 )
             updateStateButton.setScrollFactor(0, 0)
-            let autoUpdateStateButton = scene.add
-                .dom(210, 30)
+            scene.add
+                .dom(200, 30)
                 .createFromHTML(
-                    '<button class="nes-btn is-success" id="auto-update">Auto-Update?</button>'
+                    '<button class="nes-btn is-secondary" id="auto-update">Auto-Update?</button>'
                 )
 
-            let secondsIndicator = scene.add
+            scene.add
                 .dom(330, 30)
                 .createFromHTML(
                     '<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0; box-sizing: border-box; height: 50px; width: 70px" \

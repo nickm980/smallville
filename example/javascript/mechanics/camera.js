@@ -1,8 +1,6 @@
 var camera;
 
 function enableCameraControlls(game, scene, uiElements) {
-   
-
     scene.cameras.main.setRoundPixels(true)
     camera = scene.cameras.main;
 

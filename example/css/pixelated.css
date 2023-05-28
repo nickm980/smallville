@@ -16,9 +16,19 @@
   border: 3px solid black;
 } 
 
+.nes-btn.is-secondary {
+  --color: rgb(225, 147, 1);
+  background-color: orange;
+}
+
 .nes-btn:hover:not(button[disabled]) {
+  --color: purple;
   box-shadow: inset -5px -5px rgba(63, 63, 63, 0.25);
   background-color: var(--button-color-secondary);
+}
+
+.nes-btn.is-secondary:hover {
+  background-color: var(--color) !important;
 }
 
 .loading {
