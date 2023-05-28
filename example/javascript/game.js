@@ -77,11 +77,23 @@ class UIScene extends Phaser.Scene {
     create() {
         function setupButtons(scene) {
             let updateStateButton = scene.add
-                .dom(60, 30)
+                .dom(70, 30)
                 .createFromHTML(
-                    '<button class="nes-btn" id="smallville--next">Update State</button>'
+                    '<button class="nes-btn is-primary" id="smallville--next">Update State</button>'
                 )
             updateStateButton.setScrollFactor(0, 0)
+            let autoUpdateStateButton = scene.add
+                .dom(210, 30)
+                .createFromHTML(
+                    '<button class="nes-btn is-success" id="auto-update">Auto-Update?</button>'
+                )
+
+            let secondsIndicator = scene.add
+                .dom(330, 30)
+                .createFromHTML(
+                    '<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0; box-sizing: border-box; height: 50px; width: 70px" \
+                     class="nes-container is-dark"><span style="align-items: center; text-align: center;" id="seconds-indicator" class="nes-text"></span></div>'
+                )
             return [updateStateButton]
         }
 

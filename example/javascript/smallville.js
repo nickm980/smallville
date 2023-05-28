@@ -1,14 +1,14 @@
 import { Smallville } from '../../javascript-adapter/dist/index.js'
 import { agents } from './mechanics/agents.js'
 import { updateAgent } from './mechanics/index.js'
-import {updateLocations} from './mechanics/locations.js'
-import {showLoadingCursor, stopShowingLoadingCursor} from './dom.js'
+import { updateLocations } from './mechanics/locations.js'
+import { showLoadingCursor, stopShowingLoadingCursor } from './dom.js'
 const smallville = new Smallville({
     host: 'http://localhost:8080',
     stateHandler: (state) => {
         console.log(state)
-        if (state.agents == undefined){
-            console.log("No connection to server")
+        if (state.agents == undefined) {
+            console.log('No connection to server')
             return
         }
         state.agents.forEach((agent) => {
@@ -83,7 +83,6 @@ async function startSimulation() {
     })
 }
 
-
 await smallville.sync()
 
 document
@@ -103,4 +102,48 @@ document
         stopShowingLoadingCursor()
         this.innerHTML = 'Update State'
         this.disabled = false
+    })
+
+let shouldAutoUpdate = false
+let updateIntervalId
+let secondsIndicatorIntervalId
+let secondsIndicator = document.getElementById('seconds-indicator')
+let secondsRemaining = 300
+
+async function update() {
+    showLoadingCursor()
+    try {
+        console.log('auto-updating')
+        await smallville.updateState()
+    } catch (err) {
+        console.error(error)
+    } finally {
+        stopShowingLoadingCursor()
+    }
+}
+document
+    .getElementById('auto-update')
+    .addEventListener('click', async function () {
+        if (shouldAutoUpdate === false) {
+            this.setAttribute('class', 'nes-btn is-success')
+            this.innerText = 'Auto-Updating'
+            update()
+            updateIntervalId = setInterval(async function (e) {
+                update()
+            }, secondsRemaining * 1000)
+            secondsIndicatorIntervalId = setInterval((e) => {
+                secondsRemaining--
+                secondsIndicator.innerText = secondsRemaining
+
+                if (secondsRemaining === 0) secondsRemaining = 300
+            }, 1000)
+            shouldAutoUpdate = true
+        } else if (shouldAutoUpdate === true) {
+            this.setAttribute('class', 'nes-btn')
+            this.innerText = 'Auto-Update?'
+            clearInterval(updateIntervalId)
+            secondsRemaining = 300
+            console.log('cleared auto-update')
+            shouldAutoUpdate = false
+        }
     })
