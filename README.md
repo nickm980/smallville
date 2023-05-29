@@ -135,4 +135,4 @@ Code based on Generative Agents: Interactive Simulacra of Human Behavior https:/
 Tileset made by LimeZu
 
 ## Getting Help
-If you need help getting started with smallville you can join our community discord https://discord.gg/ktXPsgbFp5
+If you need help getting started with smallville or view project updates you can join our community discord https://discord.gg/APVSw2DrCX 
