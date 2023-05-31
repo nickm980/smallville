@@ -90,8 +90,6 @@ java -jar smallville-server.jar --api-key <OPEN_AI_KEY> --port 8080
 The server will start on the default port 8080 unless specified otherwise. The dashboard which shows the memory stream, current activities, locations, and emojis of all available agents is found at http://localhost:8080/dashboard
 
 ## Example
-![image](https://user-images.githubusercontent.com/81270095/233894690-97aedf01-7b20-4c8d-a48c-e234fdc0f4bf.png)
-
 The example is under the example directory. This example isn't finished yet but is a basic example of how to get started.
 [example javascript project](/example)
 
