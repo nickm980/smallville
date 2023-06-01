@@ -1,5 +1,10 @@
+#Configuration options to run through LocalAI
 apiPath: "https://api.openai.com/v1/chat/completions"
 model: "gpt-3.5-turbo"
 timeFormat: "h:mm a"
 fullTimeFormat: "EEEE, MMMM d, h:mm a"
 yesterdayFormat: "EEEE MMMM d"
+#The weighted sum of recent memories to trigger a reflection
+reflectionCutoff: 14
+#Set to true if the simulation.yaml file should be used to initialize the simulation
+simulationFile: false

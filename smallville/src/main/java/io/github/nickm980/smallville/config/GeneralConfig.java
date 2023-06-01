@@ -7,6 +7,24 @@ public class GeneralConfig {
     private String fullTimeFormat;
     private String yesterdayFormat;
     private String model;
+    private int reflectionCutoff;
+    private boolean simulationFile;
+
+    public boolean isSimulationFile() {
+	return simulationFile;
+    }
+
+    public void setSimulationFile(boolean useSimulationFile) {
+	this.simulationFile = useSimulationFile;
+    }
+
+    public int getReflectionCutoff() {
+	return reflectionCutoff;
+    }
+
+    public void setReflectionCutoff(int reflectionCutoff) {
+	this.reflectionCutoff = reflectionCutoff;
+    }
 
     public String getModel() {
 	return model;
