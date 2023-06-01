@@ -1,7 +1,5 @@
 # Smallville [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)]([https://opensource.org/licenses/MIT](https://github.com/nickm980/towny/blob/main/LICENSE)) [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/nickm980/smallville/issues)
 
-My attempt at creating generative agent simulations for RPG games or research
-
 ## What are Generative Agents?
 Generative agents are virtual characters that can store memories and dynamically react to their environment. Using LLM models such as ChatGPT or StableLM, agents are able to observe their surroundings, store memories, and react to state changes in the world
 
@@ -92,8 +90,6 @@ java -jar smallville-server.jar --api-key <OPEN_AI_KEY> --port 8080
 The server will start on the default port 8080 unless specified otherwise. The dashboard which shows the memory stream, current activities, locations, and emojis of all available agents is found at http://localhost:8080/dashboard
 
 ## Example
-![image](https://user-images.githubusercontent.com/81270095/233894690-97aedf01-7b20-4c8d-a48c-e234fdc0f4bf.png)
-
 The example is under the example directory. This example isn't finished yet but is a basic example of how to get started.
 [example javascript project](/example)
 
@@ -134,6 +130,7 @@ Start LocalAI and change the apiPath and model options to the correct values
 
 ## Info
 Code based on Generative Agents: Interactive Simulacra of Human Behavior https://arxiv.org/pdf/2304.03442.pdf
+Tileset made by LimeZu
 
 ## Getting Help
-If you need help getting started with smallville you can join our community discord https://discord.gg/ktXPsgbFp5
+If you need help getting started with smallville or view project updates you can join our community discord https://discord.gg/APVSw2DrCX 
