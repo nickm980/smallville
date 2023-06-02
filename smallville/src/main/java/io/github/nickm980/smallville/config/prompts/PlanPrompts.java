@@ -4,7 +4,6 @@ public class PlanPrompts {
 
     private String shortTerm;
     private String longTerm;
-    private String midTerm;
     private String current;
 
     public String getShortTerm() {
@@ -21,14 +20,6 @@ public class PlanPrompts {
 
     public void setLongTerm(String longTerm) {
 	this.longTerm = longTerm;
-    }
-
-    public String getMidTerm() {
-	return midTerm;
-    }
-
-    public void setMidTerm(String midTerm) {
-	this.midTerm = midTerm;
     }
 
     public String getCurrent() {

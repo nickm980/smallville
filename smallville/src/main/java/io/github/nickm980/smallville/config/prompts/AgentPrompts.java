@@ -5,6 +5,24 @@ public class AgentPrompts {
     private String characteristics;
     private String summary;
     private String askQuestion;
+    private String reflectionQuestion;
+    private String reflectionResult;
+
+    public String getReflectionQuestion() {
+	return reflectionQuestion;
+    }
+
+    public void setReflectionQuestion(String reflectionQuestion) {
+	this.reflectionQuestion = reflectionQuestion;
+    }
+
+    public String getReflectionResult() {
+	return reflectionResult;
+    }
+
+    public void setReflectionResult(String reflectionResult) {
+	this.reflectionResult = reflectionResult;
+    }
 
     public String getAskQuestion() {
 	return askQuestion;
