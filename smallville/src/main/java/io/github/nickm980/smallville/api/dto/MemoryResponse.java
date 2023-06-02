@@ -1,19 +1,17 @@
 package io.github.nickm980.smallville.api.dto;
 
-import java.time.LocalDateTime;
-
 public class MemoryResponse {
 
     private String description;
-    private LocalDateTime time;
+    private String time;
     private String type;
     private double importance;
 
-    public LocalDateTime getTime() {
+    public String getTime() {
 	return time;
     }
 
-    public void setTime(LocalDateTime time) {
+    public void setTime(String time) {
 	this.time = time;
     }
 
