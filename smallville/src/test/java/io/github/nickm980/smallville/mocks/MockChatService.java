@@ -6,6 +6,7 @@ import io.github.nickm980.smallville.entities.Agent;
 import io.github.nickm980.smallville.entities.Conversation;
 import io.github.nickm980.smallville.entities.memory.Memory;
 import io.github.nickm980.smallville.entities.memory.Plan;
+import io.github.nickm980.smallville.entities.memory.Reflection;
 import io.github.nickm980.smallville.prompts.dto.CurrentActivity;
 import io.github.nickm980.smallville.prompts.dto.ObjectChangeResponse;
 import io.github.nickm980.smallville.prompts.dto.Reaction;
@@ -68,6 +69,18 @@ public class MockChatService implements IChatService {
     @Override
     public int[] getWeights(Agent agent) {
 	return null;
+    }
+
+    @Override
+    public Reflection createReflectionFor(Agent agent) {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public boolean shouldUpdatePlans(Agent agent, String observation) {
+	// TODO Auto-generated method stub
+	return false;
     }
 
 }
