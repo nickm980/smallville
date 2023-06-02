@@ -4,7 +4,9 @@ model: "gpt-3.5-turbo"
 timeFormat: "h:mm a"
 fullTimeFormat: "EEEE, MMMM d, h:mm a"
 yesterdayFormat: "EEEE MMMM d"
-#The weighted sum of recent memories to trigger a reflection
-reflectionCutoff: 14
+#The weighted sum of recent memories to trigger a reflection. This value
+#depends on how many memories are added each time step and should only be 
+#triggered 3-5 times per simulated day
+reflectionCutoff: 50
 #Set to true if the simulation.yaml file should be used to initialize the simulation
 simulationFile: false
