@@ -37,6 +37,12 @@ class Agent {
     }
 
     setEmoji(emoji) {
+        if (emoji === undefined || emoji == null){
+            this.emoji = "?"
+            this.say(this.activity)
+            return
+        }
+        
         this.emoji = emoji
         this.say(this.activity)
     }
