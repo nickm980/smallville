@@ -12,6 +12,7 @@ import io.github.nickm980.smallville.entities.SimulatedObject;
 import io.github.nickm980.smallville.entities.memory.Characteristic;
 import io.github.nickm980.smallville.entities.memory.Memory;
 import io.github.nickm980.smallville.entities.memory.Plan;
+import io.github.nickm980.smallville.entities.memory.Reflection;
 import io.github.nickm980.smallville.entities.memory.TemporalMemory;
 
 public class ModelMapper {
@@ -52,6 +53,10 @@ public class ModelMapper {
 
 	if (memory instanceof Characteristic) {
 	    result.setType("Characteristic");
+	}
+
+	if (memory instanceof Reflection) {
+	    result.setType("Reflection");
 	}
 
 	if (memory instanceof TemporalMemory) {
