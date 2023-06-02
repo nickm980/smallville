@@ -14,6 +14,6 @@ public class UpdateProgress extends AgentUpdate {
     @Override
     protected boolean update(IChatService converter, World world, Agent agent) {
 	progress.update();
-	return true;
+	return next(converter, world, agent);
     }
 }
