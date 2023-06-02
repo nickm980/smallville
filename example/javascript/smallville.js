@@ -1,8 +1,9 @@
-import { Smallville } from '../../javascript-adapter/dist/index.js'
+import { Smallville } from '../../javascript-client/dist/index.js'
 import { agents } from './mechanics/agents.js'
 import { updateAgent } from './mechanics/index.js'
 import { updateLocations } from './mechanics/locations.js'
 import { showLoadingCursor, stopShowingLoadingCursor } from './dom.js'
+
 const smallville = new Smallville({
     host: 'http://localhost:8080',
     stateHandler: (state) => {
@@ -36,7 +37,11 @@ async function startSimulation() {
      *                                       *
      *****************************************/
     await smallville.createLocation({
-        name: 'Main Island',
+        name: 'Green House',
+    })
+
+    await smallville.createLocation({
+        name: 'Red House',
     })
 
     await smallville.createLocation({
@@ -44,14 +49,14 @@ async function startSimulation() {
     })
 
     await smallville.createObject({
-        parent: 'Main Island',
-        name: 'Green House',
+        parent: 'Green House',
+        name: 'Kitchen',
         state: 'empty',
     })
 
     await smallville.createObject({
-        parent: 'Main Island',
-        name: 'Red House',
+        parent: 'Red House',
+        name: 'Bedroom',
         state: 'empty',
     })
 
@@ -116,11 +121,12 @@ async function update() {
         console.log('auto-updating')
         await smallville.updateState()
     } catch (err) {
-        console.error(error)
+        console.error(err)
     } finally {
         stopShowingLoadingCursor()
     }
 }
+
 document
     .getElementById('auto-update')
     .addEventListener('click', async function () {

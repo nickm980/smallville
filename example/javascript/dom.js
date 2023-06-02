@@ -44,13 +44,17 @@ function stopShowingLoadingCursor() {
 function createNewAgentBox({ name, location, activity }) {
     return `<div id="${name}" class="agent">
         <h2>${name}</h2>
-        <p><b>Current Activity:</b> ${activity}}</p>
+        <p><b>Current Activity:</b> ${activity}</p>
         <p><b>Location:</b> ${location}</p>
         <p><b>Conversation:</b> None</p>
     </div>`
 }
 
 function updateHTMLElement({ name, location, activity }) {
+    console.log(location)
+    if (location.includes("null")){
+        location = location.split(":")[0]
+    }
     const element = document.getElementById(name)
     if (element == undefined) {
         //create element

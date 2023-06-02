@@ -16,15 +16,15 @@ const locations = {
         x: -296,
         y: -140,
     },
-    Campfire: {
+    'Campfire': {
         x: 590,
         y: 380,
     },
-    Forest: {
+    'Forest': {
         x: 490,
         y: 500,
     },
-    Branches: {
+    'Branches': {
         x: 810,
         y: 355,
     },
