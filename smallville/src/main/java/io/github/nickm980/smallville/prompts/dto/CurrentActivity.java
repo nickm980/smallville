@@ -5,7 +5,8 @@ public class CurrentActivity {
     private String currentActivity;
     private String emoji;
     private String location;
-
+    private String object;
+    
     public String getLocation() {
 	return location;
     }
@@ -36,5 +37,13 @@ public class CurrentActivity {
 
     public void setEmoji(String emoji) {
 	this.emoji = emoji;
+    }
+
+    public String getObject() {
+	return object;
+    }
+    
+    public void setObject(String object) {
+	this.object = object;
     }
 }
