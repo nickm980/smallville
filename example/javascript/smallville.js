@@ -105,11 +105,11 @@ document
     })
 
 let shouldAutoUpdate = false
-let updateIntervalId
-let secondsIndicatorIntervalId
+let intervalId
 let secondsIndicator = document.getElementById('seconds-indicator')
-let secondsRemaining = 300
-
+let secondsBetweenUpdates = 300
+let secondsLeft = secondsBetweenUpdates
+let prevExecutionTime
 async function update() {
     showLoadingCursor()
     try {
@@ -121,28 +121,39 @@ async function update() {
         stopShowingLoadingCursor()
     }
 }
+
 document
     .getElementById('auto-update')
     .addEventListener('click', async function () {
+        console.log('hlleo')
         if (shouldAutoUpdate === false) {
             this.setAttribute('class', 'nes-btn is-success')
             this.innerText = 'Auto-Updating'
             update()
-            updateIntervalId = setInterval(async function (e) {
-                update()
-            }, secondsRemaining * 1000)
-            secondsIndicatorIntervalId = setInterval((e) => {
-                secondsRemaining--
-                secondsIndicator.innerText = secondsRemaining
+            prevExecutionTime = Date.now()
+            intervalId = setInterval((e) => {
+                let wholeSecondsSincePrevExecution = Math.floor(
+                    (Date.now() - prevExecutionTime) / 1000
+                )
 
-                if (secondsRemaining === 0) secondsRemaining = 300
+                if (wholeSecondsSincePrevExecution > 0) {
+                    secondsLeft -= wholeSecondsSincePrevExecution
+                    prevExecutionTime = Date.now()
+                }
+                if (secondsLeft <= 0) {
+                    update()
+                    secondsLeft = secondsBetweenUpdates - secondsLeft
+                }
+                secondsIndicator.innerText = secondsLeft
+
+                
             }, 1000)
             shouldAutoUpdate = true
         } else if (shouldAutoUpdate === true) {
             this.setAttribute('class', 'nes-btn')
             this.innerText = 'Auto-Update?'
-            clearInterval(updateIntervalId)
-            secondsRemaining = 300
+            clearInterval(intervalId)
+            secondsLeft = secondsBetweenUpdates
             console.log('cleared auto-update')
             shouldAutoUpdate = false
         }
