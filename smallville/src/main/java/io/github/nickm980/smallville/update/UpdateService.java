@@ -1,10 +1,14 @@
 package io.github.nickm980.smallville.update;
 
+import java.time.format.DateTimeFormatter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.github.nickm980.smallville.World;
+import io.github.nickm980.smallville.config.SmallvilleConfig;
 import io.github.nickm980.smallville.entities.Agent;
+import io.github.nickm980.smallville.entities.SimulationTime;
 import io.github.nickm980.smallville.llm.LLM;
 
 /**
@@ -33,39 +37,21 @@ public class UpdateService {
      * 
      * @param agent
      */
-    public void updateAgent(Agent agent) {
-	LOG.info("Starting update for " + agent.getFullName());
+    public void updateAgent(Agent agent, Progress progress) {
+	SimulationTime.update();
+	LOG
+	    .info("Starting update for " + agent.getFullName() + " at time "
+		    + SimulationTime
+			.now()
+			.format(DateTimeFormatter.ofPattern(SmallvilleConfig.getConfig().getTimeFormat())));
 
 	AgentUpdate update = new UpdateMemoryWeights()
 	    .setNext(new UpdateFuturePlans())
 	    .setNext(new UpdateCurrentActivity())
-	    .setNext(new UpdateMemoryWeights())
-	    .setNext(new UpdateAgentExactLocation())
-	    .setNext(new UpdateLocations());
+	    .setNext(new UpdateLocations())
+	    .setNext(new UpdateReflection());
 
 	update.start(chatService, world, agent);
-
-	LOG.info("Agent updated");
-    }
-
-    /**
-     * 
-     * Updates an agent's memory weights, conversation, and reaction based on the
-     * given observation string.
-     * 
-     * @param agent       The agent to update
-     * 
-     * @param observation The observation string that contains information about the
-     *                    agent's state
-     * 
-     */
-    public void updateAgent(Agent agent, String observation) {
-	AgentUpdate updater = new UpdateMemoryWeights()
-	    .setNext(new UpdateReaction(observation))
-	    .setNext(new UpdateConversation(observation))
-	    .setNext(new UpdateMemoryWeights());
-
-	updater.start(chatService, world, agent);
 
 	LOG.info("Agent updated");
     }

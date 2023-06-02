@@ -1,6 +1,7 @@
 package io.github.nickm980.smallville.api;
 
 import java.io.StringWriter;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import com.github.mustachejava.MustacheFactory;
 
 import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.api.dto.*;
+import io.github.nickm980.smallville.entities.SimulationTime;
 import io.github.nickm980.smallville.llm.LLM;
 import io.javalin.Javalin;
 
@@ -170,8 +172,15 @@ public class SmallvilleServer {
 	app.post("/timestep", (ctx) -> {
 	    SetTimestepRequest request = ctx.bodyAsClass(SetTimestepRequest.class);
 	    int minutes = Integer.valueOf(request.getNumOfMinutes());
+	    SimulationTime.setStep(Duration.ofMinutes(minutes));
+	    ctx.json(Map.of("success", true));
 	});
-	
+
+	app.get("/progress", (ctx) -> {
+	    int progress = service.getProgress();
+	    ctx.json(Map.of("max", 100, "current", progress));
+	});
+
 	app.start(port);
     }
 

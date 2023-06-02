@@ -3,54 +3,42 @@ package io.github.nickm980.smallville.entities;
 import java.time.Duration;
 
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAmount;
 
-public class SimulationTime {
+import io.github.nickm980.smallville.exceptions.SmallvilleException;
+
+
+public final class SimulationTime {
     private static final LocalDateTime START = LocalDateTime.now();
 
-    private boolean isRealTime = true;
-    private LocalDateTime simulationTime;
-    private Duration timestepDuration;
+    private static volatile LocalDateTime time = LocalDateTime.now();
+    private static volatile Duration step = Duration.ofMinutes(1);
 
-    private static SimulationTime instance;
-
-    public SimulationTime() {
-	isRealTime = true;
+    public static synchronized LocalDateTime now() {
+	return time;
     }
 
-    public SimulationTime(LocalDateTime simulationTime, Duration timestepDuration) {
-	this.simulationTime = simulationTime;
-	this.timestepDuration = timestepDuration;
+    public static synchronized void setSimulationTime(LocalDateTime simTime) {
+	time = simTime;
     }
 
-    public LocalDateTime getSimulationTime() {
-	return isRealTime ? LocalDateTime.now() : simulationTime;
+    public static synchronized void setStep(Duration duration) {
+	step = duration;
     }
 
-    public void setSimulationTime(LocalDateTime simulationTime) {
-	this.simulationTime = simulationTime;
+    public static synchronized void update() {
+	if (step == null || time == null) {
+	    throw new SmallvilleException("Missing timestep or time");
+	}
+
+	time = time.plus(step);
     }
 
-    public Duration getTimestepDuration() {
-	return timestepDuration;
-    }
-
-    public void setTimestepDuration(Duration timestepDuration) {
-	this.timestepDuration = timestepDuration;
-    }
-
-    public void incrementSimulationTime() {
-	simulationTime = simulationTime.plus(timestepDuration);
-    }
-
-    public static LocalDateTime startedAt() {
+    public static synchronized LocalDateTime startedAt() {
 	return START;
     }
 
-    public static SimulationTime getInstance() {
-	if (instance == null) {
-	    instance = new SimulationTime();
-	}
-
-	return instance;
+    public static synchronized TemporalAmount getStepDuration() {
+	return step;
     }
 }

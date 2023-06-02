@@ -3,7 +3,6 @@ package io.github.nickm980.smallville.entities.memory;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-import io.github.nickm980.smallville.entities.AccessTime;
 import io.github.nickm980.smallville.entities.NaturalLanguageConvertible;
 import io.github.nickm980.smallville.entities.SimulationTime;
 import io.github.nickm980.smallville.math.SmallvilleMath;
@@ -17,26 +16,20 @@ import io.github.nickm980.smallville.math.SmallvilleMath;
 public class Plan extends Memory implements TemporalMemory, NaturalLanguageConvertible {
 
     private final LocalDateTime time;
-    private boolean isShortTerm;
     public PlanType type;
 
     public Plan(String description, LocalDateTime time) {
-	this(description, time, false);
+	this(description, time, PlanType.LONG_TERM);
     }
 
-    public Plan(String description, LocalDateTime time, boolean isShortTerm) {
+    public Plan(String description, LocalDateTime time, PlanType type) {
 	super(description);
 	this.time = time;
-	this.isShortTerm = isShortTerm;
-	this.type = PlanType.LONG_TERM;
+	this.type = type;
     }
 
     public PlanType getType() {
 	return type;
-    }
-
-    public boolean isShortTerm() {
-	return isShortTerm;
     }
 
     public LocalDateTime getTime() {
@@ -45,7 +38,7 @@ public class Plan extends Memory implements TemporalMemory, NaturalLanguageConve
 
     @Override
     double getRecency() {
-	var now = LocalDateTime.now();
+	var now = SimulationTime.now();
 	var a = ChronoUnit.SECONDS.between(time, SimulationTime.startedAt());
 	var b = ChronoUnit.SECONDS.between(now, time);
 	var timeSinceStart = ChronoUnit.SECONDS.between(now, SimulationTime.startedAt());
@@ -58,8 +51,7 @@ public class Plan extends Memory implements TemporalMemory, NaturalLanguageConve
 	return getDescription();
     }
 
-    public void convertToShortTermMemory(boolean b, PlanType type) {
-	this.isShortTerm = b;
+    public void convert(PlanType type) {
 	this.type = type;
     }
 }

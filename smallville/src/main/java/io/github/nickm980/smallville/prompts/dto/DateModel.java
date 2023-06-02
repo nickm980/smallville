@@ -9,17 +9,15 @@ import io.github.nickm980.smallville.entities.SimulationTime;
 public class DateModel {
 
     public String getTime() {
-	return format(SimulationTime.getInstance().getSimulationTime(), SmallvilleConfig.getConfig().getTimeFormat());
+	return format(SimulationTime.now(), SmallvilleConfig.getConfig().getTimeFormat());
     }
 
     public String getFull() {
-	return format(SimulationTime.getInstance().getSimulationTime(),
-		SmallvilleConfig.getConfig().getFullTimeFormat());
+	return format(SimulationTime.now(), SmallvilleConfig.getConfig().getFullTimeFormat());
     }
 
     public String getYesterday() {
-	return format(SimulationTime.getInstance().getSimulationTime().minusDays(1),
-		SmallvilleConfig.getConfig().getYesterdayFormat());
+	return format(SimulationTime.now().minusDays(1), SmallvilleConfig.getConfig().getYesterdayFormat());
     }
 
     private String format(LocalDateTime time, String pattern) {
