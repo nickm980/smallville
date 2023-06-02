@@ -3,7 +3,6 @@ package io.github.nickm980.smallville.entities;
 import java.util.List;
 import io.github.nickm980.smallville.entities.memory.Characteristic;
 import io.github.nickm980.smallville.entities.memory.MemoryStream;
-import io.github.nickm980.smallville.entities.memory.Plan;
 
 public class Agent {
 
@@ -16,7 +15,7 @@ public class Agent {
     public Agent(String name, List<Characteristic> characteristics, String currentAction, AgentLocation location) {
 	this.name = name;
 	this.memories = new MemoryStream();
-	this.memories.add(characteristics);
+	this.memories.addAll(characteristics);
 	this.location = location;
 	this.currentAction = new ActionHistory(currentAction);
     }
@@ -59,18 +58,6 @@ public class Agent {
 
     public MemoryStream getMemoryStream() {
 	return memories;
-    }
-
-    public List<Characteristic> getCharacteristics() {
-	return memories.getCharacteristics();
-    }
-
-    public void addPlans(List<Plan> plans) {
-	memories.addPlans(plans);
-    }
-
-    public List<Plan> getPlans() {
-	return memories.getPlans();
     }
 
     public void setGoal(String goal) {

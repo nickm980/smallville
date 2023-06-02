@@ -4,58 +4,40 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
-
-import io.github.nickm980.smallville.api.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import io.github.nickm980.smallville.Util;
 import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.api.dto.*;
-import io.github.nickm980.smallville.entities.AccessTime;
-import io.github.nickm980.smallville.entities.Agent;
-import io.github.nickm980.smallville.entities.AgentLocation;
-import io.github.nickm980.smallville.entities.Conversation;
-import io.github.nickm980.smallville.entities.ObjectState;
-import io.github.nickm980.smallville.entities.SimulatedLocation;
-import io.github.nickm980.smallville.entities.SimulatedObject;
-import io.github.nickm980.smallville.entities.SimulationTime;
+import io.github.nickm980.smallville.entities.*;
 import io.github.nickm980.smallville.entities.memory.Characteristic;
+import io.github.nickm980.smallville.entities.memory.Observation;
 import io.github.nickm980.smallville.exceptions.AgentNotFoundException;
 import io.github.nickm980.smallville.exceptions.LocationNotFoundException;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
 import io.github.nickm980.smallville.llm.LLM;
+import io.github.nickm980.smallville.update.Progress;
 import io.github.nickm980.smallville.update.UpdateService;
-
-import java.util.concurrent.TimeUnit;
 
 public class SimulationService {
 
     private final ModelMapper mapper;
     private final UpdateService prompts;
     private final World world;
-    private final AccessTime time;
-    private final Logger LOG = LoggerFactory.getLogger(SimulationService.class);
-
-    private SimulationTime timekeeper;
+    private int progress;
 
     public SimulationService(LLM llm, World world) {
 	this.world = world;
 	this.mapper = new ModelMapper();
-	this.time = new AccessTime();
 	this.prompts = new UpdateService(llm, world);
-	this.timekeeper = new SimulationTime();
+	this.progress = 0;
     }
 
     public void createMemory(CreateMemoryRequest request) {
-	if (request.isReactable()) {
-	    react(request.getName(), request.getDescription());
-	} else {
-	    Agent agent = world.getAgent(request.getName()).orElseThrow();
-	    agent.getMemoryStream().addObservation(request.getDescription());
-	}
+	Agent agent = world.getAgent(request.getName()).orElseThrow();
+	Observation observation = new Observation(request.getDescription());
+	observation.setReactable(request.isReactable());
+	agent.getMemoryStream().add(observation);
     }
 
     public AgentStateResponse getAgentState(String name) {
@@ -64,7 +46,7 @@ public class SimulationService {
     }
 
     public List<AgentStateResponse> getAgents() {
-	Set<Agent> agents = world.getAgents();
+	List<Agent> agents = world.getAgents();
 
 	return agents.stream().map(mapper::fromAgent).toList();
     }
@@ -89,7 +71,7 @@ public class SimulationService {
 
 	AgentLocation location = new AgentLocation(loc, obj);
 
-	world.save(new Agent(request.getName(), characteristics, request.getActivity(), location));
+	world.create(new Agent(request.getName(), characteristics, request.getActivity(), location));
     }
 
     public void createLocation(CreateLocationRequest request) {
@@ -97,7 +79,7 @@ public class SimulationService {
 	    throw new SmallvilleException("Location already exists");
 	}
 
-	world.save(new SimulatedLocation(request.getName()));
+	world.create(new SimulatedLocation(request.getName()));
     }
 
     public List<MemoryResponse> getMemories(String pathParam) {
@@ -126,20 +108,19 @@ public class SimulationService {
 	    throw new SmallvilleException("Must create an agent before changing the state");
 	}
 
-	time.update();
 	for (Agent agent : world.getAgents()) {
-	    prompts.updateAgent(agent);
+	    prompts.updateAgent(agent, new Progress() {
+		@Override
+		public void update() {
+		    progress += 1;
+		}
+	    });
 	}
     }
 
-    private void react(String name, String observation) {
-	time.update();
-	Agent agent = world.getAgent(name).orElseThrow(() -> new AgentNotFoundException(name));
-	prompts.updateAgent(agent, observation);
-    }
-
     public List<ConversationResponse> getConversations() {
-	List<Conversation> conversations = world.getConversationsAfter(time.getLastAccessed());
+	List<Conversation> conversations = world
+	    .getConversationsAfter(SimulationTime.now().minus(SimulationTime.getStepDuration()));
 
 	return conversations.stream().map(mapper::fromConversation).toList();
     }
@@ -152,20 +133,20 @@ public class SimulationService {
 	ObjectState state = new ObjectState(request.getState(), List.of());
 	SimulatedObject object = new SimulatedObject(request.getName(), state, parent);
 
-	world.save(object);
+	world.create(object);
     }
 
     public void setGoal(String name, String goal) {
 	world.getAgent(name).orElseThrow().setGoal(goal);
     }
 
-    public SimulationTime getTimekeeper() {
-	return timekeeper;
-    }
-
     public void setTimestep(SetTimestepRequest request) {
 	long durationValue = Long.parseLong(request.getNumOfMinutes());
 	Duration duration = Duration.ofMinutes(durationValue);
-	timekeeper.setTimestepDuration(duration);
+	SimulationTime.setStep(duration);
+    }
+
+    public int getProgress() {
+	return progress;
     }
 }

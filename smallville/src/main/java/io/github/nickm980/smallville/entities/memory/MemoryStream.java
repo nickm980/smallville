@@ -1,10 +1,11 @@
 package io.github.nickm980.smallville.entities.memory;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
+import java.util.stream.Stream;
 
 /**
  * Includes plans, observations, and characteristics
@@ -34,17 +35,21 @@ public class MemoryStream {
 	return memories.stream().filter(memory -> {
 	    if (memory instanceof Plan) {
 		Plan p = (Plan) memory;
-		if (p.isShortTerm()) {
+		if (p.getType() == PlanType.SHORT_TERM) {
 		    return false;
 		}
 	    }
-
 	    return memory.getImportance() == 0;
 	}).toList();
     }
 
-    public void addObservation(String memory) {
-	this.memories.add(new Observation(memory));
+    public double sumRecency() {
+	return getRecentMemories().stream().flatMapToDouble(memory -> DoubleStream.of(memory.getImportance())).sum();
+    }
+
+    public List<Memory> getRecentMemories() {
+	List<Memory> result = memories.stream().filter(memory -> memory.getRecency() > .4).toList();
+	return result;
     }
 
     public List<Memory> getMemories() {
@@ -52,63 +57,35 @@ public class MemoryStream {
     }
 
     public List<Observation> getObservations() {
-	return memories.stream().filter(memory -> {
-	    return memory instanceof Observation;
-	}).map(memory -> {
-	    return (Observation) memory;
-	}).collect(Collectors.toList());
+	return filterMemoriesByType(Observation.class).toList();
     }
 
     public List<Characteristic> getCharacteristics() {
-	return memories.stream().filter(memory -> {
-	    return memory instanceof Characteristic;
-	}).map(memory -> {
-	    return (Characteristic) memory;
-	}).collect(Collectors.toList());
+	return filterMemoriesByType(Characteristic.class).toList();
     }
 
     public List<Plan> getPlans() {
-	return memories.stream().filter(memory -> {
-	    return memory instanceof Plan;
-	}).map(memory -> {
-	    return (Plan) memory;
-	}).sorted(new TemporalMemory.TemporalComparator()).collect(Collectors.toList());
+	return filterMemoriesByType(Plan.class)
+	    .sorted(new TemporalMemory.TemporalComparator())
+	    .collect(Collectors.toList());
     }
 
-    public void addAll(List<String> memories) {
-	this.memories.addAll(memories.stream().map(Observation::new).toList());
+    private <T extends Memory> Stream<T> filterMemoriesByType(Class<T> memoryType) {
+	return memories.stream().filter(memoryType::isInstance).map(memoryType::cast);
     }
 
-    public void add(List<? extends Memory> memories) {
+    public void addAll(List<? extends Memory> memories) {
 	this.memories.addAll(memories);
     }
 
-    public List<Plan> prunePlans() {
-	List<Plan> copies = new ArrayList<Plan>();
-
-	for (Memory memory : memories) {
-	    if (memory instanceof Plan) {
-		Plan plan = (Plan) memory;
-		boolean isOld = plan.getTime() != null && plan.getTime().compareTo(LocalDateTime.now()) < 0;
-
-		if (isOld) {
-		    copies.add(plan);
-		}
-	    }
-	}
-
-	memories.removeAll(copies);
-	return copies;
+    public void add(Memory memory) {
+	this.memories.add(memory);
     }
 
     public void setShortTermPlans(List<Plan> plans) {
-	List<Plan> removed = getShortTermPlans();
+	List<Plan> removed = getPlans(PlanType.SHORT_TERM);
 	memories.removeAll(removed);
 	memories.addAll(plans);
-    }
-
-    public List<Plan> getShortTermPlans() {
-	return getPlans().stream().filter(plan -> plan.isShortTerm()).toList();
     }
 
     public List<? extends TemporalMemory> sortByTime(List<? extends TemporalMemory> mems) {
@@ -120,11 +97,17 @@ public class MemoryStream {
 	}).toList();
     }
 
-    public void addPlans(List<Plan> plans) {
-	this.memories.addAll(plans);
+    public List<Plan> getPlans(PlanType term) {
+	return getPlans().stream().filter(plan -> plan.getType() == term).toList();
     }
 
-    public List<Plan> getPlans(PlanType midTerm) {
-	return getPlans().stream().filter(plan -> plan.getType() == midTerm).toList();
+    public Observation getLastObservation() {
+	List<Observation> observations = getObservations();
+
+	if (observations == null || observations.isEmpty()) {
+	    return new Observation("");
+	}
+
+	return observations.get(observations.size() - 1);
     }
 }
