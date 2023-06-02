@@ -21,8 +21,8 @@ public class ChatServiceTest {
 	SimulatedObject obj = new SimulatedObject("Stove", new ObjectState("on", List.of()), location);
 
 	World world = new World();
-	world.save(location);
-	world.save(obj);
+	world.create(location);
+	world.create(obj);
 
 	ChatService service = new ChatService(world, new ChatGPT());
 //	

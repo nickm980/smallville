@@ -19,7 +19,7 @@ public class JacksonJsonTest {
     @BeforeAll
     public static void setUp() {
 	sim = new World();
-	sim.save(new SimulatedLocation("red house"));
+	sim.create(new SimulatedLocation("red house"));
     }
 
     @Test

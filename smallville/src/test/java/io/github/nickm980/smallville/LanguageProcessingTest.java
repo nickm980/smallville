@@ -10,8 +10,12 @@ public class LanguageProcessingTest {
     LocalNLP nlp = new LocalNLP();
 
     @Test
-    public void testNamedEntities() {
+    public void testFutureToPast() {
 	assertEquals("I went to the mall", nlp.convertToPastTense("I will go to the mall"));
     }
-
+    
+    @Test
+    public void testFutureToPresent() {
+	assertEquals("finishes cooking dinner and cleans up the campsite", nlp.convertToPresentTense("Finish cooking dinner and clean up the campsite"));
+    }
 }
