@@ -43,6 +43,18 @@ public class PromptBuilder {
 	return this;
     }
 
+    public PromptBuilder withStatements(List<String> statements) {
+	String result = "";
+
+	for (int i = 0; i < statements.size(); i++) {
+	    result += i + 1 + ") " + statements.get(i);
+	    result += "\n";
+	}
+
+	data.put("statements", result);
+	return this;
+    }
+
     public PromptBuilder withLocations(List<SimulatedLocation> locations) {
 	data.put("locations", locations);
 	return this;
