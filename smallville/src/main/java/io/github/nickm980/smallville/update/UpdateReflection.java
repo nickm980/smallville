@@ -18,10 +18,10 @@ public class UpdateReflection extends AgentUpdate {
 
 	LOG.info("[Reflections] Memory weight sum: " + agent.getMemoryStream().sumRecency() + " / " + cutoff);
 	if (agent.getMemoryStream().sumRecency() > cutoff) {
-	    LOG.info("[Reflection] Reflecting on recent memories");
-	    Reflection reflection = service.reflectOn(agent);
+	    LOG.info("[Reflections] Reflecting on recent memories");
+	    Reflection reflection = service.createReflectionFor(agent);
 	    agent.getMemoryStream().add(reflection);
-	    LOG.info("[Reflection] Reflection: " + reflection.getDescription());
+	    LOG.info("[Reflections] Reflection: " + reflection.getDescription());
 	}
 
 	return next(service, world, agent);
