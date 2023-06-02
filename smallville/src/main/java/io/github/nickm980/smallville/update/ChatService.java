@@ -6,7 +6,10 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +25,7 @@ import io.github.nickm980.smallville.entities.Dialog;
 import io.github.nickm980.smallville.entities.memory.Memory;
 import io.github.nickm980.smallville.entities.memory.Observation;
 import io.github.nickm980.smallville.entities.memory.Plan;
+import io.github.nickm980.smallville.entities.memory.Reflection;
 import io.github.nickm980.smallville.llm.LLM;
 import io.github.nickm980.smallville.nlp.LocalNLP;
 import io.github.nickm980.smallville.nlp.NLPCoreUtils;
@@ -51,6 +55,8 @@ public class ChatService implements IChatService {
 	    .build();
 
 	String response = chat.sendChat(prompt, .1);
+	// the response will sometimes end with ",]" instead of "]"
+	response = response.replace(",]", "]");
 
 	ObjectMapper objectMapper = new ObjectMapper();
 	int[] result = new int[0];
@@ -122,7 +128,6 @@ public class ChatService implements IChatService {
 	    .build();
 
 	String response = chat.sendChat(prompt, .2);
-	LOG.info(response);
 	return parsePlans(response);
     }
 
@@ -143,10 +148,12 @@ public class ChatService implements IChatService {
     public CurrentActivity getCurrentPlan(Agent agent) {
 	CurrentActivity result = new CurrentActivity();
 	Prompt prompt = new PromptBuilder()
+	    .withWorld(world)
 	    .withAgent(agent)
 	    .withLocations(world.getLocations())
 	    .setPrompt(SmallvilleConfig.getPrompts().getPlans().getCurrent())
 	    .build();
+
 	NLPCoreUtils nlp = new LocalNLP();
 
 	String response = chat.sendChat(prompt, .7);// higher value provides better results for emojis
@@ -161,12 +168,13 @@ public class ChatService implements IChatService {
 	    return result;
 	}
 
-	result.setCurrentActivity(json.get("activity").asText());
 	result.setEmoji(json.get("emoji").asText());
 	result.setLastActivity(nlp.convertToPastTense(agent.getCurrentActivity()));
+	result.setCurrentActivity(json.get("activity").asText());
 	result.setLocation(json.get("location").asText());
+	result.setObject(json.get("object").asText());
 
-	LOG.info("[Activity]" + result.getCurrentActivity() + " location: " + agent.getLocation().getName());
+	LOG.info("[Activity]" + result.getCurrentActivity() + " location: " + result.getLocation());
 
 	return result;
     }
@@ -307,6 +315,61 @@ public class ChatService implements IChatService {
 
 	    result.add(new Observation(pastTense, plan.getTime(), (int) plan.getImportance()));
 	}
+
+	return result;
+    }
+
+    @Override
+    public Reflection createReflectionFor(Agent agent) {
+	Reflection reflection = new Reflection("");
+	Prompt prompt = new PromptBuilder()
+	    .withAgent(agent)
+	    .setPrompt(SmallvilleConfig.getPrompts().getAgent().getReflectionQuestion())
+	    .build();
+
+	String query = chat.sendChat(prompt, .1);
+	query = query.split("\n")[0].substring(2);
+
+	LOG.info("[Reflections] Question: " + query);
+
+	Set<Memory> filter = new HashSet<Memory>();
+	filter.addAll(agent.getMemoryStream().getRelevantMemories(query.substring(2)));
+	List<Memory> memories = new ArrayList<>(filter); // Convert the set back to a list
+
+	LOG.debug(String.join(",", memories.stream().map(m -> m.getDescription()).toList()));
+
+	Prompt secondPrompt = new PromptBuilder()
+	    .withAgent(agent)
+	    .withStatements(memories.stream().map(m -> m.getDescription()).toList())
+	    .setPrompt(SmallvilleConfig.getPrompts().getAgent().getReflectionResult())
+	    .build();
+
+	String description = chat.sendChat(secondPrompt, .4);
+
+	// retrieve just the insight. remove the because clause and the key
+	int index = description.lastIndexOf(":");
+
+	if (index != -1) {
+	    description = description.substring(index);
+	}
+
+	description = description.replaceAll(":", "").trim();
+
+	reflection.setDescription(description);
+
+	return reflection;
+    }
+
+    @Override
+    public boolean shouldUpdatePlans(Agent agent, String observation) {
+	Prompt prompt = new PromptBuilder()
+	    .withObservation(observation)
+	    .withAgent(agent)
+	    .setPrompt(SmallvilleConfig.getPrompts().getReactions().getReaction())
+	    .build();
+
+	String response = chat.sendChat(prompt, .2);
+	boolean result = response.toLowerCase().contains("yes");
 
 	return result;
     }
