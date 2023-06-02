@@ -38,12 +38,11 @@ public class ChatGPT implements LLM {
 			"model": "%model",
 			"messages": [
 				%messages
-			], "temperature": %temperature, "max_tokens": 1000
+			], "temperature": %temperature, "max_tokens": 2000
 		}
 		""";
 
 	try {
-	    json = json.replaceAll("\n", "");
 	    json = json.replaceAll("\t", "");
 	    json = json.strip();
 	    json = json.replace("%messages", MAPPER.writeValueAsString(prompt.build()));
@@ -74,6 +73,7 @@ public class ChatGPT implements LLM {
 
 	    if (node.get("choices") == null) {
 		LOG.error("Invalid api token or rate limit reached");
+		LOG.debug(node.toPrettyString());
 		throw new SmallvilleException("Invalid api token or rate limit reached.");
 	    }
 
