@@ -16,6 +16,10 @@ public final class SmallvilleMath {
 	
 	return bert;
     }
+    
+    public static void loadBert() {
+	getBert();
+    }
     /**
      * Normalizes a vector to a value between 0 and 1
      * 
