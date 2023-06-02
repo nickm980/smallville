@@ -3,12 +3,12 @@ package io.github.nickm980.smallville.entities.memory;
 import io.github.nickm980.smallville.math.SmallvilleMath;
 
 public abstract class Memory implements Comparable<Memory> {
-    
+
     private String description;
     private int weight;
-    
+
     public Memory(String description) {
-	this.description = description;
+	this.description = description.replace("-", "").trim();
 	this.weight = 0;
     }
 
@@ -30,7 +30,7 @@ public abstract class Memory implements Comparable<Memory> {
     /**
      * How recent the memory was. A larger number is more recent
      * 
-     * @return double bounded between SIMULATION_START_TIME and LocalDateTime.now()
+     * @return double bounded between SIMULATION_START_TIME and SimulationTime.now()
      */
     abstract double getRecency();
 
@@ -41,7 +41,7 @@ public abstract class Memory implements Comparable<Memory> {
     private double getRelevancy(String observation) {
 	return SmallvilleMath.calculateSentenceSimilarity(observation, description);
     }
-    
+
     public String getDescription() {
 	return description;
     }
