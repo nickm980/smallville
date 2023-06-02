@@ -5,7 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Repository<T> {
+    
+    private final Logger LOG = LoggerFactory.getLogger(Repository.class);
 
     public Map<String, RepositoryItem<T>> data;
 
@@ -13,24 +18,34 @@ public class Repository<T> {
 	data = new HashMap<String, RepositoryItem<T>>();
     }
 
-    public void save(String id, T item) {
+    public boolean save(String id, T item) {
+	boolean result = false;
+
+	if (!data.containsKey(id)) {
+	    data.put(id, new RepositoryItem<T>(item));
+	    LOG.info("Creating: " + id);
+	    result = true;
+	}
+
+	return result;
+    }
+
+    public void update(String id, T item) {
 	RepositoryItem<T> searchedFor = data.get(id);
 
 	if (searchedFor != null) {
 	    searchedFor.update(item);
 	    return;
 	}
-
-	data.put(id, new RepositoryItem<T>(item));
     }
 
     public T getById(String id) {
 	RepositoryItem<T> item = data.get(id);
-	
+
 	if (item == null) {
 	    return null;
 	}
-	
+
 	return item.getData();
     }
 
