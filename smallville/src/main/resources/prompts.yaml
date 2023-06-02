@@ -1,3 +1,26 @@
+################################################################
+# agent.name	- Full name of the agent
+# agent.memories	- List of all the memories (has child of {{description}})
+# agent.activity	- What the agent is currently doing
+# agent.lastActivity	- What the agent was last doing
+# agent.summary - summary from prompts.yaml
+# agent.description	- Comma delimited characteristics
+# agent.locationName	- The current location
+# agent.locationChildren	- List of objects contained by the current location
+# agent.plans	- List of the two most recent plans
+# tenses	- For example, x is no longer {past tense} and is now {current activity}
+# memories.unranked	- Memories with a weight of 0 (except short term plans)
+# memories.characteristics	- Initial memories added to the agent
+# memories.relevant	- The three most relevant memories to an observation
+# date.full	- Full date (as formatted in config.yaml)
+# date.time	- Time of day (as formatted in config.yaml)
+# date.yesterday	- Yesterday's full date (as formatted in config.yaml)
+# world.description	- World description (includes available locations)
+# question	- Question asked to agent
+# tenses	- For example, x is no longer {past tense} and is now {current activity}
+# memories.characteristics	- Initial memories added to the agent
+#################################################################
+
 reactions:
   conversation: |
     {{agent.summary}}
@@ -12,13 +35,14 @@ reactions:
   reaction: |
     {{world.description}} 
     {{agent.summary}}
-    Should {{agent.name}} react to the observation, and if so, what would be an appropriate reaction? Respond in one line.
-    
-    If the action is to engage in dialogue, write:
-    SAY: "what to say"
-    otherwise, write:
-    REACT: {agent_name}'s reaction (if anything).
-    Either do nothing, react, or say something but not both.
+     
+    Plans: {{agent.plans}}{{description}}; {{/agent.plans}}
+
+    Observation: {{observation}}
+
+    Will {{agent.name}} react to the observation and change their plans?
+
+    <yes/no>
 
 world:
   location: |
@@ -51,62 +75,65 @@ plans:
   shortTerm: |
     {{world.description}}
     {{agent.summary}}
-
+    
     * Every plan should get its own line.
     * Give a start time for every plan and format the time as "hh:mm a"
-
-    Last Activity: {{agent.lastActivity}}
+    * Start each plan with a hypen
 
     Plans: {{#agent.plans}}{{description}};{{/agent.plans}}
 
-    What will you do every minute for the next 20 minutes? Start at the current time and end 20 minutes from now.
+    Last Activity: {{agent.lastActivity}}
+    
+    What will {{agent.name}} do every minute for the next 20 minutes? Start at the current time and end 20 minutes from now.
     Respond with 20 plans.
+    The current time is {{date.time}}
 
-    It is currently {{date.time}}
-
-  midTerm: |
-    {{world.description}}
-    {{agent.summary}}
-          
-    * Every plan should get its own line.
-    * When responding with a time, use the format " hh:mm a "
-
-    {{#agent.plans}}
-    - {{description}}
-    {{/agent.plans}}
-
-    List what {{agent.name}} has planned every hour. Start at {{date.time}}.
 
   longTerm: |
     {{world.description}}
     {{agent.summary}}
-      
-    * Every plan should be on a new line
-    * When responding with a time, use the format "hh:mm a"
+    Recent Memories: {{#agent.recentMemories}}{{description}}; {{/agent.recentMemories}}
 
-    Today is {{date.full}}. What does {{agent.name}} have planned for today in broad strokes? 
+    * Each plan should start on a new line
+    * Each plan should have a start time in the "hh:mm a" format and mention a location
 
-    * Start every plan on a new line with the start and ending time
-    * Include a plan for the current time
+    Today is {{date.full}}. 
+    - {{agent.name}} woke up at 8:00 AM
+    [...]
+    - {{agent.name}} went to bed at 10:00 PM
 
   current: |
     {{world.description}}
-    {{agent.summary}}
 
-    Last Activity: {{agent.lastActivity}}
-    Most Recent Plan: {{agent.lastPlan}}
+    Plans: {{#agent.plans}}{{description}}; {{/agent.plans}}
 
-    What are you doing now? It is currently {{date.time}}
+    Answer the questions:
 
-    Respond confidently in the following JSON format and choose an emoji to represent the activity.
+    - What will {{agent.name}} be doing now? It is currently {{date.time}}
+    - Pick an emoji that represents the current activity.
+    - Choose a location an object that the location has for the Current Activity.
 
+    Respond in this format:
     {
       "activity": "I am <fill in>",
       "location": "<Location Name>",
+      "object": "<Object Name>",
       "emoji": "<fill in>",
     }
 
 agent:
+# statements are from the memory stream
+  reflectionResult: |
+    Statements about {{agent.name}}
+    {{statements}}
+    What single high-level insight can you infer from
+    the above statements? (example format: insight (because of 1, 5, 3))
+# The result of this prompt is sent to fetch memories from memory stream
+  reflectionQuestion: |
+    {{#agent.recentMemories}}
+    - {{description}}
+    {{/agent.recentMemories}}
+    Given only the information above, what are 3 most salient high-level questions we can answer about the subjects in the statements?
   characteristics: |
     How would one describe {{agent.name}}'s core characteristics
     given the following statements?
