@@ -11,7 +11,7 @@ import okhttp3.Response;
 
 public final class Updater {
 
-    private final static String VERSION = "v1.2.0";
+    private final static String VERSION = "v1.3.0";
     private final static Logger LOG = LoggerFactory.getLogger(Updater.class);
     private final static String REPO_URL = "https://api.github.com/repos/nickm980/smallville/releases/latest";
 
