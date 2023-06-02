@@ -1,4 +1,4 @@
-import { Smallville } from '../../javascript-adapter/dist/index.js'
+import { Smallville } from '../../javascript-client/dist/index.js'
 import { agents } from './mechanics/agents.js'
 import { updateAgent } from './mechanics/index.js'
 import { updateLocations } from './mechanics/locations.js'
@@ -115,10 +115,16 @@ let secondsIndicator = document.getElementById('seconds-indicator')
 let secondsBetweenUpdates = 300
 let secondsLeft = secondsBetweenUpdates
 let prevExecutionTime
+
 async function update() {
     showLoadingCursor()
     try {
         console.log('auto-updating')
+        const agent = agents[0]
+        await smallville.addObservation({
+            observation: "John is at the red house",
+            reactable: true
+        })
         await smallville.updateState()
     } catch (err) {
         console.error(err)
@@ -130,7 +136,6 @@ async function update() {
 document
     .getElementById('auto-update')
     .addEventListener('click', async function () {
-        console.log('hlleo')
         if (shouldAutoUpdate === false) {
             this.setAttribute('class', 'nes-btn is-success')
             this.innerText = 'Auto-Updating'
