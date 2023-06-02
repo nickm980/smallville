@@ -15,7 +15,7 @@ public class UpdateLocations extends AgentUpdate {
 	if (objects.length > 0) {
 	    for (ObjectChangeResponse response : objects) {
 		if (response != null) {
-		    world.changeObject(response.getObject(), response.getState());
+		    world.setState(response.getObject(), response.getState());
 		}
 	    }
 	}

@@ -5,7 +5,7 @@ import java.util.List;
 import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.entities.Agent;
 import io.github.nickm980.smallville.entities.Conversation;
-import io.github.nickm980.smallville.entities.Dialog;
+import io.github.nickm980.smallville.entities.memory.Observation;
 import io.github.nickm980.smallville.nlp.LocalNLP;
 import io.github.nickm980.smallville.nlp.NLPCoreUtils;
 
@@ -24,7 +24,7 @@ public class UpdateConversation extends AgentUpdate {
 
     @Override
     public boolean update(IChatService service, World world, Agent agent) {
-	LOG.info("[Updater / Conversation] Checking for any conversations and initating dialog");
+	LOG.info("[Conversation] Checking for any conversations and initating dialog");
 
 	if (observation == null) {
 	    observation = agent.getCurrentActivity();
@@ -33,31 +33,34 @@ public class UpdateConversation extends AgentUpdate {
 	String subject = TOKENIZER.extractLastOccurenceOfName(observation);
 
 	if (agent.getFullName().equals(subject)) {
-	    LOG.warn("[Updater / Conversation] Agent attempted to have a conversation with themself.");
+	    LOG.warn("[Conversation] Agent attempted to have a conversation with themself.");
 	    return false;
 	}
 
 	if (subject == null) {
-	    LOG.info("[Updater / Conversation] No conversation detected");
+	    LOG.info("[Conversation] No conversation detected");
 	    return true;
 	}
 
-	Agent other = world.getAgent(subject).orElse(null);
+	Agent other = world.getAgent(subject).orElseThrow();
 
 	if (other == null) {
-	    LOG
-		.error("[Updater / Conversation] A conversation was implied but the target {" + subject
-			+ "} does not exist.");
+	    LOG.error("[Conversation] A conversation was implied but the target {" + subject + "} does not exist.");
 	    return false;
 	}
 
 	Conversation conversation = service.getConversationIfExists(agent, other);
 
-	List<String> memories = conversation.getDialog().stream().map(Dialog::asNaturalLanguage).toList();
+	List<Observation> memories = conversation
+	    .getDialog()
+	    .stream()
+	    .map(dialog -> new Observation(dialog.asNaturalLanguage()))
+	    .toList();
+
 	agent.getMemoryStream().addAll(memories);
 	other.getMemoryStream().addAll(memories);
 
-	world.save(conversation);
+	world.create(conversation);
 
 	return next(service, world, agent);
     }
