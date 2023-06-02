@@ -1,11 +1,19 @@
 package io.github.nickm980.smallville;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.Test;
 
+import io.github.nickm980.smallville.entities.Agent;
+import io.github.nickm980.smallville.entities.AgentLocation;
+import io.github.nickm980.smallville.entities.ObjectState;
+import io.github.nickm980.smallville.entities.SimulatedLocation;
+import io.github.nickm980.smallville.entities.SimulatedObject;
+import io.github.nickm980.smallville.entities.memory.Characteristic;
 import io.github.nickm980.smallville.entities.memory.MemoryStream;
 import io.github.nickm980.smallville.entities.memory.Plan;
 import io.github.nickm980.smallville.llm.ChatGPT;
@@ -53,9 +61,29 @@ public class PlansParsingTest {
 				""");
 	MemoryStream stream = new MemoryStream();
 
-	stream.addPlans(plans);
+	stream.addAll(plans);
 
-	stream.prunePlans();
 	assertTrue(stream.getPlans().size() == 1);
+    }
+    
+    @Test
+    public void testPrunedPlans() {
+	World world = new World();
+	SimulatedLocation location = new SimulatedLocation("location");
+	SimulatedObject obj = new SimulatedObject("obj", new ObjectState("off", List.of()), location);
+	
+	world.create(obj);
+	world.create(location);
+	
+	Agent agent = new Agent("name", List.of(new Characteristic("desc")), "current", new AgentLocation(location));
+	agent.setGoal("Run for president");
+	agent.setCurrentActivity("Doing nothing");
+	agent.setCurrentActivity("making dinner");
+	agent.getMemoryStream().addAll(List.of(new Plan("plan", LocalDateTime.now().plusMinutes(5)), new Plan("plan2", LocalDateTime.now().minusHours(1))));
+	
+	world.create(agent);
+	
+	
+	assertEquals(1, agent.getMemoryStream().getPlans().size());
     }
 }

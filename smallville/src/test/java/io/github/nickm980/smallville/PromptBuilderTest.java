@@ -22,14 +22,15 @@ public class PromptBuilderTest {
 
     @Test
     public void testPromptTemplates() {
-	String prompt = SmallvilleConfig.getPrompts().getMisc().getDebug();
+	String prompt = SmallvilleConfig.getPrompts().getPlans().getCurrent();
 	World world = new World();
 	SimulatedLocation location = new SimulatedLocation("location");
-	world.save(location);
+	world.create(location);
 	Agent ageng = new Agent("name", List.of(new Characteristic("desc")), prompt, new AgentLocation(location));
-	world.save(ageng);
+	world.create(ageng);
 
 	Prompt builder = new PromptBuilder()
+	    .withWorld(world)
 	    .withAgent(ageng)
 	    .withLocations(world.getLocations())
 	    .setPrompt(prompt)
@@ -40,25 +41,28 @@ public class PromptBuilderTest {
 
     @Test
     public void testLongTermPlansPrompt() {
-	String prompt = SmallvilleConfig.getPrompts().getPlans().getShortTerm();
+	String prompt = SmallvilleConfig.getPrompts().getAgent().getReflectionResult();
 	World world = new World();
 	SimulatedLocation location = new SimulatedLocation("location");
 	SimulatedObject obj = new SimulatedObject("obj", new ObjectState("off", List.of()), location);
-	
-	world.save(obj);
-	world.save(location);
-	
+
+	world.create(obj);
+	world.create(location);
+
 	Agent ageng = new Agent("name", List.of(new Characteristic("desc")), prompt, new AgentLocation(location));
 	ageng.setGoal("Run for president");
 	ageng.setCurrentActivity("Doing nothing");
 	ageng.setCurrentActivity("making dinner");
-	ageng.addPlans(List.of(new Plan("plan", LocalDateTime.now())));
+	ageng
+	    .getMemoryStream()
+	    .addAll(List
+		.of(new Plan("plan", LocalDateTime.now().plusMinutes(5)), new Plan("plan2", LocalDateTime.now())));
+	ageng.getMemoryStream().add(new Characteristic("hello"));
+	world.create(ageng);
 	
-	world.save(ageng);
-
 	Prompt builder = new PromptBuilder()
-	    .withObservation("walked to the moon")
 	    .withAgent(ageng)
+	    .withStatements(List.of("2 to the moon2"))
 	    .withWorld(world)
 	    .withQuestion("hello there!")
 	    .withLocations(world.getLocations())

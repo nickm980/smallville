@@ -15,9 +15,9 @@ public class ObjectsTest {
     @Test
     public void testObjectLoads() {
 	World world = new World();
-	world.save(new SimulatedLocation("Forest"));
+	world.create(new SimulatedLocation("Forest"));
 	world
-	    .save(new SimulatedObject("Campfire", new ObjectState("on", List.of()),
+	    .create(new SimulatedObject("Campfire", new ObjectState("on", List.of()),
 		    world.getLocation("Forest").orElseThrow()));
 
 	assertTrue(world.getObjectByName("Campfire").getState().equals("on"), "Object state was not loaded");
@@ -26,11 +26,11 @@ public class ObjectsTest {
     @Test
     public void testObjectStateWillChange() {
 	World world = new World();
-	world.save(new SimulatedLocation("Forest"));
+	world.create(new SimulatedLocation("Forest"));
 	world
-	    .save(new SimulatedObject("Campfire", new ObjectState("on", List.of()),
+	    .create(new SimulatedObject("Campfire", new ObjectState("on", List.of()),
 		    world.getLocation("Forest").orElseThrow()));
-	world.changeObject("Campfire", "off");
+	world.setState("Campfire", "off");
 
 	assertTrue(world.getObjectByName("Campfire").getState().equals("off"), "Object state was not changed");
     }
