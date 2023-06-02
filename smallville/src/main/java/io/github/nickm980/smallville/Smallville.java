@@ -12,6 +12,7 @@ import io.github.nickm980.smallville.api.SmallvilleServer;
 import io.github.nickm980.smallville.config.CommandLineArgs;
 import io.github.nickm980.smallville.config.SmallvilleConfig;
 import io.github.nickm980.smallville.llm.ChatGPT;
+import io.github.nickm980.smallville.math.SmallvilleMath;
 import io.github.nickm980.smallville.nlp.LocalNLP;
 
 public class Smallville {
@@ -29,14 +30,15 @@ public class Smallville {
 	Settings.setApiKey(key);
 
 	loadConfig();
-
+	Updater.checkLatestVersion();
+	
 	LOG.info("Starting server...");
 
 	LocalNLP.preLoad();
+	SmallvilleMath.loadBert();
 
 	startServer(port);
 
-	Updater.checkLatestVersion();
 	LOG.info("Smallville server started on port " + port);
     }
 
