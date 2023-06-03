@@ -15,11 +15,11 @@ public class PromptBuilder {
 
     private Map<String, Object> data;
     private String prompt;
-    private final MiniPrompts prompts;
+    private final TemplateMapper prompts;
 
     public PromptBuilder() {
 	this.data = new HashMap<>();
-	this.prompts = new MiniPrompts();
+	this.prompts = new TemplateMapper();
 
 	data.put("ping", "pong");
 	data.put("date", new DateModel());
