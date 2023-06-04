@@ -12,10 +12,58 @@
     <body>
         <div class="container">
             <div id="phaser-container"></div>
+            <form action="http://localhost:8080/memories" method="POST">
+                <input
+                    type="text"
+                    name="memory"
+                    placeholder="add memory to Medina"
+                />
+                <input type="submit" value="Submit" />
+            </form>
             <div id="locations"></div>
             <div id="characters"></div>
         </div>
 
+        <script>
+            // Get the form element
+            const form = document.querySelector('form')
+
+            // Add an event listener for form submission
+            form.addEventListener('submit', (e) => {
+                e.preventDefault() // Prevent the default form submission
+
+                // Get the input value
+                const memoryInput = document.querySelector(
+                    'input[name="memory"]'
+                )
+                const memory = memoryInput.value
+
+                // Create an object with the memory data
+                const data = {
+                    name: 'Medina',
+                    reactable: true,
+                    description: memory,
+                }
+
+                // Make the HTTP request
+                fetch('http://localhost:8080/memories', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                })
+                    .then((response) => response.json())
+                    .then((result) => {
+                        // Handle the response
+                        console.log(result)
+                    })
+                    .catch((error) => {
+                        // Handle any errors
+                        console.error('Error:', error)
+                    })
+            })
+        </script>
         <script src="javascript/phaser-navmesh-plugin.js"></script>
         <script type="module" src="javascript/game.js"></script>
         <script type="module" src="javascript/smallville.js"></script>
