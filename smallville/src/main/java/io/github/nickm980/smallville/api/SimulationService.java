@@ -126,6 +126,11 @@ public class SimulationService {
     }
 
     public void createObject(CreateObjectRequest request) {
+
+	if (world.getObjectByName(request.getName()) != null) {
+	    throw new SmallvilleException("Object already exists");
+	}
+
 	SimulatedLocation parent = world
 	    .getLocation(request.getParent())
 	    .orElseThrow(() -> new LocationNotFoundException(request.getParent()));
