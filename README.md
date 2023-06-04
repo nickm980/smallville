@@ -23,16 +23,19 @@ Download the compiled jar from releases
 
 ### Start writing code
 Create new agents (as in the example project) [example project](/example/javascript/smallville.js)
+
+Supported Client Languages: Java, JavaScript (or use the http endpoints)
+
 ```javascript
 const sim = new Smallville({
         host: "http://localhost:8080", // host of the server
         stateHandler: function(state) {
-                //in here you would update the location of the agent using your own pathfinding algorithm
-                const agents = state.agents
-                const objects = state.locations
-                const conversations = state.conversations
+            //in here you would update the location of the agent using your own pathfinding algorithm
+            const agents = state.agents
+            const objects = state.locations
+            const conversations = state.conversations
                 
-                console.log('[State Change]: The simulation has been updated')
+            console.log('[State Change]: The simulation has been updated')
     },
 });
 
