@@ -21,6 +21,8 @@ public class UpdateFuturePlans extends AgentUpdate {
 	if (observation != null && observation.isReactable()) {
 	    shouldUpdatePlans = converter.shouldUpdatePlans(agent, observation.getDescription());
 	    if (shouldUpdatePlans) {
+		agent.getMemoryStream().prunePlans(PlanType.LONG_TERM);
+		agent.getMemoryStream().prunePlans(PlanType.SHORT_TERM);
 		LOG.info("[Plans] Changing plans...");
 	    } else {
 		LOG.info("[Plans] Not changing plans...");
@@ -30,7 +32,7 @@ public class UpdateFuturePlans extends AgentUpdate {
 	// initialize the agent plans if none are found
 	if (shouldUpdatePlans) {
 	    List<Plan> plans = converter.getPlans(agent);
-	    agent.getMemoryStream().addAll(plans);
+	    agent.getMemoryStream().setPlans(plans, PlanType.LONG_TERM);
 
 	    for (Plan plan : plans) {
 		LOG.info("[Plans] " + plan.getType() + " " + plan.asNaturalLanguage());
@@ -47,7 +49,7 @@ public class UpdateFuturePlans extends AgentUpdate {
 		LOG.info("[Plans] " + plan.getType() + " " + plan.asNaturalLanguage());
 	    }
 
-	    agent.getMemoryStream().setShortTermPlans(plans);
+	    agent.getMemoryStream().setPlans(plans, PlanType.SHORT_TERM);
 
 	    LOG.info("[Plans] Updated short term plans");
 	}

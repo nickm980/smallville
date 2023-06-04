@@ -123,11 +123,12 @@ public class ChatService implements IChatService {
     public List<Plan> getPlans(Agent agent) {
 	Prompt prompt = new PromptBuilder()
 	    .withLocations(world.getLocations())
+	    .withObservation(agent.getMemoryStream().getLastObservation().getDescription())
 	    .withAgent(agent)
 	    .setPrompt(SmallvilleConfig.getPrompts().getPlans().getLongTerm())
 	    .build();
 
-	String response = chat.sendChat(prompt, .2);
+	String response = chat.sendChat(prompt, .4);
 	return parsePlans(response);
     }
 
@@ -135,6 +136,7 @@ public class ChatService implements IChatService {
     public List<Plan> getShortTermPlans(Agent agent) {
 	Prompt prompt = new PromptBuilder()
 	    .withLocations(world.getLocations())
+	    .withObservation(agent.getMemoryStream().getLastObservation().getDescription())
 	    .withAgent(agent)
 	    .setPrompt(SmallvilleConfig.getPrompts().getPlans().getShortTerm())
 	    .build();
@@ -254,6 +256,10 @@ public class ChatService implements IChatService {
 
     @Override
     public ObjectChangeResponse[] getObjectsChangedBy(Agent agent) {
+	if (agent.getCurrentActivity().equals(agent.getLastActivity())) {
+	    return new ObjectChangeResponse[0];
+	}
+
 	Prompt tensesPrompt = new PromptBuilder()
 	    .withAgent(agent)
 	    .setPrompt(SmallvilleConfig.getPrompts().getMisc().getCombineSentences())
@@ -275,6 +281,11 @@ public class ChatService implements IChatService {
 
 	for (int i = 0; i < lines.length; i++) {
 	    String line = lines[i];
+
+	    if (line.isBlank()) {
+		continue;
+	    }
+
 	    String[] parts = line.split(":");
 	    String item = parts[0].trim();
 	    String value = parts[1].trim();
