@@ -1,6 +1,9 @@
 package io.github.nickm980.smallville.llm;
 
 import java.io.IOException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -25,67 +28,38 @@ public class ChatGPT implements LLM {
 
     @Override
     public String sendChat(Prompt prompt, double temperature) {
-	long start = System.currentTimeMillis();
+	int maxRetries = SmallvilleConfig.getConfig().getMaxRetries();
+	int retryCount = 0;
+	String result = null;
 
-	OkHttpClient client = new OkHttpClient.Builder()
-	    .connectTimeout(10, TimeUnit.SECONDS)
-	    .writeTimeout(3, TimeUnit.MINUTES)
-	    .readTimeout(3, TimeUnit.MINUTES)
-	    .build();
+	ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+	Semaphore semaphore = new Semaphore(0);
 
-	String json = """
-		{
-			"model": "%model",
-			"messages": [
-				%messages
-			], "temperature": %temperature, "max_tokens": 2000
+	while (retryCount < maxRetries) {
+	    try {
+		result = attemptRequest(prompt, temperature);
+		break;
+	    } catch (IOException | SmallvilleException e) {
+		retryCount++;
+		LOG.error("Request failed. Retrying... (Attempt " + retryCount + ")");
+
+		executor.schedule(() -> semaphore.release(), 2, TimeUnit.SECONDS);
+
+		try {
+		    semaphore.acquire();
+		} catch (InterruptedException ex) {
+		    Thread.currentThread().interrupt();
 		}
-		""";
-
-	try {
-	    json = json.replaceAll("\t", "");
-	    json = json.strip();
-	    json = json.replace("%messages", MAPPER.writeValueAsString(prompt.build()));
-	    json = json.replace("%temperature", String.valueOf(temperature));
-	    json = json.replace("%model", SmallvilleConfig.getConfig().getModel());
-	} catch (JsonProcessingException e1) {
-	    e1.printStackTrace();
-	}
-
-	LOG.debug("[Chat Request]" + prompt.getContent().replaceAll("\n", " "));
-
-	RequestBody body = RequestBody.create(json.getBytes());
-	Request request = new Request.Builder()
-	    .url(SmallvilleConfig.getConfig().getApiPath())
-	    .addHeader("Content-Type", "application/json")
-	    .addHeader("Authorization", "Bearer " + Settings.getApiKey())
-	    .post(body)
-	    .build();
-
-	String result = "";
-
-	try {
-	    Response response = client.newCall(request).execute();
-	    String responseBody = response.body().string();
-
-	    ObjectMapper objectMapper = new ObjectMapper();
-	    JsonNode node = objectMapper.readTree(responseBody);
-
-	    if (node.get("choices") == null) {
-		LOG.error("Invalid api token or rate limit reached");
-		LOG.debug(node.toPrettyString());
-		throw new SmallvilleException("Invalid api token or rate limit reached.");
 	    }
-
-	    result = node.get("choices").get(0).get("message").get("content").asText();
-
-	    LOG.debug("[Chat Response]" + result);
-	} catch (IOException e) {
-	    e.printStackTrace();
 	}
 
-	long end = System.currentTimeMillis();
-	LOG.debug("[Chat] Response took " + String.valueOf(start - end) + "ms");
+	executor.shutdownNow();
+
+	if (result == null) {
+	    LOG.error("Failed to get a successful response after " + maxRetries + " attempts.");
+	    throw new SmallvilleException("Failed to get a successful response.");
+	}
+
 	return result;
     }
 
@@ -114,6 +88,63 @@ public class ChatGPT implements LLM {
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
+
+	return result;
+    }
+
+    private String attemptRequest(Prompt prompt, double temperature) throws IOException, SmallvilleException {
+	long start = System.currentTimeMillis();
+
+	OkHttpClient client = new OkHttpClient.Builder()
+	    .connectTimeout(10, TimeUnit.SECONDS)
+	    .writeTimeout(3, TimeUnit.MINUTES)
+	    .readTimeout(3, TimeUnit.MINUTES)
+	    .build();
+
+	String json = """
+		{
+			"model": "%model",
+			"messages": [
+				%messages
+			], "temperature": %temperature, "max_tokens": 2000
+		}
+		""";
+
+	json = json.replaceAll("\t", "");
+	json = json.strip();
+	json = json.replace("%messages", MAPPER.writeValueAsString(prompt.build()));
+	json = json.replace("%temperature", String.valueOf(temperature));
+	json = json.replace("%model", SmallvilleConfig.getConfig().getModel());
+
+	LOG.debug("[Chat Request]" + prompt.getContent());
+
+	RequestBody body = RequestBody.create(json.getBytes());
+	Request request = new Request.Builder()
+	    .url(SmallvilleConfig.getConfig().getApiPath())
+	    .addHeader("Content-Type", "application/json")
+	    .addHeader("Authorization", "Bearer " + Settings.getApiKey())
+	    .post(body)
+	    .build();
+
+	String result = "";
+
+	Response response = client.newCall(request).execute();
+	String responseBody = response.body().string();
+
+	ObjectMapper objectMapper = new ObjectMapper();
+	JsonNode node = objectMapper.readTree(responseBody);
+
+	if (node.get("choices") == null) {
+	    LOG.debug(node.toPrettyString());
+	    throw new SmallvilleException("Invalid api token or rate limit reached.");
+	}
+
+	result = node.get("choices").get(0).get("message").get("content").asText();
+
+	LOG.debug("[Chat Response]" + result);
+
+	long end = System.currentTimeMillis();
+	LOG.debug("[Chat] Response took " + String.valueOf(start - end) + "ms");
 
 	return result;
     }

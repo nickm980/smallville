@@ -9,6 +9,7 @@ public class GeneralConfig {
     private String model;
     private int reflectionCutoff;
     private boolean simulationFile;
+    private int maxRetries;
 
     public boolean isSimulationFile() {
 	return simulationFile;
@@ -64,6 +65,14 @@ public class GeneralConfig {
 
     public void setApiPath(String path) {
 	this.apiPath = path;
+    }
+
+    public int getMaxRetries() {
+	return maxRetries;
+    }
+
+    public void setMaxRetries(int maxRetries) {
+	this.maxRetries = maxRetries;
     }
 
 }
