@@ -1,8 +1,11 @@
 package io.github.nickm980.smallville.entities.memory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
@@ -17,6 +20,16 @@ public class MemoryStream {
 	this.memories = new ArrayList<Memory>();
     }
 
+    public void prunePlans(PlanType type) {
+	memories.removeIf(memory -> memory instanceof Plan && ((Plan) memory).getType() == type);
+    }
+
+    public List<Memory> getRelevantMemories(String query) {
+	int defaultMinImportance = 2;
+
+	return getRelevantMemories(query, defaultMinImportance);
+    }
+
     /**
      * Prunes the weaker, less poingnant memories and returns the strongest ones
      * based on observations and updated plans.
@@ -27,8 +40,37 @@ public class MemoryStream {
      * 
      * @return
      */
-    public List<Memory> getRelevantMemories(String query) {
-	return memories.stream().sorted().limit(3).toList();
+    public List<Memory> getRelevantMemories(String query, int minImportance) {
+	// score, memory index
+	Map<Double, Integer> scores = new HashMap<Double, Integer>();
+
+	for (Memory memory : memories) {
+	    if (memory.getImportance() >= minImportance) {
+		double score = memory.getScore(query);
+		scores.put(score, memories.indexOf(memory));
+	    }
+	}
+
+	List<Double> keys = new ArrayList<Double>(scores.keySet());
+	Collections.sort(keys);
+
+	List<Integer> indices = scores.values().stream().toList();
+
+	if (scores.size() > 3) {
+	    double first = keys.get(keys.size() -1);
+	    double second = keys.get(keys.size() -2);
+	    double third = keys.get(keys.size() -3);
+	    
+	    indices = List.of(scores.get(first), scores.get(second), scores.get(third));
+	}
+
+	List<Memory> memCopies = new ArrayList<Memory>();
+
+	for (int index : indices) {
+	    memCopies.add(memories.get(index));
+	}
+
+	return memCopies;
     }
 
     public List<Memory> getUnweightedMemories() {
@@ -82,8 +124,8 @@ public class MemoryStream {
 	this.memories.add(memory);
     }
 
-    public void setShortTermPlans(List<Plan> plans) {
-	List<Plan> removed = getPlans(PlanType.SHORT_TERM);
+    public void setPlans(List<Plan> plans, PlanType type) {
+	List<Plan> removed = getPlans(type);
 	memories.removeAll(removed);
 	memories.addAll(plans);
     }
