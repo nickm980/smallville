@@ -4,6 +4,8 @@
 Generative agents are virtual characters that can store memories and dynamically react to their environment. Using LLM models such as ChatGPT or StableLM, agents are able to observe their surroundings, store memories, and react to state changes in the world
 
 Generative Agents save time programming interactions by hand and make NPC's more realistic / dynamic
+![walking](https://github.com/nickm980/smallville/assets/81270095/bc0bc20c-3b80-4c1d-906d-8ceabe7fa6a0)
+![image](https://github.com/nickm980/smallville/assets/81270095/ffe3c8d4-4fab-42e5-aaac-a1d78f2c7c31)
 
 ## Getting Started
 Visit the package on npm https://www.npmjs.com/package/smallville
