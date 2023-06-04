@@ -173,6 +173,7 @@ public class SmallvilleServer {
 	    SetTimestepRequest request = ctx.bodyAsClass(SetTimestepRequest.class);
 	    int minutes = Integer.valueOf(request.getNumOfMinutes());
 	    SimulationTime.setStep(Duration.ofMinutes(minutes));
+		System.out.println("HEYo");
 	    ctx.json(Map.of("success", true));
 	});
 

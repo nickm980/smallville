@@ -19,8 +19,8 @@ import io.github.nickm980.smallville.entities.memory.Plan;
  * language
  *
  */
-public class MiniPrompts {
-    private static final Logger LOG = LoggerFactory.getLogger(MiniPrompts.class);
+public class TemplateMapper {
+    private static final Logger LOG = LoggerFactory.getLogger(TemplateMapper.class);
 
     public String buildAgentSummary(Agent agent) {
 	String prompt = SmallvilleConfig.getPrompts().getAgent().getSummary();
