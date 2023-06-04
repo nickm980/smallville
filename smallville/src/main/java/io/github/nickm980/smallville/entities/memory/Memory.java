@@ -24,6 +24,11 @@ public abstract class Memory implements Comparable<Memory> {
 	int a2 = 1;
 	int a3 = 1;
 	double score = a1 * getRecency() + a2 * getImportance() + a3 * getRelevancy(observation);
+
+	if (Double.isNaN(score)) {
+	    score = getRelevancy(observation);
+	}
+
 	return score;
     }
 
