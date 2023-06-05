@@ -128,7 +128,7 @@ class UIScene extends Phaser.Scene {
                             <div class="modal-body">
                                 Timestep (mins):
                                 <input type="number" id="timestep" name="timestep"
-                                min="1" value=1>
+                                min="1" value="1">
                                 <button 
                                     id="timestep-submit"
                                    
@@ -142,10 +142,11 @@ class UIScene extends Phaser.Scene {
                 .setOrigin(0)
                 .setPosition(0, 0)
 
-            let timestepToSend = document.getElementById('timestep').value
+            
             document
                 .getElementById('timestep-submit')
                 .addEventListener('click', (e) => {
+                    let timestepToSend = parseInt(document.getElementById('timestep').value)
                     fetch('http://localhost:8080/timestep', {
                         method: 'POST',
                         mode: 'cors', // no-cors, *cors, same-origin
@@ -161,7 +162,6 @@ class UIScene extends Phaser.Scene {
 
 
                 moreButton.node.addEventListener('click', e => {
-                    console.log('hey')
                     settings.classList.remove('display-none')
                 })
 

@@ -60,6 +60,7 @@ button {
     align-items: center;
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(3px);
 }
 
 .modal {
