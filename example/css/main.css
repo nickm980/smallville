@@ -13,6 +13,7 @@ body {
 
 * {
     font-family: sans-serif;
+    box-sizing: border-box;
 }
 
 .count {
@@ -33,8 +34,9 @@ canvas {
     max-width: 800px;
 }
 
-p, b  {
-    line-height: .25em;
+p,
+b {
+    line-height: 0.25em;
     font-family: sans-serif;
 }
 
@@ -50,4 +52,33 @@ button {
     top: 0;
     color: white;
     width: 200px;
+}
+
+.modal-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(3px);
+}
+
+.modal {
+    box-sizing: border-box;
+    background-color: #eeeeee;
+    border-radius: 1em;
+    padding: 1em;
+    width: 95%;
+    height: 95%;
+    border-radius: 10px;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.display-none {
+    display: none;
 }

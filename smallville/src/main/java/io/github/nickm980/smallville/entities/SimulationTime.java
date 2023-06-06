@@ -14,9 +14,7 @@ public final class SimulationTime {
     private static volatile LocalDateTime time = LocalDateTime.now();
     private static volatile Duration step = Duration.ofMinutes(1);
 
-    public static synchronized LocalDateTime now() {
-	return time;
-    }
+    public static synchronized LocalDateTime now() { return time; }
 
     public static synchronized void setSimulationTime(LocalDateTime simTime) {
 	time = simTime;

@@ -39,11 +39,7 @@
   cursor: url(../assets/cursor/cursor.png), auto;
 }
 
-#phaser-container.hover {
-  cursor: url(../assets/cursor/cursor-click.png), auto !important;
-}
-
-.nes-btn:hover:not(disabled) {
+button:hover:not(disabled) {
   cursor: url(../assets/cursor/cursor-click.png), auto;
 }
 
