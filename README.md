@@ -98,6 +98,10 @@ The server will start on the default port 8080 unless specified otherwise. The d
 The example is under the example directory. This example isn't finished yet but is a basic example of how to get started.
 [example javascript project](/example)
 
+## Dashboard
+The dashboard can be accessed from http://localhost:8080/dashboard by default. The dashboard contains all the prompts sent to the LLM every update, information about agents, locations, and the current time, as well as memory streams of the agents. Through the dashboard you can also change the states of objects and interview agents.
+![image](https://github.com/nickm980/smallville/assets/81270095/18912b25-059e-4ace-b390-f29de57b9615)
+
 ## Configuration
 ### Prompt Templates
 | Template Variable | Description |
