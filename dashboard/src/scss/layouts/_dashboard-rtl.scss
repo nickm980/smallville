@@ -1,0 +1,90 @@
+// _dashboard-rtl.scss
+// 
+// Template's rtl dashboard layout styles.
+// 
+
+
+// Dashboard Layout
+.layout-dashboard-rtl {
+	background: transparent;
+	text-align: right;
+	direction: rtl;
+	position: relative;
+	overflow-x: hidden;
+				
+	@media( min-width: $lg ){
+		overflow: auto;
+	}
+
+	.ant-page-header-heading-title {
+		float: right;
+	}
+
+	// Primary Sidebar
+	.ant-layout-sider.sider-primary {
+		right: 0;
+		left: auto;
+		
+		@media( min-width: $lg ){
+			margin: 20px 20px 0 0;
+			height: calc(100vh - 20px);
+		}
+		.ant-menu-item,
+		.ant-menu-submenu {
+			.icon {
+				margin-left: 11px;
+				margin-right: 0;
+			}
+		}
+
+		&.ant-layout-sider-white {
+			margin: 20px 20px 64px 0px;
+		}
+	}
+	// / Primary Sidebar
+	.header-notifications-list {
+		.ant-list-item-meta-description {
+			svg {
+				margin-left: 4px;
+				margin-right: 0;
+			}
+		}
+	}
+	// / Header Notification Dropdown
+	
+	.header-control {
+		.btn-sign-in {
+			svg {
+				margin-left: 4px;
+				margin-right: 0;
+			}
+		}
+	}
+	// / Page Header
+
+	// Content/Main Layout
+	.ant-layout {
+		@media( min-width: $lg ){
+			margin-right: 270px;
+			margin-left: 0;
+		}
+	}
+
+	// Page Footer
+	.ant-layout-footer {
+		@media( min-width: $md ){
+			margin: 0px 20px 20px 0;
+		}
+		.ant-menu-horizontal {
+			@media( min-width: $md ){
+				text-align: left;
+			}
+		}
+		.copyright {
+			@media( min-width: $md ){
+				text-align: right;
+			}
+		}
+	}
+	// / Page Footer
+}

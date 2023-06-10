@@ -1,0 +1,16 @@
+// _avatar.scss
+// 
+// Template's avatar styles.
+// 
+
+.avatar-chips .ant-avatar-image {
+	border: 1px solid #ffffff;
+	&:hover {
+		z-index: 1;
+	}
+} 
+.avatar-chips .ant-space-item {
+	&:hover {
+		z-index: 1;
+	}
+}

@@ -1,0 +1,317 @@
+// _default.scss
+// 
+// Template's default layout styles.
+// 
+
+
+body {
+	padding: 0 0 30px 0;
+	background-color: $color-gray-2;
+}
+
+// Default Layout
+.layout-default {
+	background: transparent;
+	text-align: left;
+	position: relative;
+	overflow-x: hidden;
+				
+	@media( min-width: $lg ){
+		overflow: auto;
+	}
+	.ant-layout-header {
+		display: flex;
+		position: relative;
+		background-color: $color-gray-1;
+		color: $color-gray-12;
+		box-shadow: $shadow-1;
+		flex-direction: column;
+		padding: 20px;
+		height: auto;
+		line-height: 1.5;
+				
+		@media( min-width: $lg ){
+			flex-direction: row;
+			padding: 0 50px;
+			height: 64px;
+			line-height: 64px;
+		}
+
+		.header-brand {
+			margin-right: auto;
+			margin-left: auto;
+			display: flex;
+			justify-content: space-between;
+			width: 100%;
+			align-items: center;
+			margin-bottom: 20px;
+				
+			@media( min-width: $lg ){
+				margin-right: auto;
+				margin-left: 0;
+				display: block;
+				width: auto;
+				margin-bottom: 0px;
+			}
+
+			.btn-menu-trigger {
+				display: block;
+				
+				@media( min-width: $lg ){
+					display: none;
+				}
+			}
+
+			h6 {
+				white-space: nowrap;
+				font-size: 16px;
+				color: $color-gray-12;
+				margin: 0;
+			}
+				
+			@media( min-width: $lg ){
+				h6 {
+					font-size: 14px;
+				}
+			}
+		}
+		.header-menu .ant-menu-submenu a svg {
+			margin-right: 5px;
+		}
+		.header-nav {
+			margin-right: auto;
+			margin-left: auto;
+			width: 100%;
+				
+			@media( min-width: $lg ){
+				margin-right: auto;
+				margin-left: auto;
+			}
+
+			a {
+				color: $color-gray-12;
+				padding: 6px 12px;
+				font-weight: $fw-regular;
+
+				&.router-link-active {
+					color: $color-gray-12;
+					font-weight: $fw-semibold;
+					svg path {
+						fill: $color-gray-12;
+					}
+				}
+
+				svg,
+				span {
+    				vertical-align: middle;
+				}
+				svg {
+					margin-right: 5px;
+				}
+			}
+
+			.menu-large {
+				display: none;
+					
+				@media( min-width: $lg ){
+					display: block;
+				}
+			}
+			
+			.ant-menu-horizontal {
+				border: none;
+				margin-top: 0px;
+				text-align: center;
+				background-color: transparent;
+					
+				@media( min-width: $md ){
+					margin-top: 0;
+				}
+				> .ant-menu-item {
+					padding: 0;
+				}
+
+				.ant-menu-submenu-title > span { // Ellipsis element
+					vertical-align: 6px;
+				}
+				> .ant-menu-item,
+				> .ant-menu-item:hover,
+				> .ant-menu-item-active,
+				> .ant-menu-item-selected,
+				> .ant-menu-submenu,
+				> .ant-menu-submenu:hover,
+				> .ant-menu-submenu-active,
+				> .ant-menu-submenu-selected {
+					color: $color-gray-7;
+					font-weight: $fw-semibold;
+					border: none;
+				}
+				> .ant-menu-item:hover,
+				> .ant-menu-item-active,
+				> .ant-menu-item-selected,
+				> .ant-menu-submenu:hover,
+				> .ant-menu-submenu-active,
+				> .ant-menu-submenu-selected {
+					color: $color-gray-10;
+				}
+
+				.ant-menu-submenu-title {
+					font-size: 16px;
+					font-weight: bold;
+				}
+			}
+
+			.menu-small {
+				display: block;
+					
+				@media( min-width: $lg ){
+					display: none;
+				}
+
+				.ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left {
+					border: none;
+				}
+				.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+					display: none;
+				}
+				.ant-collapse-content {
+					border: none;
+				}
+				.ant-collapse > .ant-collapse-item {
+					border: 0;
+					border-radius: 4px;
+				}
+				.ant-menu {
+					border: 1px solid $color-gray-12;
+				}
+				.ant-collapse-item:last-child > .ant-collapse-content {
+					border-radius: 4px;
+					border-color: $color-gray-12;
+					border-top: 0;
+				}
+				.ant-collapse {
+					background-color: transparent;
+					border: 0;
+				}
+				.ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left {
+					border: 1px solid $color-gray-5;
+					border-radius: 4px;
+					padding: 16px 0px;
+					margin-bottom: 20px;
+				}
+				.ant-collapse-content-box {
+					padding: 0;
+				}
+				.ant-menu-vertical .ant-menu-item:not(:last-child), .ant-menu-vertical-left .ant-menu-item:not(:last-child), .ant-menu-vertical-right .ant-menu-item:not(:last-child), .ant-menu-inline .ant-menu-item:not(:last-child) {
+					height: auto;
+					margin: 0;
+				}
+				.ant-menu-vertical .ant-menu-item a {
+					padding-top: 0;
+					padding-bottom: 0;
+				}
+				.ant-collapse-content > .ant-collapse-content-box {
+					padding: 0;
+				}
+				.ant-menu-vertical > .ant-menu-item, .ant-menu-vertical-left > .ant-menu-item, .ant-menu-vertical-right > .ant-menu-item, .ant-menu-inline > .ant-menu-item, .ant-menu-vertical > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-vertical-left > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-vertical-right > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title {
+					height: auto;
+					margin: 0;
+				}
+			}
+
+		}
+		.header-btn {
+				
+			@media( min-width: $lg ){
+				margin-left: auto;
+			}
+
+			.ant-btn-round.ant-btn-sm {
+				font-size: 12px;
+				width: 100%;
+				
+				@media( min-width: $lg ){
+					width: auto;
+				}
+			}
+		}
+	}
+	.ant-layout-content {
+		padding-top: 40px;
+	}
+	.ant-layout-footer {
+		padding: 24px 0px;
+		color: rgba(0, 0, 0, 0.65);
+		font-size: 14px;
+		background: transparent;
+		text-align: center;
+			
+		@media( min-width: $md ) {
+			padding: 24px 50px;
+		}
+			
+		.ant-menu-horizontal {
+			border: none;
+			line-height: 1.5;
+			margin: 0 0 30px;
+			background-color: transparent;
+			font-size: 16px;
+				
+			@media( min-width: $md ){
+			}
+			> .ant-menu-item,
+			> .ant-menu-item:hover,
+			> .ant-menu-item-active,
+			> .ant-menu-item-selected,
+			> .ant-menu-submenu,
+			> .ant-menu-submenu:hover,
+			> .ant-menu-submenu-active,
+			> .ant-menu-submenu-selected {
+				color: $color-gray-7;
+				border: none;
+			}
+			> .ant-menu-item:hover,
+			> .ant-menu-item-active,
+			> .ant-menu-item-selected,
+			> .ant-menu-submenu:hover,
+			> .ant-menu-submenu-active,
+			> .ant-menu-submenu-selected {
+				color: $color-gray-10;
+			}
+
+			.ant-menu-submenu-title {
+				font-size: 16px;
+				font-weight: bold;
+			}
+		}
+
+		.menu-nav-social {
+			a svg {
+				fill: $color-muted;
+				vertical-align: middle;
+			}
+			a:hover svg {
+				fill: $color-primary;
+			}
+		}
+
+		.copyright {
+			margin: 0;
+			font-size: 16px;
+			color: $color-muted;
+			
+			svg {
+				width: 16px;
+				height: 16px;
+				vertical-align: -2px;
+				path {
+					fill: $color-danger;
+				}
+			}
+			a {
+				color: inherit;
+			}
+		}
+	}
+}
+// Default Layout

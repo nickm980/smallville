@@ -1,0 +1,47 @@
+// _timeline.scss
+// 
+// Template's timeline styles.
+// 
+
+
+// Timeline
+.ant-timeline-item-content {
+    margin: 0 0 0 33px;
+	font-size: 14px;
+    top: -4px;
+	font-weight: $fw-semibold;
+	color: $color-gray-12;
+	p {
+		font-size: 12px;
+		font-weight: $fw-bold;
+		color: $color-gray-7;
+		margin: 0;
+	}
+}
+.ant-timeline-item-pending .ant-timeline-item-content {
+	font-size: 14px;
+	font-weight: $fw-semibold;
+	color: $color-gray-12;
+}
+.ant-timeline-item-pending .ant-timeline-item-head {
+	border-color: $color-gray-4;
+}
+.ant-timeline-item-head {
+    width: 15px;
+    height: 15px;
+    border-width: 3px;
+}
+.ant-timeline-item-tail {
+    left: 7px;
+}
+
+.layout-dashboard-rtl {
+	.ant-timeline-item-tail {
+		right: 6.5px;
+		left: auto;
+	}
+	.ant-timeline-item-content {
+		margin: 0 33px 0 0;
+	}
+}
+// / Timeline

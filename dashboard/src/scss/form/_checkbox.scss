@@ -1,0 +1,12 @@
+// _checkbox.scss
+// 
+// Template's checkbox styles.
+// 
+
+.ant-checkbox-inner {
+	border-radius: 4px;
+
+	&::after {
+		top: 45%;
+	}
+}
