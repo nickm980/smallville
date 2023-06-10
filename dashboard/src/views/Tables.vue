@@ -137,7 +137,7 @@ export default {
       loading: true,
       answer: "No data",
       visible: false,
-      memoryStreamVisible: true,
+      memoryStreamVisible: false,
       currentAgent: "Choose an agent",
       agentData: [],
       agentColumns: agentColumns,
