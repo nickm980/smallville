@@ -118,13 +118,9 @@ const stats = [
 
 export default {
   components: {
-    CardBarChart,
     CardLineChart,
     WidgetCounter,
     CardProjectTable,
-    CardOrderHistory,
-    CardInfo,
-    CardInfo2,
   },
   methods: {
     async updateState(event) {
