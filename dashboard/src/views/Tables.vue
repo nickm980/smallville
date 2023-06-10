@@ -35,6 +35,7 @@
         </a-col>
         <a-col span="20">
           <a-input
+            v-model="question"
             placeholder="What do you have planned for today?"
             @keyup.enter="submitInput"
           >
@@ -120,7 +121,7 @@ export default {
     async submitInput() {
       this.toggleModal();
       this.answer = "Loading...";
-      const answer = await ask(this.currentAgent, "How are you");
+      const answer = await ask(this.currentAgent, this.question);
       if (answer.error) {
         alert("Error pick an agent");
         return;
@@ -134,6 +135,7 @@ export default {
   },
   data() {
     return {
+      question: 'What do you have planned for today?',
       loading: true,
       answer: "No data",
       visible: false,
