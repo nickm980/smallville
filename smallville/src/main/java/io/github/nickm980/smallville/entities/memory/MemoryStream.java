@@ -25,7 +25,7 @@ public class MemoryStream {
     }
 
     public List<Memory> getRelevantMemories(String query) {
-	int defaultMinImportance = 2;
+	int defaultMinImportance = 0;
 
 	return getRelevantMemories(query, defaultMinImportance);
     }
@@ -57,10 +57,10 @@ public class MemoryStream {
 	List<Integer> indices = scores.values().stream().toList();
 
 	if (scores.size() > 3) {
-	    double first = keys.get(keys.size() -1);
-	    double second = keys.get(keys.size() -2);
-	    double third = keys.get(keys.size() -3);
-	    
+	    double first = keys.get(keys.size() - 1);
+	    double second = keys.get(keys.size() - 2);
+	    double third = keys.get(keys.size() - 3);
+
 	    indices = List.of(scores.get(first), scores.get(second), scores.get(third));
 	}
 
@@ -90,7 +90,10 @@ public class MemoryStream {
     }
 
     public List<Memory> getRecentMemories() {
-	List<Memory> result = memories.stream().filter(memory -> memory.getRecency() > .4).toList();
+	List<Memory> result = memories
+	    .stream()
+	    .filter(memory -> memory.getRecency() > .4 && !(memory instanceof Plan))
+	    .toList();
 	return result;
     }
 

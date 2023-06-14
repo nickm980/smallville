@@ -8,6 +8,9 @@ public abstract class Memory implements Comparable<Memory> {
     private int weight;
 
     public Memory(String description) {
+	if (description == null) {
+	    description = "";
+	}
 	this.description = description.replace("-", "").trim();
 	this.weight = 0;
     }
