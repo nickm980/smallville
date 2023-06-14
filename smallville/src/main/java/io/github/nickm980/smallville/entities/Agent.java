@@ -10,8 +10,8 @@ public class Agent {
     private String name;
     private ActionHistory currentAction;
     private AgentLocation location;
-    private String goal = "";
-
+    private String traits;
+    
     public Agent(String name, List<Characteristic> characteristics, String currentAction, AgentLocation location) {
 	this.name = name;
 	this.memories = new MemoryStream();
@@ -60,11 +60,12 @@ public class Agent {
 	return memories;
     }
 
-    public void setGoal(String goal) {
-	this.goal = goal;
+    public void setTraits(String goal) {
+	this.traits = goal;
     }
 
-    public String getGoal() {
-	return goal;
+    public String getTraits() {
+	return traits;
     }
+    
 }
