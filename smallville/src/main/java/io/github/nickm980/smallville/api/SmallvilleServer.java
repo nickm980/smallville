@@ -2,13 +2,19 @@ package io.github.nickm980.smallville.api;
 
 import java.io.StringWriter;
 import java.time.Duration;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 
+import io.github.nickm980.smallville.LogCache;
 import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.api.dto.*;
 import io.github.nickm980.smallville.entities.SimulationTime;
@@ -35,7 +41,8 @@ public class SmallvilleServer {
     public void start(int port) {
 	Javalin app = Javalin.create(config -> {
 	    config.showJavalinBanner = false;
-
+	    config.staticFiles.enableWebjars();
+	    config.staticFiles.add("./");
 	    config.plugins.enableCors(cors -> {
 		cors.add(it -> {
 		    it.anyHost();
@@ -65,6 +72,15 @@ public class SmallvilleServer {
 
 	app.get("/", (ctx) -> {
 	    ctx.redirect("/dashboard");
+	});
+
+	app.get("/info", (ctx) -> {
+	    String time = SimulationTime.now().format(DateTimeFormatter.ofPattern("h:mm a"));
+
+	    ctx
+		.json(Map
+		    .of("time", time, "step", (int) SimulationTime.getStepDuration().getSeconds() / 60, "prompts",
+			    LogCache.getPrompts()));
 	});
 
 	app.get("/ping", (ctx) -> {
@@ -123,6 +139,21 @@ public class SmallvilleServer {
 		.get();
 
 	    service.createLocation(request);
+	    ctx.json(Map.of("success", true));
+	});
+
+	class LocationState {
+	    String state;
+	}
+
+	app.post("/locations/{name}", (ctx) -> {
+	    String location = ctx.pathParam("name");
+	    ObjectMapper objectMapper = new ObjectMapper();
+
+	    JsonNode rootNode = objectMapper.readTree(ctx.body());
+	    String state = rootNode.get("state").asText();
+
+	    service.setState(location, state);
 	    ctx.json(Map.of("success", true));
 	});
 

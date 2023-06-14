@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.github.nickm980.smallville.LogCache;
 import io.github.nickm980.smallville.Util;
 import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.api.dto.*;
@@ -36,7 +37,7 @@ public class SimulationService {
     public void createMemory(CreateMemoryRequest request) {
 	Agent agent = world.getAgent(request.getName()).orElseThrow();
 	Observation observation = new Observation(request.getDescription());
-	observation.setReactable(request.isReactable());
+	observation.setReactable(true);
 	agent.getMemoryStream().add(observation);
     }
 
@@ -70,8 +71,12 @@ public class SimulationService {
 	SimulatedObject obj = world.getObjectByName(names[1]);
 
 	AgentLocation location = new AgentLocation(loc, obj);
+	Agent agent = new Agent(request.getName(), characteristics, request.getActivity(), location);
 
-	world.create(new Agent(request.getName(), characteristics, request.getActivity(), location));
+	if (world.create(agent)) {
+	    String traits = prompts.createTraitsWithCharacteristics(agent);
+	    agent.setTraits(traits);
+	}
     }
 
     public void createLocation(CreateLocationRequest request) {
@@ -104,9 +109,12 @@ public class SimulationService {
     }
 
     public void updateState() throws SmallvilleException {
+	LogCache.refresh();
 	if (world.getAgents().size() == 0) {
 	    throw new SmallvilleException("Must create an agent before changing the state");
 	}
+
+	SimulationTime.update();
 
 	for (Agent agent : world.getAgents()) {
 	    prompts.updateAgent(agent, new Progress() {
@@ -142,7 +150,6 @@ public class SimulationService {
     }
 
     public void setGoal(String name, String goal) {
-	world.getAgent(name).orElseThrow().setGoal(goal);
     }
 
     public void setTimestep(SetTimestepRequest request) {
@@ -153,5 +160,9 @@ public class SimulationService {
 
     public int getProgress() {
 	return progress;
+    }
+
+    public void setState(String location, String state) {
+	world.setState(location, state);
     }
 }
