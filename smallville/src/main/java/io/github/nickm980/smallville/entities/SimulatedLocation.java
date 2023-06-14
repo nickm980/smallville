@@ -1,6 +1,7 @@
 package io.github.nickm980.smallville.entities;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +41,10 @@ public class SimulatedLocation implements Location {
 	    return name;
 	}
 
-	return name + " has " + String.join(";", children.stream().map(c -> c.getName()).toList());
+	List<Location> childList = Collections.unmodifiableList(children);
+	List<String> childNames = childList.stream().map(Location::getName).toList();
+	
+	return name + " has a " + String.join(" and a ", childNames);
     }
 
     public List<SimulatedObject> getObjects() {
