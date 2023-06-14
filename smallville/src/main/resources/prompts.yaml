@@ -1,26 +1,3 @@
-################################################################
-# agent.name	- Full name of the agent
-# agent.memories	- List of all the memories (has child of {{description}})
-# agent.activity	- What the agent is currently doing
-# agent.lastActivity	- What the agent was last doing
-# agent.summary - summary from prompts.yaml
-# agent.description	- Comma delimited characteristics
-# agent.locationName	- The current location
-# agent.locationChildren	- List of objects contained by the current location
-# agent.plans	- List of the two most recent plans
-# tenses	- For example, x is no longer {past tense} and is now {current activity}
-# memories.unranked	- Memories with a weight of 0 (except short term plans)
-# memories.characteristics	- Initial memories added to the agent
-# memories.relevant	- The three most relevant memories to an observation
-# date.full	- Full date (as formatted in config.yaml)
-# date.time	- Time of day (as formatted in config.yaml)
-# date.yesterday	- Yesterday's full date (as formatted in config.yaml)
-# world.description	- World description (includes available locations)
-# question	- Question asked to agent
-# tenses	- For example, x is no longer {past tense} and is now {current activity}
-# memories.characteristics	- Initial memories added to the agent
-#################################################################
-
 reactions:
   conversation: |
     {{agent.summary}}
@@ -32,110 +9,121 @@ reactions:
 
     A: Hello, how are you today?
     B: I am good, and you?
+
   reaction: |
     {{world.description}} 
     {{agent.summary}}
      
-    Plans: {{agent.plans}}{{description}}; {{/agent.plans}}
+    Plans: {{#agent.plans}}{{description}}; {{/agent.plans}}
+    Relevant Memories: {{#memories.relevant}}{{description}}; {{/memories.relevant}}
+
+    List the reasons and say yes or no whether or not {{agent.name}} would change their plans given the observation.
+
+    For example:
+    Observation: a burning house
+    Reasoning: a burning house is highly important. {{agent.name}} would likely react to a burning house.
+    Answer: Yes, {{agent.name}} would react and try to put the fire out
+    Conversation: No, there is no one to talk to
+
+    Observation: a chirping bird
+    Reasoning: a chirping bird is a common occurence and doesn't interest {{agent.name}}
+    Answer: No, {{agent.name}} would not react
+    Conversation: No, there is no one to talk to and the event doesn't interest {{agent.name}} enough
+
+    Observation: {{agent.name}} sees John in a burning house
+    Reasoning: John being stuck in a burning house interests {{agent.name}}
+    Answer: Yes, {{agent.name}} would change their plans
+    Conversation: Yes because {{agent.name}} wants to make sure John is OK
 
     Observation: {{observation}}
-
-    Will {{agent.name}} react to the observation and change their plans?
-
-    <yes/no>
+    Reasoning: ...
+    Answer: ...
+    Conversation: ...
 
 world:
-  location: |
-    You were last in the {{agent.locationName}}
-
-    Current Activity: {{agent.activity}}
-    Available Objects: {{#agent.locationChildren}}{{name}}; {{/agent.locationChildren}} 
-
-    Which one will you interact with?
-
-    Do not include punctuation.
   objectStates: |
     {{world.description}}
 
     {{tenses}}
 
     What are the new states of the objects?
-    Respond in the following format:
 
-    <Object>: <State>
-    <Object2>: <State>
-    ...
+    For example:
+    House has cofee machine and a shower;
 
-    For example, if you are no longer cooking coffee and are now taking a shower
+    you are no longer cooking coffee and are now taking a shower
 
     Coffee Machine: Off
     Shower: On
+
+    What are the states of the objects?
 
 plans:
   shortTerm: |
     {{world.description}}
     {{agent.summary}}
-    
-    * Every plan should get its own line.
-    * Give a start time for every plan and format the time as "hh:mm a"
-    * Start each plan with a hypen
 
-    Plans: {{#agent.plans}}{{description}};{{/agent.plans}}
+    {{#agent.recentMemories}}{{description}}; {{/agent.recentMemories}}{{#memories.relevant}}{{description}}; {{/memories.relevant}}
 
+    Schedule: {{#agent.plans}}{{description}};{{/agent.plans}}
     Last Activity: {{agent.lastActivity}}
     
-    What will {{agent.name}} do every minute for the next 20 minutes? Start at the current time and end 20 minutes from now.
-    Respond with 20 plans.
-    The current time is {{date.time}}
+    Example: 
+    8:00 am at the Oak Hill College Dorm: Klaus Mueller's room: bed, sleep;
+    8:05 am at the Oak Hill College Dorm: Klaus Mueller's room: bed, sleep;
+    [...]
 
+    It is currently {{date.time}}
+    Here is what {{agent.name}} will do for the next hour in increments of 5 to 10 minutes:
 
   longTerm: |
     {{world.description}}
     {{agent.summary}}
-    Recent Memories: {{#agent.recentMemories}}{{description}}; {{/agent.recentMemories}}
+    {{#agent.recentMemories}}{{description}}; {{/agent.recentMemories}}{{#memories.relevant}}{{description}}; {{/memories.relevant}}
 
-    * Each plan should start on a new line
-    * Each plan should have a start time in the "hh:mm a" format and mention a location
+    * Only use the available locations
+    * Include the time {{agent.name}} wake's up and falls asleep
 
-    Today is {{date.full}}. 
-    - {{agent.name}} woke up at 8:00 AM
-    [...]
-    - {{agent.name}} went to bed at 10:00 PM
+    Example of a plan: 
+    8:00 am at the Oak Hill College Dorm: Klaus Mueller's room: bed, wake up and get ready for school;
+    9:00 am at the Oak Hill College Dorm: Klaus Mueller's room: desk, read and take notes for research paper;
+    5:00 pm at the Oak Hill College Dorm: Kitchen, get ready for dinner
+    10:00 am at the Oak Hill College Dorm: Klaus Mueller's room: bathroom, get ready for bed
+
+    Today is Wednesday February 13. Here is {{agent.name}}'s
+    plan today in broad strokes:
 
   current: |
     {{world.description}}
+    Schedule: {{#agent.plans}}{{description}}; {{/agent.plans}}
 
-    Plans: {{#agent.plans}}{{description}}; {{/agent.plans}}
-
-    Answer the questions:
-
-    - What will {{agent.name}} be doing now? It is currently {{date.time}}
-    - Pick an emoji that represents the current activity.
-    - Choose a location an object that the location has for the Current Activity.
-
-    Respond in this format:
-    {
-      "activity": "I am <fill in>",
-      "location": "<Location Name>",
-      "object": "<Object Name>",
-      "emoji": "<fill in>",
-    }
+    Example:
+    Activity: cooking dinner
+    Location: Green House: Kitchen
+    Emoji: 🍳
+    
+    It is currently {{date.time}}
+    Activity: ...
+    Emoji: ...
+    Location: ...
 
 agent:
-# statements are from the memory stream
+  # statements are from the memory stream
   reflectionResult: |
     Statements about {{agent.name}}
     {{statements}}
     What single high-level insight can you infer from
     the above statements? (example format: insight (because of 1, 5, 3))
-# The result of this prompt is sent to fetch memories from memory stream
+
+  # The result of this prompt is sent to fetch memories from memory stream
   reflectionQuestion: |
     {{#agent.recentMemories}}
     - {{description}}
     {{/agent.recentMemories}}
     Given only the information above, what are 3 most salient high-level questions we can answer about the subjects in the statements?
+
   characteristics: |
-    How would one describe {{agent.name}}'s core characteristics
+    How would one describe {{agent.name}}'s core characteristics in 3 words
     given the following statements?
     {{#memories.characteristics}}
      - {{description}}
@@ -145,14 +133,19 @@ agent:
     Pretend you are {{agent.name}}
 
     Name: {{agent.name}}
-    Description: {{agent.description}}
+    Innate Traits: {{agent.traits}}
+    Characteristics: {{agent.description}}
     Current Location: {{agent.locationName}}
 
     {{date.full}}
+
   askQuestion: |
+    {{agent.summary}}
     {{memories.relevant}}
 
-    Pretend you are {{agent.name}} and answer the following question in the first person: {{question}}
+    Pretend you are answering questions from a news reporter. It is currently {{date.full}}
+        
+    The news reporter has asked you: {{question}}
 
 misc:
   combineSentences: |
@@ -168,8 +161,24 @@ misc:
 
     Memories: {{#memories.unranked}}{{description}}; {{/memories.unranked}}
 
+  # Do not touch, debug is just used for testing purposes
   debug: |
-    Ping {{ping}}
-
-  relationship: |
-    What is {{agent.name}}'s relationship with the {{entity}}?
+    ping: {{ping}}
+    memories.characteristics: {{memories.characteristics}}
+    tenses: {{tenses}}
+    question: {{question}}
+    world.description: {{world.description}}
+    date.yesterday: {{date.yesterday}}
+    date.time: {{date.time}}
+    date.full: {{date.full}}
+    memories.relevant: {{#memories.relevant}}{{description}}; {{/memories.relevant}}
+    memories.characteristics: {{#memories.characteristics}}{{description}}; {{/memories.characteristics}}
+    memories.unranked: {{#memories.unranked}}{{description}}; {{/memories.unranked}}
+    agent.plans: {{#agent.plans}}{{description}}; {{/agent.plans}}
+    agent.locationChildren: {{agent.locationChildren}}
+    agent.locationName: {{agent.locationName}}
+    agent.description: {{agent.description}}
+    agent.lastActivity: {{agent.lastActivity}}
+    agent.memories: {{#agent.memories}}{{description}}; {{/agent.memories}}
+    agent.name: {{agent.name}}
+    agent.plansBlock: {{agent.plansBlock}}
