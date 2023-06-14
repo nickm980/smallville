@@ -9,8 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import io.github.nickm980.smallville.config.SmallvilleConfig;
 import io.github.nickm980.smallville.entities.Agent;
-import io.github.nickm980.smallville.entities.SimulationTime;
-import io.github.nickm980.smallville.entities.memory.Memory;
 import io.github.nickm980.smallville.entities.memory.MemoryStream;
 import io.github.nickm980.smallville.entities.memory.Plan;
 
@@ -29,14 +27,21 @@ public class TemplateMapper {
 	data.put("agent.name", agent.getFullName());
 	data.put("agent.locationName", agent.getLocation().getName());
 	data.put("agent.description", stream.getCharacteristics().stream().map(c -> c.getDescription()).toList());
-
+	data.put("agent.traits", agent.getTraits());
+	
 	return new TemplateEngine().format(prompt, data);
     }
 
     public Map<String, Object> fromAgent(Agent agent) {
-	MemoryStream stream = agent.getMemoryStream();
-
 	Map<String, Object> result = new HashMap<String, Object>();
+
+	MemoryStream stream = agent.getMemoryStream();
+	String desc = String.join("; ", stream.getCharacteristics().stream().map(c -> c.getDescription()).toList());
+
+	if (stream.getPlans() == null) {
+	    LOG.error("no plans found!!!");
+	}
+	
 	result.put("name", agent.getFullName());
 	result.put("memories", agent.getMemoryStream().getMemories().stream().limit(10).toList());
 	result.put("activity", agent.getCurrentActivity());
@@ -44,37 +49,52 @@ public class TemplateMapper {
 	result.put("summary", buildAgentSummary(agent));
 	result.put("locationName", agent.getLocation().getName());
 	result.put("locationChildren", agent.getLocation().getObjects());
-	result
-	    .put("description",
-		    String.join("; ", stream.getCharacteristics().stream().map(c -> c.getDescription()).toList()));
-
-	result.put("_internal", agent);
-
+	result.put("description", desc);
 	result.put("plans", stream.getPlans());
-	List<Memory> memories = agent.getMemoryStream().getRecentMemories();
-	result.put("recentMemories", memories);
+	result.put("recentMemories", agent.getMemoryStream().getRecentMemories());
 
-	if (!stream.getPlans().isEmpty()) {
-	    Plan firstSmallerPlan = new Plan("", LocalDateTime.MIN);
-	    Plan firstGreaterPlan = new Plan("", LocalDateTime.MAX);
+	/*
+	 * agent.plansBlock is a number list of the upcoming plans with a block [...]
+	 * between the current time and the next time.
+	 */
+	result.put("plansBlock", buildPlansBlock(agent.getFullName(), stream.getPlans()));
+	return result;
+    }
 
-	    for (Plan plan : stream.getPlans()) {
-		LocalDateTime planDateTime = plan.getTime();
+    public String buildPlansBlock(String name, List<Plan> plans) {
+	String result = "";
+	LocalDateTime time = LocalDateTime.now();
 
-		if (planDateTime.compareTo(SimulationTime.now()) <= 0) {
-		    if (firstSmallerPlan == null || planDateTime.isAfter(firstSmallerPlan.getTime())) {
-			firstSmallerPlan = plan;
-		    }
-		} else {
-		    if (firstGreaterPlan == null || planDateTime.isBefore(firstGreaterPlan.getTime())) {
-			firstGreaterPlan = plan;
-		    }
-		}
+	boolean includeBlock = false;
+	int index = 0;
+	boolean hasBeenUpdated = false;
+
+	for (Plan plan : plans) {
+	    result += "- " + plan.getDescription() + System.lineSeparator();
+	    boolean hasPlanPast = plan.getTime().compareTo(time) < 0;
+
+	    if (!hasBeenUpdated
+		    && ((hasPlanPast && includeBlock) || index == plans.size() && !result.contains("[...]"))) {
+		result += "[...]" + System.lineSeparator();
+		hasBeenUpdated = true;
 	    }
 
-	    result.put("firstSmallerPlan", firstSmallerPlan.getDescription());
-	    result.put("firstGreaterPlan", firstGreaterPlan.getDescription());
+	    if (hasPlanPast) {
+		includeBlock = true;
+	    }
+
+	    index++;
 	}
+
+	if (plans == null || plans.isEmpty()) {
+	    result = """
+	    	- $name will wake up at 8:00 AM
+	    	[...]
+	    	- $name will get ready for bed at 10:00 PM
+	    	""";
+	}
+
+	result.replace("$name", name);
 
 	return result;
     }

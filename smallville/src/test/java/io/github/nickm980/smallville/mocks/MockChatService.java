@@ -15,16 +15,6 @@ import io.github.nickm980.smallville.update.IChatService;
 public class MockChatService implements IChatService {
 
     @Override
-    public String getExactLocation(Agent agent) {
-	return agent.getLocation().getName();
-    }
-
-    @Override
-    public List<Memory> convertFuturePlansToMemories(List<Plan> plans) {
-	return null;
-    }
-
-    @Override
     public ObjectChangeResponse[] getObjectsChangedBy(Agent agent) {
 	return null;
     }
@@ -40,7 +30,7 @@ public class MockChatService implements IChatService {
     }
 
     @Override
-    public CurrentActivity getCurrentPlan(Agent agent) {
+    public CurrentActivity getCurrentActivity(Agent agent) {
 	// TODO Auto-generated method stub
 	return null;
     }
@@ -60,12 +50,7 @@ public class MockChatService implements IChatService {
     public String ask(Agent agent, String question) {
 	return null;
     }
-
-    @Override
-    public Reaction getReaction(Agent agent, String observation) {
-	return null;
-    }
-
+    
     @Override
     public int[] getWeights(Agent agent) {
 	return null;
