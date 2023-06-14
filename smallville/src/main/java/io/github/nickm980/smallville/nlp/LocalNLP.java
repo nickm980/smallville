@@ -12,6 +12,7 @@ import edu.stanford.nlp.pipeline.CoreDocument;
 import edu.stanford.nlp.pipeline.CoreSentence;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.semgraph.SemanticGraph;
+import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
 import edu.stanford.nlp.semgraph.SemanticGraphEdge;
 import edu.stanford.nlp.simple.Sentence;
 import edu.stanford.nlp.util.CoreMap;
@@ -39,6 +40,42 @@ public class LocalNLP implements NLPCoreUtils {
 
     public static void preLoad() {
 	getPipeline();
+    }
+
+    @Override
+    public String[] getEntities(String sentence) {
+	Annotation annotation = new Annotation(sentence);
+	List<String> result = new ArrayList<String>();
+	// Process the annotation
+	getPipeline().annotate(annotation);
+
+	// Get the sentences from the annotation
+	List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
+
+	// Iterate over the sentences
+	for (CoreMap coreMap : sentences) {
+	    // Get the semantic graph of the sentence
+	    SemanticGraph semanticGraph = coreMap
+		.get(SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation.class);
+
+	    // Iterate over the edges in the graph
+	    for (edu.stanford.nlp.semgraph.SemanticGraphEdge edge : semanticGraph.edgeIterable()) {
+                String relation = edge.getRelation().getShortName();
+
+                // Check if the edge represents an observation relation
+                if (relation.equals("nsubjpass")) {
+                    String observedEntity = edge.getGovernor().word();
+                    String observer = edge.getDependent().word();
+                    result.add(observedEntity);
+                    result.add(observer);
+                    
+                    System.out.println("Observed entity: " + observedEntity);
+                    System.out.println("Observer: " + observer);
+                }
+	    }
+	}
+	
+	return result.toArray(new String[0]);
     }
 
     @Override
