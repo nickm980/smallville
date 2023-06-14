@@ -5,15 +5,6 @@ public class MiscPrompts {
     private String rankMemories;
     private String combineSentences;
     private String debug;
-    private String relationship;
-
-    public String getRelationship() {
-	return relationship;
-    }
-
-    public void setRelationship(String relationship) {
-	this.relationship = relationship;
-    }
 
     public String getRankMemories() {
 	return rankMemories;
