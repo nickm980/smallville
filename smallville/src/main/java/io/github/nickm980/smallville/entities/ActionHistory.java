@@ -8,7 +8,7 @@ public class ActionHistory {
     
     public ActionHistory(String action) {
 	this.activity = action;
-	this.lastActivity = "";
+ 	this.lastActivity = action;
     }
 
     public String getActivity() {
