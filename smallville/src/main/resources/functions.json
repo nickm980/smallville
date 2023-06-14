@@ -1,0 +1,36 @@
+{
+    "functions": [
+        {
+            "name": "set_characteristics",
+            "description": "Set the core characteristics of an agent",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "characteristics": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": ["traits"]
+            }
+        },
+        {
+            "name": "set_current_activity",
+            "description": "Set the current activity, emoji, and location",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "characteristics": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": ["traits"]
+            }
+        }
+    ]
+}

@@ -1,6 +1,7 @@
 package io.github.nickm980.smallville.llm;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Semaphore;
@@ -9,10 +10,10 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.github.nickm980.smallville.LogCache;
 import io.github.nickm980.smallville.Settings;
 import io.github.nickm980.smallville.config.SmallvilleConfig;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
@@ -37,7 +38,11 @@ public class ChatGPT implements LLM {
 
 	while (retryCount < maxRetries) {
 	    try {
-		result = attemptRequest(prompt, temperature);
+		if (prompt.isFunctional()) {
+
+		} else {
+		    result = attemptRequest(prompt, temperature);
+		}
 		break;
 	    } catch (IOException | SmallvilleException e) {
 		retryCount++;
@@ -104,18 +109,27 @@ public class ChatGPT implements LLM {
 	String json = """
 		{
 			"model": "%model",
-			"messages": [
-				%messages
-			], "temperature": %temperature, "max_tokens": 2000
+			"messages": [%messages],
+			"temperature": %temperature, "max_tokens": 2000
 		}
 		""";
 
+	if (prompt.isFunctional()) {
+	    json += """
+	    	"functions": %functions,
+	    	"function_call": {"name": "%function_name"}
+	    	""";
+	}
+	
 	json = json.replaceAll("\t", "");
 	json = json.strip();
+	json = json.replace("%function_name", prompt.getFunction());
 	json = json.replace("%messages", MAPPER.writeValueAsString(prompt.build()));
+	json = json.replace("%functions", MAPPER.writeValueAsString(SmallvilleConfig.getFunctions().get("functions")));
 	json = json.replace("%temperature", String.valueOf(temperature));
 	json = json.replace("%model", SmallvilleConfig.getConfig().getModel());
 
+	LOG.debug("[Chat Request Original]" + json);
 	LOG.debug("[Chat Request]" + prompt.getContent());
 
 	RequestBody body = RequestBody.create(json.getBytes());
@@ -136,16 +150,25 @@ public class ChatGPT implements LLM {
 
 	if (node.get("choices") == null) {
 	    LOG.debug(node.toPrettyString());
-	    throw new SmallvilleException("Invalid api token or rate limit reached.");
+	    throw new SmallvilleException(
+		    "Invalid api token, rate limit reached, or the LLM is overloaded with requests.");
 	}
 
 	result = node.get("choices").get(0).get("message").get("content").asText();
+	
+	try {
+	    Object res = node.get("choices").get(0).get("message").get("function_call").get("arguments");
+	    LOG.info(res.toString());
+	} catch (Exception e) {
 
-	LOG.debug("[Chat Response]" + result);
+	}
+
+	LOG.debug("[Chat Response]" + node.get("choices").toPrettyString());
 
 	long end = System.currentTimeMillis();
 	LOG.debug("[Chat] Response took " + String.valueOf(start - end) + "ms");
-
+	LogCache.addPrompt(prompt.getContent());
+	LogCache.addPrompt(result);
 	return result;
     }
 }
