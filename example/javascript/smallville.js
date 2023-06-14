@@ -57,7 +57,7 @@ async function startSimulation() {
     await smallville.createObject({
         parent: 'Red House',
         name: 'Bedroom',
-        state: 'empty',
+        state: 'occupied by John',
     })
 
     await smallville.createObject({
@@ -122,8 +122,8 @@ async function update() {
         console.log('auto-updating')
         const agent = agents[0]
         await smallville.addObservation({
-            observation: "John is at the red house",
-            reactable: true
+            observation: 'John is at the red house',
+            reactable: true,
         })
         await smallville.updateState()
     } catch (err) {
@@ -155,8 +155,6 @@ document
                     secondsLeft = secondsBetweenUpdates - secondsLeft
                 }
                 secondsIndicator.innerText = secondsLeft
-
-                
             }, 1000)
             shouldAutoUpdate = true
         } else if (shouldAutoUpdate === true) {

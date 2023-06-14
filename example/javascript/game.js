@@ -58,13 +58,23 @@ class GameScene extends Phaser.Scene {
         createAgent({
             scene: this,
             name: 'Medina',
-            location: 'Forest: Campfire',
-            activity: 'Staying warm by the campfire',
+            location: 'Red House: Bedroom',
+            activity: 'sleeping',
             memories: [
-                'Loves to cook',
-                'Hates to be around campfires',
-                'Loves to hang out inside the Green House',
-                'Has a friend that lives in the Red House',
+                'Medina is the mother of John',
+                'Medina loves to cook',
+                'Medina hates to be around campfires',
+            ],
+        })
+
+        createAgent({
+            scene: this,
+            name: 'John',
+            location: 'Green House: Bedroom',
+            activity: 'watching television',
+            memories: [
+                'John is the son of Medina',
+                'John loves to be alone inside the Green House',
             ],
         })
     }
