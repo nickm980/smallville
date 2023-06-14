@@ -26,11 +26,11 @@ public class PlansParsingTest {
 	ChatService service = new ChatService(new World(), new ChatGPT());
 
 	List<Plan> plans = service.parsePlans("""
-		Walk to the farmhouse at 2:00 PM
-		\nMeet with the farmer to discuss crops at 2:30 PM
+		2:01 am at Red House: Bedroom, sleeping
+		\n  2:30 PM Meet with the farmer to discuss crops at
 		\nHelp with feeding the animals from 3:00 PM - 4:00 PM
 		\nRead a book under the shade of a tree from 4:00 PM - 5:00 PM
-		\nHave dinner at home at 6:00 PM.
+		\n2:20 am at Red House: Bedroom, still sleeping
 		""");
 
 	assertTrue(plans.size() == 5);
@@ -76,7 +76,6 @@ public class PlansParsingTest {
 	world.create(location);
 	
 	Agent agent = new Agent("name", List.of(new Characteristic("desc")), "current", new AgentLocation(location));
-	agent.setGoal("Run for president");
 	agent.setCurrentActivity("Doing nothing");
 	agent.setCurrentActivity("making dinner");
 	agent.getMemoryStream().addAll(List.of(new Plan("plan", LocalDateTime.now().plusMinutes(5)), new Plan("plan2", LocalDateTime.now().minusHours(1))));

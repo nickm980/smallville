@@ -35,7 +35,6 @@ public class PromptBuilderTest {
 	world.create(location);
 
 	agent = new Agent("name", List.of(new Characteristic("desc")), "test", new AgentLocation(location));
-	agent.setGoal("Run for president");
 	agent.setCurrentActivity("Doing nothing");
 	agent.setCurrentActivity("making dinner");
 	agent
@@ -79,8 +78,8 @@ public class PromptBuilderTest {
     }
 
     @Test
-    public void testShortTermPlansPrompt() {
-	String input = SmallvilleConfig.getPrompts().getPlans().getShortTerm();
+    public void testLongTermPlans() {
+	String input = SmallvilleConfig.getPrompts().getPlans().getLongTerm();
 	Prompt prompt = builder.setPrompt(input).build();
 
 	assertTrue(prompt.build().get("content").contains("[...]"));
