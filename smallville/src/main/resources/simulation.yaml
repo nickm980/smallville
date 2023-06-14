@@ -1,0 +1,21 @@
+# This file is a work in progress and is not ready yet to be used
+world:
+  locations:
+    - name: "Forest"
+      objects:
+        - name: "Campfire"
+          state: "Extinguished"
+        - name: "Branches"
+          state: "Broken"
+    - name: "Green House"
+      objects:
+        - name: "Kitchen"
+          state: "Unoccupied"
+
+agents:
+  - name: "Medina"
+    location: "Forest: Campfire"
+    activity: "Cooking in the forest campfire"
+    memories:
+      - "Likes to cook"
+      - "Lives alone"
