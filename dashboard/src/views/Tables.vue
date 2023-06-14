@@ -1,5 +1,42 @@
 <template>
   <div>
+    <a-row :gutter="24" class="mb-24">
+      <a-card class="b-card">
+        <h5 class="font-semibold m-0">Interview Agents</h5>
+        <p>
+          Ask the agents questions taking the role of a newscaster. Interviews
+          will not affect the memory stream
+        </p>
+        <div class="flex--s">
+          <a-col span="4" type="flex">
+            <a-dropdown>
+              <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
+                {{ currentAgent }} <a-icon type="down" />
+              </a>
+              <a-menu slot="overlay">
+                <a-menu-item
+                  v-for="agent in agentData"
+                  @click="setAgent(agent.name)"
+                >
+                  <a href="javascript:;">{{ agent.name }}</a>
+                </a-menu-item>
+              </a-menu>
+            </a-dropdown>
+          </a-col>
+          <a-col span="20">
+            <a-input
+              v-model="question"
+              placeholder="What do you have planned for today?"
+              @keyup.enter="submitInput"
+            >
+              <a-tooltip slot="suffix" title="Interview an agent">
+                <a-icon type="info-circle" style="color: rgba(0, 0, 0, 0.45)" />
+              </a-tooltip>
+            </a-input>
+          </a-col>
+        </div>
+      </a-card>
+    </a-row>
     <a-row :gutter="24" type="flex">
       <a-col :span="24" :lg="16" class="mb-24">
         <CardAuthorTable
@@ -14,38 +51,8 @@
         ></CardProjectTable2>
       </a-col>
     </a-row>
-    <a-row :gutter="24">
-      <a-card class="b-card">
-        <h5 class="font-semibold m-0">Interview Agents</h5>
-        <p>Ask the agents questions taking the role of a newscaster</p>
-        <a-col span="4">
-          <a-dropdown>
-            <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
-              {{ currentAgent }} <a-icon type="down" />
-            </a>
-            <a-menu slot="overlay">
-              <a-menu-item
-                v-for="agent in agentData"
-                @click="setAgent(agent.name)"
-              >
-                <a href="javascript:;">{{ agent.name }}</a>
-              </a-menu-item>
-            </a-menu>
-          </a-dropdown>
-        </a-col>
-        <a-col span="20">
-          <a-input
-            v-model="question"
-            placeholder="What do you have planned for today?"
-            @keyup.enter="submitInput"
-          >
-            <a-tooltip slot="suffix" title="Interview an agent">
-              <a-icon type="info-circle" style="color: rgba(0, 0, 0, 0.45)" />
-            </a-tooltip>
-          </a-input>
-        </a-col>
-      </a-card>
-    </a-row>
+
+    <!-- Modals -->
     <a-modal v-model="visible" title="Interivew Answer" @ok="toggleModal">
       <p>{{ answer }}</p>
     </a-modal>
@@ -135,7 +142,7 @@ export default {
   },
   data() {
     return {
-      question: 'What do you have planned for today?',
+      question: "What do you have planned for today?",
       loading: true,
       answer: "No data",
       visible: false,
@@ -158,4 +165,9 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.flex--s {
+  display: flex;
+  align-items: center;
+}
+</style>
