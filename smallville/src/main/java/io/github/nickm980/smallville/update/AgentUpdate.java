@@ -6,6 +6,13 @@ import org.slf4j.LoggerFactory;
 import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.entities.Agent;
 
+/**
+ * The AgentUpdate class is an abstract class that serves as a base for
+ * implementing agent update functionality.
+ * <p>
+ * It provides methods for setting the next update handler and starting the
+ * update process.
+ */
 public abstract class AgentUpdate {
 
     private AgentUpdate handler;

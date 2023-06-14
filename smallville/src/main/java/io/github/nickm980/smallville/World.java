@@ -15,40 +15,7 @@ import io.github.nickm980.smallville.entities.SimulatedObject;
 import io.github.nickm980.smallville.repository.Repository;
 
 /**
- * Creates an interactive Simulation for Generative Agents
- * 
- * Steps:
- * <ul>
- * 
- * <li>World creation. Create prompts describing the world. Locations and their
- * descriptions, People and their first "memory" or brief description about
- * themselves including relationships with others, profession, and character
- * traits</li>
- * 
- * <li>Planning. For each character, ask what their goals are for the day and
- * put this into a plan</li>
- * 
- * <li>Convert each planning step into past tense and rank each memories
- * poignancy</li>
- * 
- * <li>Action Phase. Convert the first plan into first tense, create an emoji
- * based on first tense sentence, and get location to travel</li>
- * </ul>
- * 
- * <p>
- * Some work still needs to be done
- * 
- * <ul>
- * <li>Protecting prompts from prompt injection by using combination of system
- * and user prompts</li>
- * 
- * <li>Improving memory retrieval through better token embeddings and optimize
- * decay function</li>
- * 
- *
- * <li>Add support for conversations between two (or more) agents</li>
- * </ul>
- *
+ * Storage for agents locations objects and conversations
  */
 public class World {
     private Repository<SimulatedLocation> locations;
@@ -72,8 +39,8 @@ public class World {
 	conversations.save(UUID.randomUUID().toString(), conversation);
     }
 
-    public void create(Agent agent) {
-	agents.save(agent.getFullName(), agent);
+    public boolean create(Agent agent) {
+	return agents.save(agent.getFullName(), agent);
     }
 
     public void create(SimulatedLocation location) {

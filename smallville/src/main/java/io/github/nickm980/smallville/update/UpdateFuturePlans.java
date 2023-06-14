@@ -8,6 +8,10 @@ import io.github.nickm980.smallville.entities.memory.Observation;
 import io.github.nickm980.smallville.entities.memory.Plan;
 import io.github.nickm980.smallville.entities.memory.PlanType;
 
+/**
+ * The UpdateFuturePlans class is responsible for creating and updating the
+ * short and long term plans of an agent based on reactable observations.
+ */
 public class UpdateFuturePlans extends AgentUpdate {
 
     @Override
@@ -18,44 +22,38 @@ public class UpdateFuturePlans extends AgentUpdate {
 
 	Observation observation = agent.getMemoryStream().getLastObservation();
 
-	if (observation != null && observation.isReactable()) {
+	if (observation.isReactable()) {
+	    LOG.info("Testing if plan should react");
 	    shouldUpdatePlans = converter.shouldUpdatePlans(agent, observation.getDescription());
-	    if (shouldUpdatePlans) {
-		agent.getMemoryStream().prunePlans(PlanType.LONG_TERM);
-		agent.getMemoryStream().prunePlans(PlanType.SHORT_TERM);
-		LOG.info("[Plans] Changing plans...");
-	    } else {
-		LOG.info("[Plans] Not changing plans...");
-	    }
 	}
 
-	// initialize the agent plans if none are found
 	if (shouldUpdatePlans) {
-	    List<Plan> plans = converter.getPlans(agent);
-	    agent.getMemoryStream().setPlans(plans, PlanType.LONG_TERM);
-
-	    for (Plan plan : plans) {
-		LOG.info("[Plans] " + plan.getType() + " " + plan.asNaturalLanguage());
-	    }
-
-	    LOG.info("[Plans] Updated long term plans");
+	    LOG.info("[Plans] Changing plans...");
+	    agent.getMemoryStream().prunePlans(PlanType.LONG_TERM);
+	    agent.getMemoryStream().prunePlans(PlanType.SHORT_TERM);
+	    updatePlans(converter, agent, PlanType.LONG_TERM);
+	    updatePlans(converter, agent, PlanType.SHORT_TERM);
 	}
 
-	if (agent.getMemoryStream().getPlans(PlanType.SHORT_TERM).isEmpty() || shouldUpdatePlans) {
-	    List<Plan> plans = converter.getShortTermPlans(agent);
-
-	    for (Plan plan : plans) {
-		plan.convert(PlanType.SHORT_TERM);
-		LOG.info("[Plans] " + plan.getType() + " " + plan.asNaturalLanguage());
-	    }
-
-	    agent.getMemoryStream().setPlans(plans, PlanType.SHORT_TERM);
-
-	    LOG.info("[Plans] Updated short term plans");
+	if (agent.getMemoryStream().getPlans(PlanType.SHORT_TERM).isEmpty()) {
+	    updatePlans(converter, agent, PlanType.SHORT_TERM);
 	}
 
 	LOG.info("[Plans] Plans updated");
 
 	return next(converter, world, agent);
+    }
+
+    private void updatePlans(IChatService converter, Agent agent, PlanType type) {
+	List<Plan> plans = type == PlanType.LONG_TERM ? converter.getPlans(agent) : converter.getShortTermPlans(agent);
+
+	for (Plan plan : plans) {
+	    plan.convert(type);
+	    LOG.info("[Plans] " + plan.getType() + " " + plan.asNaturalLanguage());
+	}
+
+	agent.getMemoryStream().setPlans(plans, type);
+
+	LOG.info("[Plans] Updated " + type.toString() + " plans");
     }
 }
