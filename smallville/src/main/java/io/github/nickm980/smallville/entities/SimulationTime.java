@@ -36,7 +36,7 @@ public final class SimulationTime {
 	return START;
     }
 
-    public static synchronized TemporalAmount getStepDuration() {
+    public static synchronized Duration getStepDuration() {
 	return step;
     }
 }
