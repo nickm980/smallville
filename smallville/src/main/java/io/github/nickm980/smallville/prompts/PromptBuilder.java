@@ -29,7 +29,9 @@ public class PromptBuilder {
 	data.put("agent", prompts.fromAgent(agent));
 
 	if (data.get("memories.unranked") == null) {
-	    data.put("memories.unranked", agent.getMemoryStream().getCharacteristics());
+	    data
+		.put("memories.unranked",
+			agent.getMemoryStream().getMemories().stream().filter(memory -> memory.getImportance() < 1.0).toList());
 	}
 
 	if (data.get("memories.characteristics") == null) {
@@ -107,7 +109,8 @@ public class PromptBuilder {
 
 	TemplateEngine engine = new TemplateEngine();
 	prompt = engine.format(prompt, data);
+	Prompt result = new Prompt.User(prompt);
 
-	return new Prompt.User(prompt);
+	return result;
     }
 }
