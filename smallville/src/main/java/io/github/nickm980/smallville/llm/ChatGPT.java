@@ -107,7 +107,7 @@ public class ChatGPT implements LLM {
 			"model": "%model",
 			"messages": [%messages],
 			"temperature": %temperature, "max_tokens": 2000
-		}
+
 		""";
 
 	if (prompt.isFunctional()) {
@@ -117,6 +117,7 @@ public class ChatGPT implements LLM {
 	    	""";
 	}
 
+	json += "}";
 	json = json.replaceAll("\t", "");
 	json = json.strip();
 	if (prompt.isFunctional()) {
