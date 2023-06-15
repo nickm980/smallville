@@ -7,4 +7,4 @@ before_install:
   - sdk install maven
   - mvn -v
 install:
-  - mvn dependency:sources dependency:resolve -f ./java-client/pom.xml -DskipTests
+  - mvn install -f ./java-client/pom.xml -DskipTests
