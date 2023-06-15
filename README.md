@@ -25,6 +25,23 @@ Download the compiled jar from releases
 Create new agents (as in the example project) [example project](/example/javascript/smallville.js)
 
 Supported Client Languages: Java, JavaScript (or use the http endpoints)
+#### Java
+```xml
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+	<dependencies>
+		<dependency>
+			<groupId>com.github.nickm980</groupId>
+			<artifactId>smallville</artifactId>
+			<version>2b663b0</version>
+		</dependency>
+	</dependencies>
+ ```
+
 ```java
    SmallvilleClient client = SmallvilleClient.create("http://localhost:8080", new AgentHandlerCallback() {
       public void handle(SimulationUpdateEvent event) {
@@ -42,7 +59,7 @@ Supported Client Languages: Java, JavaScript (or use the http endpoints)
   
       client.updateState();
 ```
-
+#### JavaScript
 ```javascript
 const client = new Smallville({
         host: "http://localhost:8080", // host of the server
