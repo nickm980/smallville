@@ -112,6 +112,7 @@ public class ChatGPT implements LLM {
 
 	if (prompt.isFunctional()) {
 	    json += """
+	    	,
 	    	"functions": %functions,
 	    	"function_call": {"name": "%function_name"}
 	    	""";
