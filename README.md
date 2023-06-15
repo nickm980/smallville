@@ -25,9 +25,26 @@ Download the compiled jar from releases
 Create new agents (as in the example project) [example project](/example/javascript/smallville.js)
 
 Supported Client Languages: Java, JavaScript (or use the http endpoints)
+```java
+   SmallvilleClient client = SmallvilleClient.create("http://localhost:8080", new AgentHandlerCallback() {
+      public void handle(SimulationUpdateEvent event) {
+          List<SmallvilleAgent> agents = event.getAgents();
+          List<SmallvilleLocation> locations = event.getLocations();
+        }
+      });
+
+      client.createLocation("Red House");
+      client.createObject("Red House", "Kitchen", new ObjectState("occupied"));
+  
+      List<String> memories = new ArrayList<String>();
+      memories.add("Memory1");
+      client.createAgent("John", memories, "Red House: Kitchen", "Cooking");
+  
+      client.updateState();
+```
 
 ```javascript
-const sim = new Smallville({
+const client = new Smallville({
         host: "http://localhost:8080", // host of the server
         stateHandler: function(state) {
             //in here you would update the location of the agent using your own pathfinding algorithm
@@ -38,51 +55,9 @@ const sim = new Smallville({
             console.log('[State Change]: The simulation has been updated')
     },
 });
-
-```
-Create new location trees
-```javascript
-sim.createLocation({
-   name: 'Barn',
-})
-
-sim.createObject({
-   name: 'Hay Pile',
-   parent: 'Barn',
-   state: 'Full'  
-})
 ```
 
-Add new agents and initialize their memory stream with starting memories
-```javascript
-sim.createAgent({
-  name: 'John',
-  location: 'Hay Pile',
-  activity: 'Stacking hay on the hay pile',
-  memories: [
-    "John is a farmer at the Barn",
-    "John is a nice and outgoing person"
-  ]
-})
-```
-Increment the time clock. The simulation will get the current time and update the agents state
-```javascript
-sim.updateState();
-```
-Keep calling sim.updateState whenever you want to update the simulation step
-
-To add new observations to the agent which they will prompt a reaction to use the following method
-```javascript
-sim.addObservation({name: "Full Agent Name", observation: "memory description", reactable: true})
-```
-Such observations such as encountering another agent or discovering a location should make use of this
-
-For observatonal purposes, you can also ask an agent a question which will use their relevant memories to answer the question
-```
-sim.askQuestion("John", "What do you do in your free time")
-```
-
-Asking an agent a question will not create a new memory unless called with `sim.addObservation()`
+Asking an agent a question using ask will not create a new memory unless called with addObservation
 
 ## Running the server
 Running the Server
@@ -94,13 +69,13 @@ java -jar smallville-server.jar --api-key <OPEN_AI_KEY> --port 8080
 ```
 The server will start on the default port 8080 unless specified otherwise. The dashboard which shows the memory stream, current activities, locations, and emojis of all available agents is found at http://localhost:8080/dashboard
 
-## Example
-The example is under the example directory. This example isn't finished yet but is a basic example of how to get started.
-[example javascript project](/example)
-
 ## Dashboard
 The dashboard can be accessed from http://localhost:8080/dashboard by default. The dashboard contains all the prompts sent to the LLM every update, information about agents, locations, and the current time, as well as memory streams of the agents. Through the dashboard you can also change the states of objects and interview agents.
 ![image](https://github.com/nickm980/smallville/assets/81270095/18912b25-059e-4ace-b390-f29de57b9615)
+
+## Example
+This example isn't finished yet but is a basic example of how to get started.
+[example javascript project](/example)
 
 ## Configuration
 ### Prompt Templates
@@ -129,13 +104,6 @@ The dashboard can be accessed from http://localhost:8080/dashboard by default. T
 
 ### Running Locally
 Start LocalAI and change the apiPath and model options to the correct values
-
-## TODO:
-- Improve conversations
-- Improve memory retrieval
-- Improve token embeddings
-- Bug fixes on location state updates
-- Improve test coverage
 
 ## Info
 Code based on Generative Agents: Interactive Simulacra of Human Behavior https://arxiv.org/pdf/2304.03442.pdf
