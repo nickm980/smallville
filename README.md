@@ -1,7 +1,7 @@
 # Smallville [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)]([https://opensource.org/licenses/MIT](https://github.com/nickm980/towny/blob/main/LICENSE)) [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/nickm980/smallville/issues)
 
-## What are Generative Agents?
-Generative agents are virtual characters that can store memories and dynamically react to their environment. Using LLM models such as ChatGPT or StableLM, agents are able to observe their surroundings, store memories, and react to state changes in the world
+## Generative Agents for video games
+Generative agents are virtual characters that can store memories and dynamically react to their environment. Using LLM models such as ChatGPT agents are able to observe their surroundings, store memories, and react to state changes in the world
 
 Generative Agents save time programming interactions by hand and make NPC's more realistic / dynamic
 ![walking](https://github.com/nickm980/smallville/assets/81270095/bc0bc20c-3b80-4c1d-906d-8ceabe7fa6a0)
