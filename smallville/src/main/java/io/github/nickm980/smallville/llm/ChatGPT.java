@@ -38,11 +38,7 @@ public class ChatGPT implements LLM {
 
 	while (retryCount < maxRetries) {
 	    try {
-		if (prompt.isFunctional()) {
-
-		} else {
-		    result = attemptRequest(prompt, temperature);
-		}
+		result = attemptRequest(prompt, temperature);
 		break;
 	    } catch (IOException | SmallvilleException e) {
 		retryCount++;
@@ -120,12 +116,17 @@ public class ChatGPT implements LLM {
 	    	"function_call": {"name": "%function_name"}
 	    	""";
 	}
-	
+
 	json = json.replaceAll("\t", "");
 	json = json.strip();
-	json = json.replace("%function_name", prompt.getFunction());
+	if (prompt.isFunctional()) {
+	    json = json
+		.replace("%functions", MAPPER.writeValueAsString(SmallvilleConfig.getFunctions().get("functions")));
+
+	    json = json.replace("%function_name", prompt.getFunction());
+	}
+
 	json = json.replace("%messages", MAPPER.writeValueAsString(prompt.build()));
-	json = json.replace("%functions", MAPPER.writeValueAsString(SmallvilleConfig.getFunctions().get("functions")));
 	json = json.replace("%temperature", String.valueOf(temperature));
 	json = json.replace("%model", SmallvilleConfig.getConfig().getModel());
 
@@ -155,7 +156,7 @@ public class ChatGPT implements LLM {
 	}
 
 	result = node.get("choices").get(0).get("message").get("content").asText();
-	
+
 	try {
 	    Object res = node.get("choices").get(0).get("message").get("function_call").get("arguments");
 	    LOG.info(res.toString());
