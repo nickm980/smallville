@@ -1,4 +1,4 @@
-import { Smallville } from '../../javascript-client/dist/index.js'
+import { Smallville } from '../../../javascript-client/dist/index.js'
 import { agents } from './mechanics/agents.js'
 import { updateAgent } from './mechanics/index.js'
 import { updateLocations } from './mechanics/locations.js'
