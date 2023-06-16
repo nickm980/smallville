@@ -20,6 +20,7 @@ async function getLocations() {
   return fetch(url + "/locations") // Replace 'your-name' with the actual name parameter
     .then((response) => response.json());
 }
+
 async function getGameInfo() {
   return fetch(url + "/info", {
     method: "GET",
@@ -40,7 +41,6 @@ async function changeLocation(name, state){
         })
       }).then((response) => response.json());
 }
-
 
 async function ask(name, question){
     return fetch(url + "/agents/" + name + "/ask", {

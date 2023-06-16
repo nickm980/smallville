@@ -23,7 +23,6 @@
 // / Base
 
 // Layouts
-@import "./layouts/default" ;
 @import "./layouts/dashboard" ;
 @import "./layouts/dashboard-rtl" ;
 // Layouts
@@ -36,7 +35,6 @@
 @import "./components/_chart" ;
 @import "./components/_list" ;
 @import "./components/_progress" ;
-@import "./components/_settings-drawer" ;
 @import "./components/_space" ;
 @import "./components/_table" ;
 @import "./components/_tag" ;
@@ -48,10 +46,4 @@
 // Form
 @import "./form/_input" ;
 @import "./form/_checkbox" ;
-// / Form
-
-// Pages
-@import "./pages/_profile" ;
-@import "./pages/_sign-in" ;
-@import "./pages/_sign-up" ;
 // Pages
