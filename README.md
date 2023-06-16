@@ -8,39 +8,27 @@ Generative Agents save time programming interactions by hand and make NPC's more
 ![image](https://github.com/nickm980/smallville/assets/81270095/ffe3c8d4-4fab-42e5-aaac-a1d78f2c7c31)
 
 ## Getting Started
-Visit the package on npm https://www.npmjs.com/package/smallville
-### Install the necessary files
-
-Start a new javascript project
-```
-npm init
-```
-
-```
-npm i smallville
-```
-Download the compiled jar from releases
-
-### Start writing code
 Create new agents (as in the example project) [example project](/example/javascript/smallville.js)
 
 Supported Client Languages: Java, JavaScript (or use the http endpoints)
-#### Java
+
+### Java
+Use maven to use the project from the jitpack repository
 ```xml
-	<repositories>
-		<repository>
-			<id>jitpack.io</id>
-			<url>https://jitpack.io</url>
-		</repository>
-	</repositories>
-	<dependencies>
-		<dependency>
-			<groupId>com.github.nickm980</groupId>
-			<artifactId>smallville</artifactId>
-			<version>2b663b0</version>
-		</dependency>
-	</dependencies>
- ```
+<repositories>
+	<repository>
+		<id>jitpack.io</id>
+		<url>https://jitpack.io</url>
+	</repository>
+</repositories>
+<dependencies>
+	<dependency>
+		<groupId>com.github.nickm980</groupId>
+		<artifactId>smallville</artifactId>
+		<version>2b663b0</version>
+	</dependency>
+</dependencies>
+```
 
 ```java
    SmallvilleClient client = SmallvilleClient.create("http://localhost:8080", new AgentHandlerCallback() {
@@ -59,7 +47,16 @@ Supported Client Languages: Java, JavaScript (or use the http endpoints)
   
       client.updateState();
 ```
-#### JavaScript
+### JavaScript
+Start a new javascript project
+```
+npm init
+```
+
+```
+npm i smallville
+```
+
 ```javascript
 const client = new Smallville({
         host: "http://localhost:8080", // host of the server
