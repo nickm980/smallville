@@ -1,6 +1,6 @@
 package io.github.nickm980.smallville.llm;
 
-import io.github.nickm980.smallville.prompts.Prompt;
+import io.github.nickm980.smallville.prompts.PromptRequest;
 
 public interface LLM {
 
@@ -12,7 +12,7 @@ public interface LLM {
      *                    coherent
      * @return chat response String
      */
-    String sendChat(Prompt prompt, double temperature);
+    String sendChat(PromptRequest prompt, double temperature);
 
     /**
      * Pricing is $0.0004 / thousand tokens for embeddings.
