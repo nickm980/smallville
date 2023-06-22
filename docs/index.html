@@ -1,291 +1,533 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smallville - Generative Agents for video games and simulations</title>
-    <script src="https://kit.fontawesome.com/6215c4a563.js" crossorigin="anonymous"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smallville - Generative Agents For Video Games</title>
+    <script
+      src="https://kit.fontawesome.com/6215c4a563.js"
+      crossorigin="anonymous"
+    ></script>
     <style>
-        :root {
-            --primary-color: #5067ff;
-        }
+      :root {
+        --title-color: rgb(220, 220, 220);
+        --body-color: #7a7883;
+      }
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: #f9f9fa;
-        }
+      .button.blue {
+        --button-border: lime;
 
-        * {
-            box-sizing: border-box;
-        }
+        --button-color: lime;
+        --button-highlight: rgb(255, 142, 56);
+      }
+      .button.white {
+        --button-border: white;
 
-        p {
-            line-height: 1.5em;
-        }
+        --button-color: black;
+        --button-highlight: white;
+      }
+      .button.transparent {
+        --button-border: transparent;
+        --button-color: #dcdcdc;
+        --button-highlight: transparent;
+        text-decoration: underline;
+      }
+      .particle-container {
+        position: relative;
+      }
 
-        .hero h1 {
-            text-align: center;
-            font-size: 4rem;
-            word-wrap: break-word;
-        }
+      .particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background-color: white;
+        border-radius: 50%;
+        top: 0;
+        left: 1000px;
+        animation: particleAnimation 3s linear infinite;
+        z-index: -1;
+      }
 
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 40px !important;
-            }
+      @keyframes particleAnimation {
+        100% {
+          top: 50%;
+          left: 50%;
+          opacity: 0;
+          transform: translate(-50%, -50%);
         }
+      }
+      /*css resets*/
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        @media (max-width: 400px) {
-            h1 {
-                font-size: 24px !important;
-            }
-        }
+      html {
+        color: var(--body-color);
+        font-family: sans-serif;
+      }
 
-        .section--colored {
-            background-color: rgb(244, 246, 248);
-        }
+      body {
+        background-color: #030014;
+      }
+      .flex {
+        display: flex;
+        gap: 1rem;
+        left: 0;
+        flex-wrap: wrap;
+      }
+      .flex.left {
+        justify-content: left;
+      }
+      .flex-image {
+        flex-basis: 800px;
+      }
+      .flex-2 {
+        flex-basis: 350px;
+        text-align: left;
+      }
+      nav {
+        z-index: 2;
 
-        .section {
-            border-radius: .5em;
-            max-width: min(1200px, 100%);
-            margin: 0 auto;
-            padding: 3em;
-        }
+        width: 100%;
+        margin: 0 !important;
+        position: fixed;
+        display: flex;
+        align-items: baseline;
+        top: 0;
+        left: 0;
+        backdrop-filter: blur(10px);
+        padding: 0.75em;
+        justify-content: space-between;
+      }
 
-        .section,
-        .hero {
-            text-align: center;
-        }
+      nav ul {
+        backdrop-filter: blur(10px);
+        background-color: #201c354a;
+        border: 2px solid #201c35;
+        font-weight: 500;
+        display: flex;
+        flex-wrap: none;
+        list-style: none;
+        gap: 1em;
+        border-radius: 0.5rem;
+        padding: 0.5em 1em 0.5em 1em;
+        font-size: 0.8rem;
+      }
 
-        .hero {
-            padding: 4rem;
-        }
+      nav ul li a {
+        color: white;
+      }
 
-        .navbar ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
+      .pill {
+        display: inline;
+        padding: 0.5em 1em 0.5em 1em;
+        font-size: 0.8em;
+        border-radius: 1em;
+        background-color: rgba(173, 173, 173, 0.135);
+        backdrop-filter: blur(10px);
+      }
+      .content {
+        margin-top: 10rem;
+        text-align: center;
+      }
 
-        .navbar ul li {
-            display: inline-block;
-            margin-right: 1em;
-            margin-left: 1em;
-        }
+      .content::before {
+        background-color: orange;
+        height: 100px;
+        width: 100px;
+        border: 1px solid red;
+        position: absolute;
+      }
 
-        .navbar {
-            font-weight: 600;
-            border-bottom: 1px solid rgb(232, 232, 232);
-        }
+      h1,
+      h2 {
+        color: var(--title-color);
+      }
+      h1 {
+        font-size: 3rem;
+        text-transform: uppercase;
+      }
+      p {
+        line-height: 2em;
+        color: #908ea0;
+      }
 
-        .button {
-            display: inline-block;
-            padding: .75em 1em .75em 1em;
-            border-radius: .5em;
-            text-decoration: none;
-            margin: .25em;
-            font-weight: 500;
-        }
+      .button {
+        font-weight: 600;
+        border-radius: 0.3rem;
+        padding: 0.75em 1em 0.75em 1em;
+        color: white;
+        background-color: transparent;
+        cursor: pointer;
+        box-shadow: none;
+        background-color: var(--button-border);
+        color: var(--button-color);
+        border: 2px solid var(--button-border);
+      }
+      .button i {
+        margin-right: 0.5em;
+      }
 
-        a {
-            color: grey;
-            text-decoration: underline;
-        }
+      .button.inverted-logo i {
+        margin-left: 0.5em;
+      }
 
-        .button--light:hover {
-            background-color: rgb(244, 244, 244);
-        }
+      .button:hover {
+        /* outline: 2px solid var(--button-highlight); Border bottom */
+        box-shadow: 0px 0px 1px 1px var(--button-highlight); /* Border bottom */
+      }
+      /**hero spacing**/
+      .hero--section-buttons {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: center;
+      }
 
-        .button--light-border {
-            border: 1px solid #f4f6f8;
+      .nav--socials a {
+        color: inherit;
+        margin: 0.25em;
+      }
+      img {
+        max-width: 100%;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: -100px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        width: 750px;
+        height: 750px;
+        margin: 0 auto;
+        z-index: -1;
+        border-radius: 50%;
+        box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.7);
+        animation: glow 5s linear infinite;
+      }
+      @media (max-width: 1000px) {
+        .hero::before {
+          display: none;
         }
+        .mt-extra {
+          margin-top: inherit !important;
+        }
+      }
+      @keyframes glow {
+        0% {
+          box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.7);
+        }
+        50% {
+          box-shadow: 0 0 40px 20px rgba(255, 255, 255, 0.3);
+          opacity: 0;
+        }
+        100% {
+          box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.7);
+        }
+      }
+      .hero {
+        margin: 0 auto;
+        flex-direction: column;
+        padding: 1rem;
+        max-width: 600px;
+      }
 
-        .button--dark {
-            background-color: #222;
-            color: white;
-        }
+      nav i {
+        color: white;
+      }
+      .card {
+        padding: 1em;
+        border: 2px solid #201c35;
+        background-color: #0e0a24;
+        min-height: 100px;
+        flex-basis: 300px;
+        text-align: left;
+      }
+      .card p {
+        line-height: 1.5em;
+      }
+      .cards {
+        flex-wrap: wrap;
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+      }
+      .section {
+        max-width: 1250px;
+        margin: 0 auto;
+        margin-bottom: 5rem;
+      }
+      b {
+        color: white;
+        font-weight: normal;
+      }
+      .border {
+        max-width: 200px;
+        margin: 0 auto;
+        border: none;
+        box-shadow: 0 0 2px 1px rgba(255, 255, 255, 0.7);
 
-        .button--primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
+        border-radius: 100%;
+      }
+      .faq {
+        max-width: 700px;
+        margin: 0 auto;
+      }
+      /**FAQ Styles**/
+      .faq_header-title {
+        font-size: 24px;
+        color: #fff;
+        margin-bottom: 30px;
+      }
+      .faq__panel {
+        padding: 7px 21px;
+        margin-bottom: 0.5rem;
+        border: 1px solid #201c35;
+        background-color: #0e0a24;
+        border-radius: 7px;
+        text-align: left;
+      }
+      .faq__label {
+        padding-block: 7px;
+        color: #f4f5f6;
+        cursor: pointer;
+      }
+      .faq__panel-answer {
+        color: #777e91;
+        padding-top: 5px;
+        padding-bottom: 7px;
+      }
+      .label.small {
+        margin-bottom: 1em;
+      }
+      .label {
+        font-weight: bold;
+        text-transform: uppercase;
+        width: fit-content;
+        margin: 0 auto;
+        letter-spacing: 0.25em;
+        background: -webkit-linear-gradient(left, #1893ff, #2418ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-position: left center; /* Add this line */
+      }
+      .mt-extra {
+        margin-top: 20rem;
+      }
 
-        .navbar {
-            display: flex;
-            align-items: baseline;
-            justify-content: space-between;
-        }
+      a {
+        color: #198eff;
+      }
+      #page__interact {
+        max-width: 100%;
+      }
+      img {
+        border-radius: 10px;
+      }
 
-        .flex--container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 1em;
-        }
+      #dashboard {
+        aspect-ratio: 1000/450;
+        max-width: 1000px;
+        margin: 0 auto;
+        margin-top: 2rem;
+        max-height: 450px;
+        border-radius: 1rem;
+        position: relative;
+        background: url("./dashboard.png") center center no-repeat;
+        background-size: cover;
+      }
 
-        .flex--info-container {
-            display: flex;
-            gap: 1em;
-            align-items: stretch;
-        }
+      #dashboard::after {
+        content: "";
+        border-radius: 1rem;
 
-        .flex--info-child {
-            flex-basis: max(50%, 500px);
-            text-align: left;
-        }
-
-        .video {
-            aspect-ratio: 16 / 9;
-            width: 100%;
-        }
-
-        .card--container {
-            display: flex;
-            gap: 1em;
-        }
-
-        .card {
-            padding: 1em;
-            text-align: left;
-            background-color: #f4f6f8;
-            border: 2px solid #eff0f1;
-            border-radius: .5em;
-            text-decoration: none;
-            color: black;
-        }
-
-        .card:hover {
-            background-color: #f3f3f3;
-        }
-
-        .card--title {
-            text-decoration: underline;
-        }
-
-        .card--feature-container {
-            display: flex;
-            gap: 1em;
-        }
-
-        .card--feature {
-            border: 1px solid rgb(230, 230, 230);
-            background-color: #f9f9fa;
-            text-align: left;
-            padding: 1em;
-            border-radius: .5em;
-        }
-
-        .card--feature p,
-        .card p {
-            margin-top: .75em;
-        }
-
-        .card--feature i {
-            margin-bottom: .5em;
-            font-size: 2rem;
-        }
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-image: linear-gradient(
+          to bottom,
+          transparent -10%,
+          #030014 90%
+        );
+      }
+      a.white {
+        color: white;
+      }
     </style>
-</head>
-
-<body>
-    <nav class="navbar">
-        <ul>
-            <li><a href="#features">Features</a></li>
-            <li><a href="https://github.com/nickm980/smallville/tree/main/example">Example</a></li>
-            <li><a href="https://discord.gg/APVSw2DrCX">Discord</a></li>
-        </ul>
-        <a class="button button--light" href="https://github.com/nickm980/smallville">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="sbui-icon ">
-                <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                </polygon>
-            </svg>
-            Star us on GitHub
-        </a>
+  </head>
+  <body>
+    <nav class="frosted">
+      <ul>
+        <li>
+          <a
+            target="_blank"
+            href="./java-client/io/github/nickm980/smallville/SmallvilleClient.html"
+            >Documentation</a
+          >
+        </li>
+        <li>
+          <a
+            target="_blank"
+            href="https://github.com/nickm980/smallville/tree/main/examples"
+            >Examples</a
+          >
+        </li>
+        <li>
+          <a
+            target="_blank"
+            href="https://github.com/nickm980/smallville/releases/"
+            >Changelog</a
+          >
+        </li>
+      </ul>
+      <div class="nav--socials">
+        <a href="https://discord.gg/invite/APVSw2DrCX"
+          ><i class="fa-brands fa-discord fa-lg"></i
+        ></a>
+        <a href="https://github.com/nickm980/smallville/"
+          ><i class="fa-brands fa-github fa-lg"></i
+        ></a>
+      </div>
     </nav>
-    <div class="hero">
-        <h1>Generative Agents For Games And Simulations</h1>
-        <p>Attempt recreating Generative Agents: Interactive Simulacra of Human Behavior</p>
-        <div>
-            <a class="button button--dark" href="https://github.com/nickm980/smallville/releases/download/v1.2.0/smallville-v1.2.0.zip">Download</a>
-            <a class="button button--primary" href="https://github.com/nickm980/smallville">View Code</a>
+
+    <div class="content">
+      <div class="hero">
+        <div class="circle"></div>
+        <div class="hero--content">
+          <p class="label small">Smallville</p>
+          <h1>Generative Agents For Video Games</h1>
+          <div class="hero--section-buttons">
+            <a
+              href="https://github.com/nickm980/smallville/releases/download/v1.2.0/smallville-v1.2.0.zip"
+            >
+              <button class="button white gradient">
+                <i class="fa-solid fa-download"></i> Download Latest
+              </button>
+            </a>
+            <button class="button transparent inverted-logo">
+              <a class="white" href="https://www.youtube.com/watch?v=jS_YsytBbD8">
+              <i class="fa-solid fa-play"></i>Play Tutorial Video</a>
+            </button>
+          </div>
         </div>
-    </div>
-    <div class="section">
-        <div class="flex--info-container">
-            <div class="flex--info-child">
-                <h2>What Are Generative Agents?</h2>
-                <p>Generative agents are virtual characters that react to their environment using stored memories. Using
-                    LLM
-                    models such
-                    as ChatGPT, agents are able to observe their surroundings, store memories, and react to state
-                    changes in the world
-                </p>
-                <p>Generative Agents save time programming individual interactions by hand and make NPC's more realistic
-                </p>
-                <a class="button button--dark" href="https://github.com/nickm980/smallville/tree/main/examples">View Example Project</a>
+      </div>
+
+      <div class="section mt-extra">
+        <div class="section--inner">
+          <h2>What can you do with Smallville?</h2>
+          <p>Smallville has a widge range of useful applications</p>
+          <div style="margin-top: 3rem" class="cards">
+            <div class="card">
+              <p>
+                <b>Video Games.</b>
+                Develop dynamic and realistic NPC characters
+              </p>
             </div>
-            <div class="flex--info-child">
-                <h2>Getting Started</h2>
-                <div>
-                    <iframe class="video" width="560" height="315"
-                        src="https://www.youtube-nocookie.com/embed/jS_YsytBbD8" title="YouTube video player"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen></iframe>
+            <div class="card">
+              <p>
+                <b>Research Simulations.</b>
+                Customize simulations for research without needing to code
+              </p>
+            </div>
+            <div class="card">
+              <p>
+                <b>Social Robots.</b>
+                Create believable social robots for the real world.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section--inner">
+          <h2>Easy to Use Dashboard</h2>
+          <p>
+            * Update the state, view memories, interview agents, and edit
+            locations through the UI *
+          </p>
+          <div class="img__gradient">
+            <div id="dashboard">f</div>
+          </div>
+        </div>
+      </div>
+      <div id="page__interact" class="section">
+        <div class="section--inner">
+          <div class="flex left">
+            <div class="flex-image">
+              <div class="img__gradient">
+                <img class="large" src="config.yaml.png" />
+              </div>
+            </div>
+            <div class="flex-2">
+              <h2>Highly Configurable</h2>
+              <p>
+                Fine tune dozens of configurable controls such as reflection
+                weight cutoffs and prompts
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section--inner">
+          <section
+            class="faq container"
+            aria-level="Frequently Asked Questions"
+          >
+            <header class="faq_header">
+              <h2 class="faq_header-title">Frequently Asked Questions</h2>
+            </header>
+            <div class="faq__body">
+              <details aria-expanded="true" class="faq__panel" open>
+                <summary class="faq__label">
+                  Can Smallville run locally?
+                </summary>
+                <div class="faq__panel-body">
+                  <p class="faq__panel-answer">
+                    Yes. Running locally can be done by running
+                    <a
+                      target="_blank"
+                      href="https://github.com/go-skynet/LocalAI"
+                      >LocalAI</a
+                    >
+                    and changing the url and model in the config.yaml settings.
+                    However local supported is untested and you should test
+                    before deploying to production.
+                  </p>
                 </div>
+              </details>
+              <details aria-expanded="false" class="faq__panel">
+                <summary class="faq__label">
+                  What happens if your service goes down?
+                </summary>
+                <div class="faq__panel-body">
+                  <p class="faq__panel-answer">
+                    Smallville is open source and able to be self hosted. In the
+                    small chance that our service stopped or repository taken
+                    down you will still be able to self host the server on your
+                    own machines.
+                  </p>
+                </div>
+              </details>
+              <details aria-expanded="false" class="faq__panel">
+                <summary class="faq__label">How do I get help?</summary>
+                <div class="faq__panel-body">
+                  <p class="faq__panel-answer">
+                    You can get help setting up and by visiting our community
+                    <a href="https://discord.gg/invite/APVSw2DrCX"
+                      >discord server</a
+                    >.
+                  </p>
+                </div>
+              </details>
             </div>
+          </section>
         </div>
-
+      </div>
     </div>
-    <div id="features" class="section section--colored">
-        <h1>Features</h1>
-        <div class="card--feature-container">
-            <div class="card--feature">
-                <i class="fa-regular fa-id-card"></i>
-                <br>
-                <b class="card--feature-title">Dashboard</b>
-                <p>Dashboard for memory stream, activities, and object states</p>
-            </div>
-            <div class="card--feature">
-                <i class="fa-solid fa-code"></i>
-                <br>
-                <b class="card--feature-title">Java and JavaScript Clients</b>
-                <p>Clients to create custom games</p>
-            </div>
-            <div class="card--feature">
-                <i class="fa-regular fa-file-lines"></i>
-                <br>
-                <b class="card--feature-title">Configurable</b>
-                <p>Use local LLM's or ChatGPT and has an option to change prompts</p>
-            </div>
-        </div>
-    </div>
-    <div class="section">
-        <h1>Create Custom Simulations</h1>
-        <div class="flex--container">
-            <div class="card--container">
-                <a class="card flex--child" href="server/">
-                    <b class="card--title">HTTP Endpoints</b>
-                </a>
-                <a class="card flex--child" href="out/">
-                    <b class="card--title">JavaScript Client Documentation</b>
-                </a>
-                <a class="card flex--child" href="java-client/">
-                    <b class="card--title">Java Client Documentation</b>
-                </a>
-            </div>
-        </div>
-        <div style="margin-top: 2em;">
-            <a class="button button--dark" href="https://discord.gg/APVSw2DrCX">Join The Discord</a>
-        </div>
-    </div>
-</body>
-
+  </body>
 </html>
