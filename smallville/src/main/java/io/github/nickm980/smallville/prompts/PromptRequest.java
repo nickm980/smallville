@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class Prompt {
+public abstract class PromptRequest {
     private String content;
     private String assistant;
-    private boolean isFunctional;
+    private String function;
 
-    public Prompt(String content) {
+    public PromptRequest(String content) {
 	this.content = content;
     }
 
@@ -19,16 +19,16 @@ public abstract class Prompt {
 	this.assistant = assistant;
     }
 
-    public void setFunction(boolean functional) {
-	this.isFunctional = functional;
-    }
-
     public boolean isFunctional() {
-	return isFunctional;
+	return function != null && !function.isEmpty();
     }
 
+    public void setFunction(String function) {
+	this.function = function;
+    }
+   
     public String getFunction() {
-	return "auto";
+	return function;
     }
 
     public String getContent() {
@@ -36,8 +36,6 @@ public abstract class Prompt {
     }
 
     public Map<String, String> build() {
-	Map<String, String> a = new HashMap<>();
-
 	Map<String, String> map = new HashMap<>();
 	map.put("role", getRole());
 	map.put("content", content);
@@ -45,7 +43,7 @@ public abstract class Prompt {
 	return map;
     }
 
-    public static class User extends Prompt {
+    public static class User extends PromptRequest {
 	public User(String content) {
 	    super(content);
 	}
@@ -56,7 +54,7 @@ public abstract class Prompt {
 	}
     }
 
-    public static class System extends Prompt {
+    public static class System extends PromptRequest {
 	public System(String content) {
 	    super(content);
 	}

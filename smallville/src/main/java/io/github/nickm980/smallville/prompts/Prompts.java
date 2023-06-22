@@ -1,4 +1,4 @@
-package io.github.nickm980.smallville.update;
+package io.github.nickm980.smallville.prompts;
 
 import java.util.List;
 
@@ -8,13 +8,14 @@ import io.github.nickm980.smallville.entities.memory.Plan;
 import io.github.nickm980.smallville.entities.memory.Reflection;
 import io.github.nickm980.smallville.prompts.dto.CurrentActivity;
 import io.github.nickm980.smallville.prompts.dto.ObjectChangeResponse;
+import io.github.nickm980.smallville.prompts.dto.Reaction;
 
 /**
  * IChatService is responsible for creating prompts, sending them to the LLM,
  * and mapping the responses into objects
  *
  */
-public interface IChatService {
+public interface Prompts {
 
     /**
      * Retrieves the objects changed by an agent.
@@ -40,7 +41,7 @@ public interface IChatService {
      * @param other The other agent involved in the conversation.
      * @return The existing conversation between the two agents, if it exists.
      */
-    Conversation getConversationIfExists(Agent agent, Agent other);
+    Conversation getConversationIfExists(Agent agent, Agent other, String topic);
 
     /**
      * Retrieves the current activity of an agent.
@@ -101,5 +102,5 @@ public interface IChatService {
      * @param observation The observation to base the plan update decision on.
      * @return `true` if the plans should be updated, `false` otherwise.
      */
-    boolean shouldUpdatePlans(Agent agent, String observation);
+    Reaction shouldUpdatePlans(Agent agent, String observation);
 }
