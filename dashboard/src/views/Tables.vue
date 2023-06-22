@@ -56,17 +56,6 @@
     <a-modal v-model="visible" title="Interivew Answer" @ok="toggleModal">
       <p>{{ answer }}</p>
     </a-modal>
-    <a-modal
-      v-model="memoryStreamVisible"
-      title="Memory Stream"
-      @ok="toggleMemoryStream"
-    >
-      <p>View the memory stream of the agent</p>
-      <CardAuthorTable
-        :data="agentData"
-        :columns="agentColumns"
-      ></CardAuthorTable>
-    </a-modal>
   </div>
 </template>
 

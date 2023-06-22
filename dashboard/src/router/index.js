@@ -29,6 +29,12 @@ let routes = [
 		layout: "dashboard",
 		component: () => import('../views/Tables.vue'),
 	},
+	{
+		path: '/conversations',
+		name: 'Conversations',
+		layout: "dashboard",
+		component: () => import(/* webpackChunkName: "dashboard" */ '../views/Conversations.vue'),
+	},
 ]
 
 // Adding layout property from each route to the meta

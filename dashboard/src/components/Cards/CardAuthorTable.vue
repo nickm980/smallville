@@ -5,7 +5,7 @@
 		<template #title>
 			<a-row type="flex" align="middle">
 				<a-col :span="24" :md="12">
-					<h5 class="font-semibold m-0">Agent Information</h5>
+					<h5 class="font-semibold m-0">{{title}}</h5>
 				</a-col>
 			</a-row>
 		</template>
@@ -57,6 +57,10 @@
 				type: Array,
 				default: () => [],
 			},
+			title: {
+				type: String,
+				default: "Agent Information"
+			}
 		},
 		data() {
 			return {

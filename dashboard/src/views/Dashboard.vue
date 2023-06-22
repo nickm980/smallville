@@ -43,9 +43,7 @@
               <div class="card-footer">
                 <a href="#" size="small">
                   <a-button v-if="loading" type="primary">Loading...</a-button>
-                  <a-button v-else type="primary" @click="updateState"
-                    >Update State</a-button
-                  >
+                  <a-button v-else type="primary" @click="updateState">Update State</a-button>
                 </a>
               </div>
             </a-col>
@@ -82,13 +80,9 @@
 </template>
 
 <script>
-import CardBarChart from "../components/Cards/CardBarChart";
 import CardLineChart from "../components/Cards/CardLineChart";
 import WidgetCounter from "../components/Widgets/WidgetCounter";
 import CardProjectTable from "../components/Cards/CardProjectTable";
-import CardOrderHistory from "../components/Cards/CardOrderHistory";
-import CardInfo from "../components/Cards/CardInfo";
-import CardInfo2 from "../components/Cards/CardInfo2";
 import { updateGameState, getGameInfo } from "../server";
 
 // Counter Widgets stats

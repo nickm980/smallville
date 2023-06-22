@@ -4,7 +4,6 @@
 		<!-- Dashboard Layout -->
 		<a-layout class="layout-dashboard" id="layout-dashboard" :class="[navbarFixed ? 'navbar-fixed' : '', ! sidebarCollapsed ? 'has-sidebar' : '', layoutClass]">
 			
-			<!-- Main Sidebar -->
 			<DashboardSidebar
 				:sidebarCollapsed="sidebarCollapsed"
 				:sidebarColor="sidebarColor"
@@ -15,51 +14,22 @@
 
 			<!-- Layout Content -->
 			<a-layout>
-
-				<!-- Layout Header's Conditionally Fixed Wrapper -->
 				<DashboardHeader
 					:sidebarCollapsed="sidebarCollapsed"
 					:navbarFixed="navbarFixed"
 					@toggleSettingsDrawer="toggleSettingsDrawer"
 					@toggleSidebar="toggleSidebar"
 				></DashboardHeader>
-				<!-- / Layout Header's Conditionally Fixed Wrapper -->
 
 				<!-- Page Content -->
 				<a-layout-content>
 					<router-view />
 				</a-layout-content>
-				<!-- / Page Content -->
 
-				<!-- Layout Footer -->
 				<DashboardFooter></DashboardFooter>
-				<!-- / Layout Footer -->
-
-			
-				<!-- / Floating Action Button For Toggling Settings Drawer -->
-
-				<!-- Sidebar Overlay -->
 				<div class="sidebar-overlay" @click="sidebarCollapsed = true" v-show="! sidebarCollapsed"></div>
-				<!-- / Sidebar Overlay -->
-
 			</a-layout>
-			<!-- / Layout Content -->
-			
-			<!-- Settings Drawer -->
-			<DashboardSettingsDrawer
-				:showSettingsDrawer="showSettingsDrawer"
-				:navbarFixed="navbarFixed"
-				:sidebarTheme="sidebarTheme"
-				@toggleSettingsDrawer="toggleSettingsDrawer"
-				@toggleNavbarPosition="toggleNavbarPosition"
-				@updateSidebarTheme="updateSidebarTheme"
-				@updateSidebarColor="updateSidebarColor"
-			></DashboardSettingsDrawer>
-			<!-- / Settings Drawer -->
-
 		</a-layout>
-		<!-- / Dashboard Layout -->
-
 	</div>
 </template>
 
@@ -68,14 +38,12 @@
 	import DashboardSidebar from '../components/Sidebars/DashboardSidebar' ;
 	import DashboardHeader from '../components/Headers/DashboardHeader' ;
 	import DashboardFooter from '../components/Footers/DashboardFooter' ;
-	import DashboardSettingsDrawer from '../components/Sidebars/DashboardSettingsDrawer' ;
 
 	export default ({
 		components: {
 			DashboardSidebar,
 			DashboardHeader,
 			DashboardFooter,
-			DashboardSettingsDrawer,
 		},
 		data() {
 			return {
