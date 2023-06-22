@@ -14,24 +14,25 @@
         --body-color: #7a7883;
       }
 
-      .button.blue {
-        --button-border: lime;
-
-        --button-color: lime;
-        --button-highlight: rgb(255, 142, 56);
-      }
       .button.white {
         --button-border: white;
-
-        --button-color: black;
-        --button-highlight: white;
+        --button-background: white;
+        --buton-color: black;
+        --button-highlight: rgb(230, 230, 230);
       }
+
       .button.transparent {
         --button-border: transparent;
         --button-color: #dcdcdc;
         --button-highlight: transparent;
         text-decoration: underline;
       }
+      .button.outline {
+        --button-border: white;
+        --button-background: transparent;
+        --buton-color: white;
+      }
+
       .particle-container {
         position: relative;
       }
@@ -73,12 +74,15 @@
       }
       .flex {
         display: flex;
-        gap: 1rem;
+        gap: 4rem;
         left: 0;
         flex-wrap: wrap;
       }
       .flex.left {
         justify-content: left;
+      }
+      .flex.right {
+        justify-content: right;
       }
       .flex-image {
         flex-basis: 800px;
@@ -140,7 +144,9 @@
         border: 1px solid red;
         position: absolute;
       }
-
+      a {
+        color: #198eff;
+      }
       h1,
       h2 {
         color: var(--title-color);
@@ -158,14 +164,15 @@
         font-weight: 600;
         border-radius: 0.3rem;
         padding: 0.75em 1em 0.75em 1em;
-        color: white;
         background-color: transparent;
         cursor: pointer;
         box-shadow: none;
-        background-color: var(--button-border);
-        color: var(--button-color);
+        border: 2px solid var(--button-border);
+        background-color: var(--button-background);
+        color: var(--buton-color);
         border: 2px solid var(--button-border);
       }
+
       .button i {
         margin-right: 0.5em;
       }
@@ -173,7 +180,39 @@
       .button.inverted-logo i {
         margin-left: 0.5em;
       }
+      .gradient-border,
+      .card {
+        padding: 0.5rem 1rem;
+        position: relative;
+        background-color: white;
+        background-clip: padding-box;
+        border: 5px solid transparent;
+      }
 
+      .gradient-border::before,
+      .card:hover::before {
+        content: "";
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        width: 20%;
+        height: 50%;
+        bottom: -2px;
+        left: -2px;
+        z-index: -1;
+        background-image: linear-gradient(180deg, #2323ff, #1893ff);
+      }
+      .gradient-border::after,
+      .card:hover::after {
+        content: "";
+        position: absolute;
+        width: 20%;
+        height: 50%;
+        bottom: -2px;
+        right: -2px;
+        z-index: -1;
+        background-image: linear-gradient(180deg, #2323ff, #1893ff);
+      }
       .button:hover {
         /* outline: 2px solid var(--button-highlight); Border bottom */
         box-shadow: 0px 0px 1px 1px var(--button-highlight); /* Border bottom */
@@ -207,6 +246,7 @@
         box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.7);
         animation: glow 5s linear infinite;
       }
+
       @media (max-width: 1000px) {
         .hero::before {
           display: none;
@@ -221,7 +261,7 @@
         }
         50% {
           box-shadow: 0 0 40px 20px rgba(255, 255, 255, 0.3);
-          opacity: 0;
+          opacity: 0.3;
         }
         100% {
           box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.7);
@@ -239,7 +279,7 @@
       }
       .card {
         padding: 1em;
-        border: 2px solid #201c35;
+        /* border: 2px solid #201c35; */
         background-color: #0e0a24;
         min-height: 100px;
         flex-basis: 300px;
@@ -257,7 +297,7 @@
       .section {
         max-width: 1250px;
         margin: 0 auto;
-        margin-bottom: 5rem;
+        margin-bottom: 10rem;
       }
       b {
         color: white;
@@ -317,10 +357,7 @@
         margin-top: 20rem;
       }
 
-      a {
-        color: #198eff;
-      }
-      #page__interact {
+      .full {
         max-width: 100%;
       }
       img {
@@ -350,12 +387,30 @@
         left: 0;
         background-image: linear-gradient(
           to bottom,
-          transparent -10%,
+          transparent 0%,
           #030014 90%
         );
       }
       a.white {
         color: white;
+      }
+      .box {
+        display: flex;
+        max-width: 800px;
+        margin: 0 auto;
+        justify-content: center;
+      }
+      .box-item {
+        padding: 1em;
+      }
+      .box-item:not(:last-child) {
+        border-right: 2px solid #201c35;
+      }
+      #cta {
+        gap: 1rem;
+      }
+      footer {
+        text-align: center;
       }
     </style>
   </head>
@@ -409,8 +464,12 @@
               </button>
             </a>
             <button class="button transparent inverted-logo">
-              <a class="white" href="https://www.youtube.com/watch?v=jS_YsytBbD8">
-              <i class="fa-solid fa-play"></i>Play Tutorial Video</a>
+              <a
+                class="white"
+                href="https://www.youtube.com/watch?v=jS_YsytBbD8"
+              >
+                <i class="fa-solid fa-play"></i>Watch Tutorial Video</a
+              >
             </button>
           </div>
         </div>
@@ -427,7 +486,7 @@
                 Develop dynamic and realistic NPC characters
               </p>
             </div>
-            <div class="card">
+            <div class="card gradient-border">
               <p>
                 <b>Research Simulations.</b>
                 Customize simulations for research without needing to code
@@ -452,9 +511,16 @@
           <div class="img__gradient">
             <div id="dashboard">f</div>
           </div>
+          <div class="box">
+            <div class="box-item">Conversation History</div>
+            <div class="box-item">Edit Locations</div>
+            <div class="box-item">Interview Agents</div>
+            <div class="box-item">Agent Information</div>
+            <div class="box-item">Prompt Debugging</div>
+          </div>
         </div>
       </div>
-      <div id="page__interact" class="section">
+      <div class="section full">
         <div class="section--inner">
           <div class="flex left">
             <div class="flex-image">
@@ -469,6 +535,57 @@
                 weight cutoffs and prompts
               </p>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="section full">
+        <div class="section--inner">
+          <div class="flex right">
+            <div class="flex-2">
+              <h2>Programming Clients</h2>
+              <p>
+                No programming is needed to configure simulations for research
+                purposes, but our
+                <a
+                  href="https://github.com/nickm980/smallville/tree/main/java-client"
+                  >Java</a
+                >
+                and
+                <a href="https://www.npmjs.com/package/smallville"
+                  >JavaScript</a
+                >
+                clients allow for more control in creating custom simulations
+                and for video games.
+              </p>
+              <br />
+              <i
+                >The Java client will get priority updates so the JavaScript
+                client may be outdated.</i
+              >
+            </div>
+            <div class="flex-image">
+              <div class="img__gradient">
+                <img class="large" src="javaclient.png" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section--inner">
+          <h2></h2>
+          <div class="hero--section-buttons" id="cta">
+            <a href="https://github.com/nickm980/smallville/tree/main">
+              <button class="button white">
+                <i class="fa-brands fa-github fa-lg"></i>View Source On GitHub
+              </button>
+            </a>
+            <p>Or</p>
+            <a href="https://github.com/nickm980/smallville">
+              <button class="button outline">
+                <i class="fa-brands fa-discord fa-lg"></i> Join the Discord
+              </button>
+            </a>
           </div>
         </div>
       </div>
@@ -529,5 +646,8 @@
         </div>
       </div>
     </div>
+    <footer>
+      © 2023 nickm980
+    </footer>
   </body>
 </html>
