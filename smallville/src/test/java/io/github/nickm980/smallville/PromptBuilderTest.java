@@ -17,7 +17,7 @@ import io.github.nickm980.smallville.entities.SimulatedLocation;
 import io.github.nickm980.smallville.entities.SimulatedObject;
 import io.github.nickm980.smallville.entities.memory.Characteristic;
 import io.github.nickm980.smallville.entities.memory.Plan;
-import io.github.nickm980.smallville.prompts.Prompt;
+import io.github.nickm980.smallville.prompts.PromptRequest;
 import io.github.nickm980.smallville.prompts.PromptBuilder;
 
 public class PromptBuilderTest {
@@ -58,7 +58,7 @@ public class PromptBuilderTest {
     @Test
     public void testPromptTemplates() {
 	String input = SmallvilleConfig.getPrompts().getMisc().getDebug();
-	Prompt prompt = builder.setPrompt(input).build();
+	PromptRequest prompt = builder.setPrompt(input).build();
 	String result = prompt.build().get("content");
 	System.out.println(result);
 	assertEquals("pong", getKey(result, "ping"));
@@ -80,7 +80,7 @@ public class PromptBuilderTest {
     @Test
     public void testLongTermPlans() {
 	String input = SmallvilleConfig.getPrompts().getPlans().getLongTerm();
-	Prompt prompt = builder.setPrompt(input).build();
+	PromptRequest prompt = builder.setPrompt(input).build();
 
 	assertTrue(prompt.build().get("content").contains("[...]"));
     }
