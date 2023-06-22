@@ -1,11 +1,11 @@
 package io.github.nickm980.smallville.llm;
 
-import io.github.nickm980.smallville.prompts.Prompt;
+import io.github.nickm980.smallville.prompts.PromptRequest;
 
 public class MockGPT implements LLM {
 
     @Override
-    public String sendChat(Prompt query, double temp) {
+    public String sendChat(PromptRequest query, double temp) {
 	return query.toString();
     }
 
