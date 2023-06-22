@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import io.github.nickm980.smallville.LogCache;
@@ -37,8 +38,18 @@ public class SimulationService {
     public void createMemory(CreateMemoryRequest request) {
 	Agent agent = world.getAgent(request.getName()).orElseThrow();
 	Observation observation = new Observation(request.getDescription());
-	observation.setReactable(true);
+	observation.setReactable(request.isReactable());
 	agent.getMemoryStream().add(observation);
+
+	if (observation.isReactable()) {
+	    SimulationTime.update();
+	    prompts.updateAgent(agent, new Progress() {
+		@Override
+		public void update() {
+		    progress += 1;
+		}
+	    });
+	}
     }
 
     public AgentStateResponse getAgentState(String name) {
@@ -127,10 +138,15 @@ public class SimulationService {
     }
 
     public List<ConversationResponse> getConversations() {
+	List<ConversationResponse> result = new ArrayList<ConversationResponse>();
 	List<Conversation> conversations = world
 	    .getConversationsAfter(SimulationTime.now().minus(SimulationTime.getStepDuration()));
 
-	return conversations.stream().map(mapper::fromConversation).toList();
+	for (Conversation conversation : conversations) {
+	    result.addAll(mapper.fromConversation(conversation));
+	}
+	
+	return result;
     }
 
     public void createObject(CreateObjectRequest request) {
