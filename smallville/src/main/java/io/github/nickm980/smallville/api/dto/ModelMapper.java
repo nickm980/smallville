@@ -1,7 +1,9 @@
 package io.github.nickm980.smallville.api.dto;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.github.nickm980.smallville.entities.Agent;
@@ -66,15 +68,17 @@ public class ModelMapper {
 	return result;
     }
 
-    public ConversationResponse fromConversation(Conversation conversation) {
-	ConversationResponse result = new ConversationResponse();
-	Map<String, String> messages = new HashMap<String, String>();
+    public List<ConversationResponse> fromConversation(Conversation conversation) {
+	List<ConversationResponse> result = new ArrayList<ConversationResponse>();
 
 	for (Dialog dialog : conversation.getDialog()) {
-	    messages.put(dialog.getName(), dialog.getMessage());
+	    ConversationResponse response = new ConversationResponse();
+
+	    response.setName(dialog.getName());
+	    response.setMessage(dialog.getMessage());
+	    result.add(response);
 	}
 
-	result.setMessages(messages);
 	return result;
     }
 }
