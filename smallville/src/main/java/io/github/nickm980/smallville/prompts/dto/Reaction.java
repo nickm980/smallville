@@ -1,31 +1,31 @@
 package io.github.nickm980.smallville.prompts.dto;
 
 public class Reaction {
-    private boolean react;
-    private String currentActivity;
-    private String emoji;
+    private String reasoning;
+    private String answer;
+    private String conversation;
 
-    public String getCurrentActivity() {
-	return currentActivity;
+    public String getReasoning() {
+	return reasoning;
     }
 
-    public void setCurrentActivity(String currentActivity) {
-	this.currentActivity = currentActivity;
+    public void setReasoning(String reasoning) {
+	this.reasoning = reasoning;
     }
 
-    public String getEmoji() {
-	return emoji;
+    public String getAnswer() {
+	return answer;
     }
 
-    public void setEmoji(String emoji) {
-	this.emoji = emoji;
+    public void setAnswer(String answer) {
+	this.answer = answer;
     }
 
-    public void setReact(boolean react) {
-	this.react = react;
+    public String getConversation() {
+	return conversation;
     }
 
-    public boolean willReact() {
-	return react;
+    public void setConversation(String conversation) {
+	this.conversation = conversation;
     }
 }
