@@ -29,9 +29,7 @@ public class PromptBuilder {
 	data.put("agent", prompts.fromAgent(agent));
 
 	if (data.get("memories.unranked") == null) {
-	    data
-		.put("memories.unranked",
-			agent.getMemoryStream().getMemories().stream().filter(memory -> memory.getImportance() < 1.0).toList());
+	    data.put("memories.unranked", agent.getMemoryStream().getUnweightedMemories());
 	}
 
 	if (data.get("memories.characteristics") == null) {
@@ -102,14 +100,14 @@ public class PromptBuilder {
 	return this;
     }
 
-    public Prompt build() {
+    public PromptRequest build() {
 	if (prompt == null || prompt.isEmpty()) {
 	    throw new SmallvilleException("Must call a creation function to make a new prompt first");
 	}
 
 	TemplateEngine engine = new TemplateEngine();
 	prompt = engine.format(prompt, data);
-	Prompt result = new Prompt.User(prompt);
+	PromptRequest result = new PromptRequest.User(prompt);
 
 	return result;
     }
