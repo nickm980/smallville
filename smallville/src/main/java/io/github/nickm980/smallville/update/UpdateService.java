@@ -1,19 +1,15 @@
 package io.github.nickm980.smallville.update;
 
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.config.SmallvilleConfig;
 import io.github.nickm980.smallville.entities.Agent;
-import io.github.nickm980.smallville.entities.SimulatedObject;
 import io.github.nickm980.smallville.entities.SimulationTime;
-import io.github.nickm980.smallville.entities.memory.Characteristic;
-import io.github.nickm980.smallville.entities.memory.Observation;
 import io.github.nickm980.smallville.llm.LLM;
+import io.github.nickm980.smallville.prompts.ChatService;
 
 /**
  * 
@@ -47,19 +43,9 @@ public class UpdateService {
 		    + SimulationTime
 			.now()
 			.format(DateTimeFormatter.ofPattern(SmallvilleConfig.getConfig().getTimeFormat())));
-	
-	// add what other agents are doing
-	for (Agent other : world.getAgents()) {
-	    if (!other.getFullName().equals(agent.getFullName())) {
-		String description = other.getFullName() + " is " + other.getCurrentActivity() + " at "
-			+ other.getLocation().getName() + ": " + other.getObject().getName();
-
-		agent.getMemoryStream().add(new Observation(description));
-	    }
-	}
 
 	AgentUpdate update = new UpdateMemoryWeights()
-	    .setNext(new UpdateFuturePlans())
+	    .setNext(new UpdateReactionAndFuturePlans())
 	    .setNext(new UpdateCurrentActivity())
 	    .setNext(new UpdateLocations())
 	    .setNext(new UpdateReflection());
