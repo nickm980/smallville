@@ -22,34 +22,36 @@ public final class ExceptionRoutes {
 	});
 
 	app.exception(JsonParseException.class, (e, ctx) -> {
-	    ctx.json(Map.of("error", "Invalid json request body"));
+	    ctx.status(400).json(Map.of("error", "Invalid json request body"));
 	});
 
 	app.exception(UnrecognizedPropertyException.class, (e, ctx) -> {
-	    ctx.json(Map.of("error", "Field not recognized {" + e.getPropertyName() + "}"));
+	    ctx.status(400).json(Map.of("error", "Field not recognized {" + e.getPropertyName() + "}"));
 	});
 
 	app.exception(SmallvilleException.class, (e, ctx) -> {
-	    ctx.json(Map.of("error", e.getMessage()));
+	    ctx.status(400).json(Map.of("error", e.getMessage()));
 	});
 
 	app.exception(NoSuchElementException.class, (e, ctx) -> {
 	    e.printStackTrace();
-	    ctx.json(Map.of("error", "Resource does not exist"));
+	    ctx.status(404).json(Map.of("error", "Resource does not exist"));
 	});
 
 	app.exception(IllegalArgumentException.class, (e, ctx) -> {
-	    ctx.json(Map.of("error", e.getMessage()));
+	    ctx.status(400).json(Map.of("error", e.getMessage()));
 	});
+	
 	app.exception(LocationNotFoundException.class, (e, ctx) -> {
-	    ctx.json(Map.of("error", e.getMessage()));
+	    ctx.status(404).json(Map.of("error", e.getMessage()));
 	});
+	
 	app.exception(AgentNotFoundException.class, (e, ctx) -> {
-	    ctx.json(Map.of("error", e.getMessage()));
+	    ctx.status(404).json(Map.of("error", e.getMessage()));
 	});
 	app.exception(Exception.class, (e, ctx) -> {
 	    e.printStackTrace();
-	    ctx.json(Map.of("error", "An unexpected error has occured"));
+	    ctx.status(400).json(Map.of("error", "An unexpected error has occured"));
 	});
     }
 }
