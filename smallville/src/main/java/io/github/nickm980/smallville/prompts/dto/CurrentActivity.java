@@ -2,7 +2,7 @@ package io.github.nickm980.smallville.prompts.dto;
 
 public class CurrentActivity {
     private String lastActivity;
-    private String currentActivity;
+    private String activity;
     private String emoji;
     private String location;
 
@@ -22,12 +22,12 @@ public class CurrentActivity {
 	this.lastActivity = lastActivity;
     }
 
-    public String getCurrentActivity() {
-	return currentActivity;
+    public String getActivity() {
+	return activity;
     }
 
-    public void setCurrentActivity(String currentActivity) {
-	this.currentActivity = currentActivity;
+    public void setActivity(String currentActivity) {
+	this.activity = currentActivity;
     }
 
     public String getEmoji() {
