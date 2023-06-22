@@ -75,13 +75,7 @@ public class MemoryStream {
 
     public List<Memory> getUnweightedMemories() {
 	return memories.stream().filter(memory -> {
-	    if (memory instanceof Plan) {
-		Plan p = (Plan) memory;
-		if (p.getType() == PlanType.SHORT_TERM) {
-		    return false;
-		}
-	    }
-	    return memory.getImportance() == 0;
+	    return memory.getImportance() == 0 && !(memory instanceof Plan);
 	}).toList();
     }
 
