@@ -90,9 +90,11 @@
       .flex-2 {
         flex-basis: 350px;
         text-align: left;
+        padding: 1em;
       }
       nav {
         z-index: 2;
+        display: none;
 
         width: 100%;
         margin: 0 !important;
@@ -398,9 +400,11 @@
         display: flex;
         max-width: 800px;
         margin: 0 auto;
+        flex-wrap: wrap;
         justify-content: center;
       }
       .box-item {
+        flex: 1;
         padding: 1em;
       }
       .box-item:not(:last-child) {
