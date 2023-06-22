@@ -4,6 +4,7 @@ reactions:
     {{other.summary}}
 
     Create a fake conversation between {{agent.name}} and {{other.name}}
+    Topic: {{observation}}
 
     For example, a conversation between people named A and B would look like this
 
@@ -13,13 +14,13 @@ reactions:
   reaction: |
     {{world.description}} 
     {{agent.summary}}
-     
+      
     Plans: {{#agent.plans}}{{description}}; {{/agent.plans}}
     Relevant Memories: {{#memories.relevant}}{{description}}; {{/memories.relevant}}
 
     List the reasons and say yes or no whether or not {{agent.name}} would change their plans given the observation.
 
-    For example:
+    Respond in the following format.
     Observation: a burning house
     Reasoning: a burning house is highly important. {{agent.name}} would likely react to a burning house.
     Answer: Yes, {{agent.name}} would react and try to put the fire out
@@ -30,10 +31,10 @@ reactions:
     Answer: No, {{agent.name}} would not react
     Conversation: No, there is no one to talk to and the event doesn't interest {{agent.name}} enough
 
-    Observation: {{agent.name}} sees John in a burning house
-    Reasoning: John being stuck in a burning house interests {{agent.name}}
+    Observation: {{agent.name}} sees x in a burning house
+    Reasoning: x being stuck in a burning house interests {{agent.name}}
     Answer: Yes, {{agent.name}} would change their plans
-    Conversation: Yes because {{agent.name}} wants to make sure John is OK
+    Conversation: Yes, with x to make sure they are OK. x cannot have the same name as {{agent.name}}
 
     Observation: {{observation}}
     Reasoning: ...
@@ -56,30 +57,27 @@ world:
     Coffee Machine: Off
     Shower: On
 
-    What are the states of the objects?
-
 plans:
   shortTerm: |
     {{world.description}}
     {{agent.summary}}
-
-    {{#agent.recentMemories}}{{description}}; {{/agent.recentMemories}}{{#memories.relevant}}{{description}}; {{/memories.relevant}}
-
-    Schedule: {{#agent.plans}}{{description}};{{/agent.plans}}
-    Last Activity: {{agent.lastActivity}}
+    Plans: {{#agent.plans}}{{description}};{{/agent.plans}}
+    Relevant Memories: {{#memories.relevant}}{{description}}; {{/memories.relevant}}
+    Observation: {{observation}}
     
-    Example: 
-    8:00 am at the Oak Hill College Dorm: Klaus Mueller's room: bed, sleep;
-    8:05 am at the Oak Hill College Dorm: Klaus Mueller's room: bed, sleep;
-    [...]
-
-    It is currently {{date.time}}
-    Here is what {{agent.name}} will do for the next hour in increments of 5 to 10 minutes:
+    * Every plan should get its own line.
+    * Give a start time for every plan and format the time as "hh:mm a"
+    * Start each plan with a hypen
+    
+    What will {{agent.name}} do every minute for the next 20 minutes? Start at the current time and end 20 minutes from now.
+    Respond with 20 plans.
+    The current time is {{date.time}}
 
   longTerm: |
     {{world.description}}
     {{agent.summary}}
-    {{#agent.recentMemories}}{{description}}; {{/agent.recentMemories}}{{#memories.relevant}}{{description}}; {{/memories.relevant}}
+    Relevant Memories: {{#memories.relevant}}{{description}}; {{/memories.relevant}}
+    Observation ({{date.time}}): {{observation}}
 
     * Only use the available locations
     * Include the time {{agent.name}} wake's up and falls asleep
@@ -95,17 +93,20 @@ plans:
 
   current: |
     {{world.description}}
-    Schedule: {{#agent.plans}}{{description}}; {{/agent.plans}}
+    Schedule: {{#agent.shortPlans}}{{description}}; {{/agent.shortPlans}}
 
-    Example:
-    Activity: cooking dinner
-    Location: Green House: Kitchen
-    Emoji: 🍳
-    
-    It is currently {{date.time}}
+    * The location should always include a leaf location or object chosen from the available locations
+
+    What is your activity at {{date.time}}?
+
+    For example:
+    Activity: swimming laps in the pool
+    Location: Gym: Swimming Pool
+    Emoji: 🏊
+
     Activity: ...
-    Emoji: ...
     Location: ...
+    Emoji: ...
 
 agent:
   # statements are from the memory stream
