@@ -72,7 +72,7 @@ public class World {
     }
 
     public List<Conversation> getConversationsAfter(LocalDateTime time) {
-	return conversations.after(time).stream().toList();
+	return conversations.all();
     }
 
     public SimulatedObject getExactLocation(String location) {
