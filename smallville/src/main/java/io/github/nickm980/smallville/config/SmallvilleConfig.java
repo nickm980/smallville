@@ -18,8 +18,6 @@ import io.github.nickm980.smallville.config.prompts.Prompts;
 public class SmallvilleConfig {
     private static Prompts prompts;
     private static GeneralConfig config;
-    private static JsonNode functions;
-
     private static final Logger LOG = LoggerFactory.getLogger(SmallvilleConfig.class);
 
     private SmallvilleConfig() {
@@ -42,15 +40,6 @@ public class SmallvilleConfig {
 	}
 
 	return config;
-    }
-
-    public static JsonNode getFunctions() {
-	if (functions == null) {
-	    LOG.info("Loading functions json...");
-	    functions = loadJsonFile("functions.json");
-	}
-
-	return functions;
     }
 
     private static InputStream loadInputStream(String path) {
