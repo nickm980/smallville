@@ -11,6 +11,7 @@ import io.github.nickm980.smallville.config.SmallvilleConfig;
 import io.github.nickm980.smallville.entities.Agent;
 import io.github.nickm980.smallville.entities.memory.MemoryStream;
 import io.github.nickm980.smallville.entities.memory.Plan;
+import io.github.nickm980.smallville.entities.memory.PlanType;
 
 /**
  * Creates the prompts used by other prompts and converts objects to natural
@@ -28,7 +29,7 @@ public class TemplateMapper {
 	data.put("agent.locationName", agent.getLocation().getName());
 	data.put("agent.description", stream.getCharacteristics().stream().map(c -> c.getDescription()).toList());
 	data.put("agent.traits", agent.getTraits());
-	
+
 	return new TemplateEngine().format(prompt, data);
     }
 
@@ -41,7 +42,7 @@ public class TemplateMapper {
 	if (stream.getPlans() == null) {
 	    LOG.error("no plans found!!!");
 	}
-	
+
 	result.put("name", agent.getFullName());
 	result.put("memories", agent.getMemoryStream().getMemories().stream().limit(10).toList());
 	result.put("activity", agent.getCurrentActivity());
@@ -51,8 +52,8 @@ public class TemplateMapper {
 	result.put("locationChildren", agent.getLocation().getObjects());
 	result.put("description", desc);
 	result.put("plans", stream.getPlans());
+	result.put("shortPlans", stream.getPlans(PlanType.SHORT_TERM));
 	result.put("recentMemories", agent.getMemoryStream().getRecentMemories());
-
 	/*
 	 * agent.plansBlock is a number list of the upcoming plans with a block [...]
 	 * between the current time and the next time.
@@ -108,7 +109,8 @@ public class TemplateMapper {
 	    .toList();
 
 	String result = String.join("; ", memories);
-	LOG.info(agent.getFullName() + "'s relevant memories (" + observation + "): " + result);
+	
+	LOG.debug(agent.getFullName() + "'s relevant memories (" + observation + "): " + result);
 
 	return result;
     }
