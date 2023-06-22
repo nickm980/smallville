@@ -4,13 +4,22 @@ import java.util.Map;
 
 public class ConversationResponse {
 
-    private Map<String, String> messages;
+    private String name;
+    private String message;
 
-    public Map<String, String> getMessages() {
-	return messages;
+    public String getName() {
+	return name;
     }
 
-    public void setMessages(Map<String, String> messages) {
-	this.messages = messages;
+    public void setName(String name) {
+	this.name = name;
+    }
+
+    public String getMessage() {
+	return message;
+    }
+
+    public void setMessage(String message) {
+	this.message = message;
     }
 }
