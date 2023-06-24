@@ -16,7 +16,8 @@ public class PromptBuilder {
     private Map<String, Object> data;
     private String prompt;
     private final TemplateMapper prompts;
-
+    private Agent agent;
+    
     public PromptBuilder() {
 	this.data = new HashMap<>();
 	this.prompts = new TemplateMapper();
@@ -26,6 +27,7 @@ public class PromptBuilder {
     }
 
     public PromptBuilder withAgent(Agent agent) {
+	this.agent = agent;
 	data.put("agent", prompts.fromAgent(agent));
 
 	if (data.get("memories.unranked") == null) {
@@ -71,7 +73,7 @@ public class PromptBuilder {
     }
 
     public PromptBuilder withWorld(World world) {
-	data.put("world", WorldModel.fromWorld(world));
+	data.put("world", WorldModel.fromWorld(agent.getFullName(), world));
 
 	if (data.get("locations") == null) {
 	    data.put("locations", world.getLocations());
