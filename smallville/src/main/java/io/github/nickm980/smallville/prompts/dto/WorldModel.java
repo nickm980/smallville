@@ -17,7 +17,7 @@ public class WorldModel {
 	this.description = description;
     }
 
-    public static WorldModel fromWorld(World world) {
+    public static WorldModel fromWorld(String name, World world) {
 	WorldModel result = new WorldModel();
 	String description = "Available Locations: ";
 
@@ -33,6 +33,9 @@ public class WorldModel {
 	}
 
 	for (Agent agent : world.getAgents()) {
+	    if (agent.getFullName().equals(name)) {
+		continue;
+	    }
 	    description += agent.getFullName() + " is " + agent.getCurrentActivity() + " at "
 		    + agent.getLocation().getName() + " ";
 	}
