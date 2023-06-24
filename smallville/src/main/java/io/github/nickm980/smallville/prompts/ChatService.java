@@ -46,7 +46,6 @@ public class ChatService implements Prompts {
     public int[] getWeights(Agent agent) {
 	PromptRequest prompt = new PromptBuilder()
 	    .withAgent(agent)
-
 	    .setPrompt(SmallvilleConfig.getPrompts().getMisc().getRankMemories())
 	    .build();
 
@@ -87,10 +86,10 @@ public class ChatService implements Prompts {
     @Override
     public List<Plan> getPlans(Agent agent) {
 	PromptRequest prompt = new PromptBuilder()
-	    .withWorld(world)
 	    .withLocations(world.getLocations())
 	    .withObservation(agent.getMemoryStream().getLastObservation().getDescription())
 	    .withAgent(agent)
+	    .withWorld(world)
 	    .setPrompt(SmallvilleConfig.getPrompts().getPlans().getLongTerm())
 	    .build();
 
@@ -116,8 +115,8 @@ public class ChatService implements Prompts {
     @Override
     public CurrentActivity getCurrentActivity(Agent agent) {
 	PromptRequest prompt = new PromptBuilder()
-	    .withWorld(world)
 	    .withAgent(agent)
+	    .withWorld(world)
 	    .withLocations(world.getLocations())
 	    .setPrompt(SmallvilleConfig.getPrompts().getPlans().getCurrent())
 	    .build();
@@ -317,7 +316,7 @@ public class ChatService implements Prompts {
 	String response = chat.sendChat(prompt, .2);
 	Reaction result = Util.parseAsClass(response, Reaction.class);
 
-	LOG.debug("reacting " + result);
+	LOG.debug("reacting " + result.getAnswer());
 	return result;
     }
 
