@@ -12,12 +12,19 @@ class Agent {
     private memories: string[]
     private location: string
 
-    constructor({ name, agent, text, activity, location, memories }:{
-        name: string,
-        agent: Phaser.GameObjects.Container,
-        text: Phaser.GameObjects.Text,
-        activity: string,
-        location: string,
+    constructor({
+        name,
+        agent,
+        text,
+        activity,
+        location,
+        memories,
+    }: {
+        name: string
+        agent: Phaser.GameObjects.Container
+        text: Phaser.GameObjects.Text
+        activity: string
+        location: string
         memories: string[]
     }) {
         this.name = name
@@ -78,10 +85,15 @@ class Agent {
 
 var nMesh: any
 
-function updateAgent({ name, location, activity, emoji }:{
-    name: string,
-    location: string,
-    activity: string,
+function updateAgent({
+    name,
+    location,
+    activity,
+    emoji,
+}: {
+    name: string
+    location: string
+    activity: string
     emoji: string
 }) {
     const agent = agents.find((agent) => {
@@ -126,12 +138,12 @@ function createAgent({
 
     var emoji = scene.add.text(0, -42, name[0] + ': ?', {
         font: '16px Courier New',
-        backgroundColor: '#00000'
+        backgroundColor: '#00000',
     })
 
     var activityText = scene.add.text(0, 0, "Game hasn't started!", {
         font: '16px Courier New',
-        backgroundColor: '#00000'
+        backgroundColor: '#00000',
     })
     // dialog.addChild(text)
     // player.addChild(dialog)
@@ -173,15 +185,16 @@ function createAgent({
     moveAgent({ scene: scene, name: name, location: location })
 }
 
-function moveAgent({ scene, name, location }: {
-    scene: any,
-    name: string,
+function moveAgent({
+    scene,
+    name,
+    location,
+}: {
+    scene: any
+    name: string
     location: string
 }) {
-    const agent = agents.find((agent) => {
-        return name == agent.getName()
-    })
-
+    const agent = agents.find((agent) => name == agent.getName())
     const coords = getCoordinates(location)
 
     if (!agent) {
@@ -220,15 +233,16 @@ function moveAgent({ scene, name, location }: {
         var deltaX = x - agent.getX()
         var deltaY = y - agent.getY()
 
-        let direction
+        let direction: string
+
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
             direction = deltaX > 0 ? 'right' : 'left'
         } else {
             direction = deltaY > 0 ? 'down' : 'up'
         }
 
-        const sprite = agent.getAgent().list[3]
-        // sprite.play(`walk-${direction}`)
+        const sprite: any = agent.getAgent().list[3]
+        sprite.play(`walk-${direction}`)
 
         // Calculate the distance to the target
         const distance = Phaser.Math.Distance.Between(
@@ -250,7 +264,7 @@ function moveAgent({ scene, name, location }: {
             onComplete: function () {
                 i++
                 if (i >= newPath.length) {
-                    // sprite.play(`idle`, true)
+                    sprite.play(`idle`, true)
                 } else {
                     moveNext() // Move to the next location recursively
                 }
