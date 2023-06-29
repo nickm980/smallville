@@ -1,8 +1,8 @@
-import { Smallville } from '../../../javascript-client/dist/index.js'
-import { agents } from './mechanics/agents.js'
-import { updateAgent } from './mechanics/index.js'
-import { updateLocations } from './mechanics/locations.js'
-import { showLoadingCursor, stopShowingLoadingCursor } from './dom.js'
+import { Smallville } from 'smallville'
+import { agents } from '../src/mechanics/agents.js'
+import { updateAgent } from '../src/mechanics/index.js'
+import { updateLocations } from '../src/mechanics/locations.js'
+import { showLoadingCursor, stopShowingLoadingCursor } from '../src/mechanics/dom.js'
 
 const smallville = new Smallville({
     host: 'http://localhost:8080',

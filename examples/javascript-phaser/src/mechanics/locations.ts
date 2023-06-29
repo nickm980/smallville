@@ -1,13 +1,4 @@
-/**
- * A collection of predefined locations and their coordinates.
- * @typedef {Object.<string, {x: number, y: number}>} Locations
- */
-
-/**
- * An object containing predefined locations and their coordinates.
- * @type {Locations}
- */
-const locations = {
+const locations: any = {
     'Red House': {
         x: -100,
         y: 100,
@@ -34,12 +25,7 @@ const locations = {
     },
 }
 
-/**
- * Retrieves the coordinates of a location by name.
- * @param {string} name - The name of the location to retrieve coordinates for.
- * @returns {{x: number, y: number}} - The coordinates of the location.
- */
-function getCoordinates(name) {
+function getCoordinates(name: string) {
     var location = getLeafLocation(name)
     if (locations[location] == undefined) {
         location = name.split(':')[0]
@@ -48,17 +34,17 @@ function getCoordinates(name) {
     return { x: locations[location].x, y: locations[location].y }
 }
 
-function getLeafLocation(location) {
+function getLeafLocation(location: string) {
     const parts = location.split(':')
     return parts[parts.length - 1].trim().replace(':', '')
 }
 
-function getRootLocation(location) {
+function getRootLocation(location: string) {
     const parts = location.split(':')
     return parts[parts.length - 1].trim().replace(':', '')
 }
 
-function updateLocations(locations) {
+function updateLocations(locations: any) {
     const element = document.getElementById('locations')
     var str
     element.innerHTML = ''

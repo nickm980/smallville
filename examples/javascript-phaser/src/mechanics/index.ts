@@ -3,8 +3,8 @@ import {
     updateAgent,
     moveAgent,
     loadAnimations,
-} from './agents.js'
-import { enableCameraControlls } from './camera.js'
+} from './agents'
+import { enableCameraControlls } from './camera'
 
 export {
     createAgent,

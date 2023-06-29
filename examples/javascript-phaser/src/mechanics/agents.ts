@@ -1,19 +1,25 @@
-import { getCoordinates } from './locations.js'
-import { updateHTMLElement } from '../dom.js'
+import { getCoordinates } from './locations'
+import { updateHTMLElement } from './dom'
 
-/**
- * An array of Agent objects.
- * @type {Agent[]}
- */
-var agents = []
+var agents: Agent[] = []
 
-/**
- * Represents an agent in the game.
- *
- * @class
- */
 class Agent {
-    constructor({ name, agent, text, activity, location, memories }) {
+    private name: string
+    private agent: Phaser.GameObjects.Container
+    private text: Phaser.GameObjects.Text
+    private emoji: string
+    private activity: string
+    private memories: string[]
+    private location: string
+
+    constructor({ name, agent, text, activity, location, memories }:{
+        name: string,
+        agent: Phaser.GameObjects.Container,
+        text: Phaser.GameObjects.Text,
+        activity: string,
+        location: string,
+        memories: string[]
+    }) {
         this.name = name
         this.agent = agent
         this.text = text
@@ -23,7 +29,7 @@ class Agent {
         this.location = location
     }
 
-    moveTo(locationName) {
+    moveTo(locationName: string) {
         const coords = getCoordinates(locationName)
 
         this.agent.setX(coords.x)
@@ -32,22 +38,22 @@ class Agent {
         console.log(this.name + ' moved to ' + locationName)
     }
 
-    say(message) {
+    say(message: string) {
         this.text.setText(this.name[0] + ': ' + this.emoji)
     }
 
-    setEmoji(emoji) {
-        if (emoji === undefined || emoji == null){
-            this.emoji = "?"
+    setEmoji(emoji: string) {
+        if (emoji === undefined || emoji == null) {
+            this.emoji = '?'
             this.say(this.activity)
             return
         }
-        
+
         this.emoji = emoji
         this.say(this.activity)
     }
 
-    setActivity(activity) {
+    setActivity(activity: string) {
         console.log(this.name + ' activity')
         this.activity = activity
         this.say(activity)
@@ -56,22 +62,30 @@ class Agent {
     getAgent() {
         return this.agent
     }
+
+    getName() {
+        return this.name
+    }
+
+    getX() {
+        return this.agent.x
+    }
+
+    getY() {
+        return this.agent.y
+    }
 }
 
-var nMesh
+var nMesh: any
 
-/**
- * Update an agent's location, activity, and emoji based on their name.
- * @param {Object} options - The options for updating the agent.
- * @param {string} options.name - The name of the agent to update.
- * @param {string} options.location - The new location of the agent.
- * @param {string} options.activity - The new activity of the agent.
- * @param {string} options.emoji - The new emoji of the agent.
- * @returns {void}
- */
-function updateAgent({ name, location, activity, emoji }) {
+function updateAgent({ name, location, activity, emoji }:{
+    name: string,
+    location: string,
+    activity: string,
+    emoji: string
+}) {
     const agent = agents.find((agent) => {
-        return name == agent.name
+        return name == agent.getName()
     })
 
     if (!agent) {
@@ -85,7 +99,19 @@ function updateAgent({ name, location, activity, emoji }) {
     agent.setActivity(activity)
 }
 
-function createAgent({ scene, name, location, activity, memories }) {
+function createAgent({
+    scene,
+    name,
+    location,
+    activity,
+    memories,
+}: {
+    scene: Phaser.Scene
+    name: string
+    location: string
+    activity: string
+    memories: string[]
+}) {
     if (nMesh == undefined) {
         nMesh = scene
     }
@@ -100,12 +126,12 @@ function createAgent({ scene, name, location, activity, memories }) {
 
     var emoji = scene.add.text(0, -42, name[0] + ': ?', {
         font: '16px Courier New',
-        fill: '#00000',
+        backgroundColor: '#00000'
     })
 
     var activityText = scene.add.text(0, 0, "Game hasn't started!", {
         font: '16px Courier New',
-        fill: '#00000',
+        backgroundColor: '#00000'
     })
     // dialog.addChild(text)
     // player.addChild(dialog)
@@ -113,11 +139,11 @@ function createAgent({ scene, name, location, activity, memories }) {
     player.setInteractive()
 
     player.on('pointerover ', function () {
-        agent.reset()
+        // agent.reset()
     })
 
     player.on('pointerout', function () {
-        agent.visible = false
+        // agent.visible = false
     })
 
     dialog.setScale(0.75)
@@ -142,14 +168,18 @@ function createAgent({ scene, name, location, activity, memories }) {
     //-300, -140
     console.log('[Agent] Created a new agent ' + name)
     const coords = getCoordinates(location)
-    agent.agent.x = coords.x
-    agent.agent.y = coords.y
+    agent.getAgent().setX(coords.x)
+    agent.getAgent().setY(coords.y)
     moveAgent({ scene: scene, name: name, location: location })
 }
 
-function moveAgent({ scene, name, location }) {
+function moveAgent({ scene, name, location }: {
+    scene: any,
+    name: string,
+    location: string
+}) {
     const agent = agents.find((agent) => {
-        return name == agent.name
+        return name == agent.getName()
     })
 
     const coords = getCoordinates(location)
@@ -160,20 +190,20 @@ function moveAgent({ scene, name, location }) {
     }
 
     const path = scene.navMesh.findPath(
-        { x: agent.agent.x, y: agent.agent.y },
+        { x: agent.getX(), y: agent.getY() },
         { x: coords.x, y: coords.y }
     )
 
     let navMeshPolys = scene.navMesh.navMesh.getPolygons()
-    let newPath = []
+    let newPath: any = []
 
     if (path == undefined) {
         console.error('no path to object')
         return
     }
 
-    path.forEach((point) => {
-        navMeshPolys.forEach((poly) => {
+    path.forEach((point: any) => {
+        navMeshPolys.forEach((poly: any) => {
             if (poly.contains(point)) {
                 newPath.push(poly.centroid)
             }
@@ -187,8 +217,8 @@ function moveAgent({ scene, name, location }) {
         const item = newPath[i]
         const x = item.x
         const y = item.y
-        var deltaX = x - agent.agent.x
-        var deltaY = y - agent.agent.y
+        var deltaX = x - agent.getX()
+        var deltaY = y - agent.getY()
 
         let direction
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
@@ -197,13 +227,13 @@ function moveAgent({ scene, name, location }) {
             direction = deltaY > 0 ? 'down' : 'up'
         }
 
-        const sprite = agent.agent.list[3]
-        sprite.play(`walk-${direction}`)
+        const sprite = agent.getAgent().list[3]
+        // sprite.play(`walk-${direction}`)
 
         // Calculate the distance to the target
         const distance = Phaser.Math.Distance.Between(
-            agent.agent.x,
-            agent.agent.y,
+            agent.getX(),
+            agent.getY(),
             x,
             y
         )
@@ -213,14 +243,14 @@ function moveAgent({ scene, name, location }) {
 
         // Create the tween
         scene.tweens.add({
-            targets: agent.agent,
+            targets: agent.getAgent(),
             x: x,
             y: y,
             duration: duration,
             onComplete: function () {
                 i++
                 if (i >= newPath.length) {
-                    sprite.play(`idle`, true)
+                    // sprite.play(`idle`, true)
                 } else {
                     moveNext() // Move to the next location recursively
                 }
@@ -231,7 +261,7 @@ function moveAgent({ scene, name, location }) {
     moveNext() // Start moving to the first location
 }
 
-function loadAnimations(scene) {
+function loadAnimations(scene: Phaser.Scene) {
     scene.anims.create({
         key: 'idle',
         frames: scene.anims.generateFrameNumbers('player', {

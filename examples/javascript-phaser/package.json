@@ -1,0 +1,25 @@
+{
+    "name": "javascript-phaser",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "build": "webpack",
+        "start": "webpack --mode development && webpack serve --mode development"
+    },
+    "author": "nickm980",
+    "license": "MIT",
+    "devDependencies": {
+        "expose-loader": "4.0.0",
+        "ts-loader": "9.3.1",
+        "typescript": "4.8.0-dev.20220730",
+        "webpack": "^5.88.1",
+        "webpack-cli": "4.10.0",
+        "webpack-dev-server": "4.9.3"
+    },
+    "dependencies": {
+        "phaser": "^3.60.0",
+        "phaser-navmesh": "^2.3.1",
+        "smallville": "^1.0.3"
+    }
+}

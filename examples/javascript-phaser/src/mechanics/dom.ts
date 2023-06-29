@@ -1,7 +1,7 @@
-let loadingCursorIntervalId
+let loadingCursorIntervalId: any
 const finalFrame = 7
-let currentCursorFrameNum
-let prevCursorFrameNum
+let currentCursorFrameNum: any
+let prevCursorFrameNum: any
 let phaserContainer = document.getElementById('phaser-container')
 function showLoadingCursor() {
     prevCursorFrameNum = finalFrame
@@ -41,7 +41,11 @@ function stopShowingLoadingCursor() {
     )
 }
 
-function createNewAgentBox({ name, location, activity }) {
+function createNewAgentBox({ name, location, activity }: {
+    name: string,
+    location: string,
+    activity: string
+}) {
     return `<div id="${name}" class="agent">
         <h2>${name}</h2>
         <p><b>Current Activity:</b> ${activity}</p>
@@ -50,7 +54,11 @@ function createNewAgentBox({ name, location, activity }) {
     </div>`
 }
 
-function updateHTMLElement({ name, location, activity }) {
+function updateHTMLElement({ name, location, activity }:{
+    name: string,
+    location: string,
+    activity: string
+}) {
     console.log(location)
     if (location.includes("null")){
         location = location.split(":")[0]
