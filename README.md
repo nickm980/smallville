@@ -4,7 +4,8 @@
 Generative agents are virtual characters that can store memories and dynamically react to their environment. Using LLM models such as ChatGPT agents are able to observe their surroundings, store memories, and react to state changes in the world
 
 Generative Agents save time programming interactions by hand and make NPC's more realistic / dynamic
-![walking](https://github.com/nickm980/smallville/assets/81270095/bc0bc20c-3b80-4c1d-906d-8ceabe7fa6a0)
+![world_map](https://github.com/nickm980/smallville/assets/81270095/75d48ba3-cea9-4072-af50-3efd7c293f69)
+
 ![image](https://github.com/nickm980/smallville/assets/81270095/ffe3c8d4-4fab-42e5-aaac-a1d78f2c7c31)
 
 ## Getting Started
