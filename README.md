@@ -6,8 +6,6 @@ Generative agents are virtual characters that can store memories and dynamically
 Generative Agents save time programming interactions by hand and make NPC's more realistic / dynamic
 ![world_map](https://github.com/nickm980/smallville/assets/81270095/75d48ba3-cea9-4072-af50-3efd7c293f69)
 
-![image](https://github.com/nickm980/smallville/assets/81270095/ffe3c8d4-4fab-42e5-aaac-a1d78f2c7c31)
-
 ## Getting Started
 Create new agents (as in the example project) [example project](/example/javascript/smallville.js)
 
