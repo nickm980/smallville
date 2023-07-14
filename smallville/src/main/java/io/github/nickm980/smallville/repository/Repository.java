@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Generic repository class for storing and managing items of type T.
@@ -87,7 +88,7 @@ public class Repository<T> {
 	    .stream()
 	    .filter(t -> t.createdAt().compareTo(time) < 0)
 	    .map(item -> item.getData())
-	    .toList();
+	    .collect(Collectors.toList());
     }
 
     /**
@@ -96,6 +97,6 @@ public class Repository<T> {
      * @return a list of all items in the repository
      */
     public List<T> all() {
-	return data.values().stream().map(t -> t.getData()).toList();
+	return data.values().stream().map(t -> t.getData()).collect(Collectors.toList());
     }
 }
