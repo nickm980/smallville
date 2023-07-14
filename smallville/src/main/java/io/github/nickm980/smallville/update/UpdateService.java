@@ -45,12 +45,15 @@ public class UpdateService {
 			.format(DateTimeFormatter.ofPattern(SmallvilleConfig.getConfig().getTimeFormat())));
 
 	AgentUpdate update = new UpdateMemoryWeights()
-	    .setNext(new UpdateReactionAndFuturePlans())
+	    .setNext(new UpdatePlans())
 	    .setNext(new UpdateCurrentActivity())
-	    .setNext(new UpdateLocations())
+	    .setNext(new UpdateConversation())
 	    .setNext(new UpdateReflection());
-
-	update.start(chatService, world, agent);
+	
+	UpdateInfo info = new UpdateInfo();
+	info.setObservation(null);
+	
+	update.start(chatService, world, agent, info);
 
 	LOG.info("Agent updated");
     }

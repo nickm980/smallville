@@ -1,23 +1,21 @@
-package io.github.nickm980.smallville.api;
+package io.github.nickm980.smallville.api.v1;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import io.github.nickm980.smallville.LogCache;
 import io.github.nickm980.smallville.Util;
 import io.github.nickm980.smallville.World;
-import io.github.nickm980.smallville.api.dto.*;
+import io.github.nickm980.smallville.api.v1.dto.*;
 import io.github.nickm980.smallville.entities.*;
-import io.github.nickm980.smallville.entities.memory.Characteristic;
-import io.github.nickm980.smallville.entities.memory.Observation;
 import io.github.nickm980.smallville.exceptions.AgentNotFoundException;
-import io.github.nickm980.smallville.exceptions.LocationNotFoundException;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
 import io.github.nickm980.smallville.llm.LLM;
+import io.github.nickm980.smallville.memory.Characteristic;
+import io.github.nickm980.smallville.memory.Observation;
 import io.github.nickm980.smallville.update.Progress;
 import io.github.nickm980.smallville.update.UpdateService;
 
@@ -60,13 +58,13 @@ public class SimulationService {
     public List<AgentStateResponse> getAgents() {
 	List<Agent> agents = world.getAgents();
 
-	return agents.stream().map(mapper::fromAgent).toList();
+	return agents.stream().map(mapper::fromAgent).collect(Collectors.toList());
     }
 
     public List<LocationStateResponse> getChangedLocations() {
 	List<LocationStateResponse> result = new ArrayList<LocationStateResponse>();
 
-	for (SimulatedObject location : world.getObjects()) {
+	for (Location location : world.getLocations()) {
 	    result.add(mapper.fromLocation(location));
 	}
 
@@ -74,14 +72,9 @@ public class SimulationService {
     }
 
     public void createPerson(CreateAgentRequest request) {
-	List<Characteristic> characteristics = request.getMemories().stream().map(c -> new Characteristic(c)).toList();
+	List<Characteristic> characteristics = request.getMemories().stream().map(c -> new Characteristic(c)).collect(Collectors.toList());
 	// Location : Object
-	String[] names = Util.parseLocation(request.getLocation());
-
-	SimulatedLocation loc = world.getLocation(names[0]).orElseThrow();
-	SimulatedObject obj = world.getObjectByName(names[1]);
-
-	AgentLocation location = new AgentLocation(loc, obj);
+	Location location = world.getLocation(request.getLocation()).orElseThrow();
 	Agent agent = new Agent(request.getName(), characteristics, request.getActivity(), location);
 
 	if (world.create(agent)) {
@@ -95,19 +88,14 @@ public class SimulationService {
 	    throw new SmallvilleException("Location already exists");
 	}
 
-	world.create(new SimulatedLocation(request.getName()));
+	world.create(new Location(request.getName()));
     }
 
     public List<MemoryResponse> getMemories(String pathParam) {
-	List<MemoryResponse> result = world
-	    .getAgent(pathParam)
-	    .orElseThrow(() -> new AgentNotFoundException(pathParam))
-	    .getMemoryStream()
-	    .getMemories()
-	    .stream()
-	    .map(mapper::fromMemory)
-	    .sorted(Comparator.comparing(MemoryResponse::getTime, Comparator.nullsLast(Comparator.naturalOrder())))
-	    .collect(Collectors.toList());
+	List<MemoryResponse> result = world.getAgent(pathParam).orElseThrow(() -> new AgentNotFoundException(pathParam))
+		.getMemoryStream().getMemories().stream().map(mapper::fromMemory)
+		.sorted(Comparator.comparing(MemoryResponse::getTime, Comparator.nullsLast(Comparator.naturalOrder())))
+		.collect(Collectors.toList());
 
 	return result;
     }
@@ -140,29 +128,13 @@ public class SimulationService {
     public List<ConversationResponse> getConversations() {
 	List<ConversationResponse> result = new ArrayList<ConversationResponse>();
 	List<Conversation> conversations = world
-	    .getConversationsAfter(SimulationTime.now().minus(SimulationTime.getStepDuration()));
+		.getConversationsAfter(SimulationTime.now().minus(SimulationTime.getStepDuration()));
 
 	for (Conversation conversation : conversations) {
 	    result.addAll(mapper.fromConversation(conversation));
 	}
-	
+
 	return result;
-    }
-
-    public void createObject(CreateObjectRequest request) {
-
-	if (world.getObjectByName(request.getName()) != null) {
-	    throw new SmallvilleException("Object already exists");
-	}
-
-	SimulatedLocation parent = world
-	    .getLocation(request.getParent())
-	    .orElseThrow(() -> new LocationNotFoundException(request.getParent()));
-
-	ObjectState state = new ObjectState(request.getState(), List.of());
-	SimulatedObject object = new SimulatedObject(request.getName(), state, parent);
-
-	world.create(object);
     }
 
     public void setGoal(String name, String goal) {

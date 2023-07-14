@@ -3,13 +3,13 @@ package io.github.nickm980.smallville.update;
 import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.config.SmallvilleConfig;
 import io.github.nickm980.smallville.entities.Agent;
-import io.github.nickm980.smallville.entities.memory.Reflection;
+import io.github.nickm980.smallville.memory.Reflection;
 import io.github.nickm980.smallville.prompts.Prompts;
 
 public class UpdateReflection extends AgentUpdate {
 
     @Override
-    public boolean update(Prompts service, World world, Agent agent) {
+    public boolean update(Prompts service, World world, Agent agent, UpdateInfo info) {
 	/*
 	 * The score to cutoff memories by. Fine tune this value to get the desired
 	 * result. Relfections should be triggered 2-3 times per day. Fine tune this
@@ -25,6 +25,6 @@ public class UpdateReflection extends AgentUpdate {
 	    LOG.info("[Reflections] Reflection: " + reflection.getDescription());
 	}
 
-	return next(service, world, agent);
+	return next(service, world, agent, info);
     }
 }

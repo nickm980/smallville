@@ -26,21 +26,21 @@ public abstract class AgentUpdate {
 	return handler;
     }
 
-    public boolean start(Prompts service, World world, Agent agent) {
+    public boolean start(Prompts service, World world, Agent agent, UpdateInfo info) {
 	AgentUpdate node = this;
 
 	while (node.parent != null) {
 	    node = node.parent;
 	}
 
-	return node.update(service, world, agent);
+	return node.update(service, world, agent, info);
     }
 
-    protected abstract boolean update(Prompts converter, World world, Agent agent);
+    protected abstract boolean update(Prompts converter, World world, Agent agen, UpdateInfo info);
 
-    protected boolean next(Prompts converter, World world, Agent agent) {
+    protected boolean next(Prompts converter, World world, Agent agent, UpdateInfo info) {
 	if (handler != null) {
-	    return handler.update(converter, world, agent);
+	    return handler.update(converter, world, agent, info);
 	} else {
 	    return true;
 	}
