@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "build": "webpack",
-        "start": "webpack --mode development && webpack serve --mode development",
+        "start": "webpack --mode development && webpack serve --mode development --port 8081",
         "test": "mocha 'test/**/*.js' --recursive --timeout 60000 --exit"
     },
     "author": "nickm980",
