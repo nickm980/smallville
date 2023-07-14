@@ -21,7 +21,6 @@ public class UpdateCurrentActivity extends AgentUpdate {
 	agent.setLocation(world.getLocation(activity.getLocation()).orElseThrow());
 	agent.getMemoryStream().add(new Observation(activity.getLastActivity()));
 
-	
 	return next(service, world, agent, info);
     }
 }

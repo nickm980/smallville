@@ -41,12 +41,7 @@ public class SimulationService {
 
 	if (observation.isReactable()) {
 	    SimulationTime.update();
-	    prompts.updateAgent(agent, new Progress() {
-		@Override
-		public void update() {
-		    progress += 1;
-		}
-	    });
+	    prompts.react(agent, observation.getDescription());
 	}
     }
 
@@ -74,7 +69,6 @@ public class SimulationService {
     public void createPerson(CreateAgentRequest request) {
 	List<Characteristic> characteristics = request.getMemories().stream().map(c -> new Characteristic(c)).collect(Collectors.toList());
 	// Location : Object
-
 	Location location = world.getLocation(request.getLocation()).orElseThrow();
 	Agent agent = new Agent(request.getName(), characteristics, request.getActivity(), location);
 
@@ -117,12 +111,7 @@ public class SimulationService {
 	SimulationTime.update();
 
 	for (Agent agent : world.getAgents()) {
-	    prompts.updateAgent(agent, new Progress() {
-		@Override
-		public void update() {
-		    progress += 1;
-		}
-	    });
+	    prompts.updateAgent(agent);
 	}
     }
 

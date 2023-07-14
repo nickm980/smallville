@@ -26,31 +26,34 @@ public class UpdatePlans extends AgentUpdate {
 	LOG.info("[Plans] Updating plans...");
 	boolean hasPlans = !agent.getMemoryStream().getPlans().isEmpty();
 	boolean shouldUpdatePlans = !hasPlans;
-	boolean shouldUpdateConversation = false;
-	Observation observation = agent.getMemoryStream().getLastObservation();
-
-	if (observation.isReactable()) {
+	String observation = info.getObservation();
+	
+	if (observation != null && !observation.isEmpty()) {
 	    LOG.info("starting reaction to an observation");
-	    Reaction reaction = converter.shouldUpdatePlans(agent, observation.getDescription());
+	    Reaction reaction = converter.shouldUpdatePlans(agent, observation);
 	    shouldUpdatePlans = reaction.getAnswer().toLowerCase().contains("yes");
-	    shouldUpdateConversation = reaction.getConversation().toLowerCase().contains("yes");
-	    info.setShouldUpdateConversation(shouldUpdateConversation);
+	    info.setShouldUpdateConversation(reaction.getConversation().toLowerCase().contains("yes"));
 	}
 
 	if (shouldUpdatePlans) {
-	    LOG.info("[Plans] Reacting to observation...");
+	    LOG.info("[Plans] Reacting to observation [" + info.getObservation() + "]");
 	    agent.getMemoryStream().prunePlans(PlanType.LONG_TERM);
 	    agent.getMemoryStream().prunePlans(PlanType.SHORT_TERM);
 	    updatePlans(converter, agent, PlanType.LONG_TERM);
 	    updatePlans(converter, agent, PlanType.SHORT_TERM);
 	}
 
+	if (agent.getMemoryStream().getPlans(PlanType.LONG_TERM).isEmpty()) {
+	    updatePlans(converter, agent, PlanType.LONG_TERM);
+	}
+	
 	if (agent.getMemoryStream().getPlans(PlanType.SHORT_TERM).isEmpty()) {
 	    updatePlans(converter, agent, PlanType.SHORT_TERM);
 	}
 
 	LOG.info("[Plans] Plans updated");
 
+	info.setPlansUpdated(shouldUpdatePlans);
 	return next(converter, world, agent, info);
     }
 

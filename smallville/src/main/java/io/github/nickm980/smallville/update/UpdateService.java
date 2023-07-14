@@ -37,7 +37,7 @@ public class UpdateService {
      * 
      * @param agent
      */
-    public void updateAgent(Agent agent, Progress progress) {
+    public void updateAgent(Agent agent) {
 	LOG
 	    .info("Starting update for " + agent.getFullName() + " at time "
 		    + SimulationTime
@@ -49,11 +49,29 @@ public class UpdateService {
 	    .setNext(new UpdateCurrentActivity())
 	    .setNext(new UpdateConversation())
 	    .setNext(new UpdateReflection());
-	
+
 	UpdateInfo info = new UpdateInfo();
 	info.setObservation(null);
-	
+
 	update.start(chatService, world, agent, info);
+
+	LOG.info("Agent updated");
+    }
+
+    public void react(Agent agent, String observation) {
+	LOG.info("Starting reaction for " + agent.getFullName());
+
+	UpdateInfo info = new UpdateInfo();
+	info.setObservation(observation);
+
+	AgentUpdate update = new UpdatePlans().setNext(new UpdateConversation());
+
+	update.start(chatService, world, agent, info);
+
+	if (info.isPlansUpdated()) {
+	    update = new UpdateCurrentActivity();
+	    update.start(chatService, world, agent, info);
+	}
 
 	LOG.info("Agent updated");
     }

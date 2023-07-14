@@ -6,21 +6,25 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.github.nickm980.smallville.LogCache;
-import io.github.nickm980.smallville.Util;
 import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.api.v1.dto.*;
 import io.github.nickm980.smallville.entities.*;
 import io.github.nickm980.smallville.exceptions.AgentNotFoundException;
+import io.github.nickm980.smallville.exceptions.LocationNotFoundException;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
 import io.github.nickm980.smallville.llm.LLM;
 import io.github.nickm980.smallville.memory.Characteristic;
 import io.github.nickm980.smallville.memory.Observation;
-import io.github.nickm980.smallville.update.Progress;
 import io.github.nickm980.smallville.update.UpdateService;
 
 public class SimulationService {
 
+    private Logger LOG  = LoggerFactory.getLogger(SimulationService.class);
+    
     private final ModelMapper mapper;
     private final UpdateService prompts;
     private final World world;
@@ -41,12 +45,7 @@ public class SimulationService {
 
 	if (observation.isReactable()) {
 	    SimulationTime.update();
-	    prompts.updateAgent(agent, new Progress() {
-		@Override
-		public void update() {
-		    progress += 1;
-		}
-	    });
+	    prompts.react(agent, observation.getDescription());
 	}
     }
 
@@ -71,10 +70,17 @@ public class SimulationService {
 	return result;
     }
 
-    public void createPerson(CreateAgentRequest request) {
+    public void createAgent(CreateAgentRequest request) {
 	List<Characteristic> characteristics = request.getMemories().stream().map(c -> new Characteristic(c)).collect(Collectors.toList());
 	// Location : Object
-	Location location = world.getLocation(request.getLocation()).orElseThrow();
+	Location location = world.getLocation(request.getLocation()).orElse(null);
+	
+	if (location == null) {
+	    LOG.error("Could not find location "  + request.getLocation());
+	    throw new LocationNotFoundException(request.getLocation());
+	}
+	
+	
 	Agent agent = new Agent(request.getName(), characteristics, request.getActivity(), location);
 
 	if (world.create(agent)) {
@@ -116,12 +122,7 @@ public class SimulationService {
 	SimulationTime.update();
 
 	for (Agent agent : world.getAgents()) {
-	    prompts.updateAgent(agent, new Progress() {
-		@Override
-		public void update() {
-		    progress += 1;
-		}
-	    });
+	    prompts.updateAgent(agent);
 	}
     }
 
@@ -135,9 +136,6 @@ public class SimulationService {
 	}
 
 	return result;
-    }
-
-    public void setGoal(String name, String goal) {
     }
 
     public void setTimestep(SetTimestepRequest request) {
