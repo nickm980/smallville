@@ -1,6 +1,6 @@
 package io.github.nickm980.smallville.entities;
 
-public class Dialog implements NaturalLanguageConvertible {
+public class Dialog {
 
     private final String name;
     private final String message;
@@ -17,10 +17,5 @@ public class Dialog implements NaturalLanguageConvertible {
 
     public String getMessage() {
 	return message;
-    }
-
-    @Override
-    public String asNaturalLanguage() {
-	return name + " said " + message;
     }
 }
