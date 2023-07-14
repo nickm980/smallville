@@ -34,7 +34,6 @@ public final class ExceptionRoutes {
 	});
 
 	app.exception(NoSuchElementException.class, (e, ctx) -> {
-	    e.printStackTrace();
 	    ctx.status(404).json(Map.of("error", "Resource does not exist"));
 	});
 
