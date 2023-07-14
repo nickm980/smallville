@@ -9,22 +9,6 @@ import com.google.gson.Gson;
 public class Util {
     private static final Gson gson = new Gson();
 
-    public static String[] parseLocation(String location) {
-	Objects.requireNonNull(location);
-	String[] locations = location.split(":");
-	String[] result = new String[2];
-	result[0] = " ";
-	result[1] = " ";
-
-	result[0] = locations[0].trim();
-
-	if (locations.length > 1) {
-	    result[1] = locations[1].trim();
-	}
-
-	return result;
-    }
-
     public static <T> T parseAsClass(String input, Class<T> clazz) {
 	Map<String, String> data = parseCson(input);
 
