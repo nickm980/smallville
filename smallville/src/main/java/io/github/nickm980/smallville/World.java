@@ -10,16 +10,14 @@ import org.slf4j.LoggerFactory;
 
 import io.github.nickm980.smallville.entities.Agent;
 import io.github.nickm980.smallville.entities.Conversation;
-import io.github.nickm980.smallville.entities.SimulatedLocation;
-import io.github.nickm980.smallville.entities.SimulatedObject;
+import io.github.nickm980.smallville.entities.Location;
 import io.github.nickm980.smallville.repository.Repository;
 
 /**
  * Storage for agents locations objects and conversations
  */
 public class World {
-    private Repository<SimulatedLocation> locations;
-    private Repository<SimulatedObject> objects;
+    private Repository<Location> locations;
     private Repository<Conversation> conversations;
     private Repository<Agent> agents;
     private final Logger LOG = LoggerFactory.getLogger(World.class);
@@ -27,7 +25,6 @@ public class World {
     public World() {
 	this.locations = new Repository<>();
 	this.agents = new Repository<>();
-	this.objects = new Repository<>();
 	this.conversations = new Repository<>();
     }
 
@@ -43,28 +40,20 @@ public class World {
 	return agents.save(agent.getFullName(), agent);
     }
 
-    public void create(SimulatedLocation location) {
-	locations.save(location.getName(), location);
-    }
-
-    public void create(SimulatedObject object) {
-	objects.save(object.getName(), object);
+    public void create(Location location) {
+	locations.save(location.getFullPath(), location);
     }
 
     public List<Agent> getAgents() {
 	return agents.all();
     }
 
-    public List<SimulatedLocation> getLocations() {
+    public List<Location> getLocations() {
 	return locations.all();
     }
 
-    public Optional<SimulatedLocation> getLocation(String locationName) {
+    public Optional<Location> getLocation(String locationName) {
 	return Optional.ofNullable(locations.getById(locationName));
-    }
-
-    public List<SimulatedObject> getObjects() {
-	return objects.all();
     }
 
     public Optional<Agent> getAgent(String name) {
@@ -75,24 +64,8 @@ public class World {
 	return conversations.all();
     }
 
-    public SimulatedObject getExactLocation(String location) {
-	String[] parts = location.split(":");
-
-	String locationName = parts[0].trim();
-	String objectName = parts[1].trim();
-
-	SimulatedLocation loc = getLocation(locationName).orElseThrow();
-	SimulatedObject result = loc.getObject(objectName).orElseThrow();
-
-	return result;
-    }
-
-    public SimulatedObject getObjectByName(String name) {
-	return objects.getById(name);
-    }
-
     public void setState(String object, String state) {
-	SimulatedObject obj = getObjectByName(object);
+	Location obj = getLocation(object).orElseThrow();
 
 	if (obj != null) {
 	    LOG.info("Changing state. " + object + ": " + state);

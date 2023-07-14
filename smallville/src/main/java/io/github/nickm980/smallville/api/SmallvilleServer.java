@@ -5,6 +5,7 @@ import com.github.mustachejava.MustacheFactory;
 
 import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.api.v1.EndpointsV1;
+import io.github.nickm980.smallville.api.v1.SimulationService;
 import io.github.nickm980.smallville.llm.LLM;
 import io.javalin.Javalin;
 

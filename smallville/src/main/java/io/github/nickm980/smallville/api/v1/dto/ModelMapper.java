@@ -1,4 +1,4 @@
-package io.github.nickm980.smallville.api.dto;
+package io.github.nickm980.smallville.api.v1.dto;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -10,12 +10,11 @@ import io.github.nickm980.smallville.entities.Agent;
 import io.github.nickm980.smallville.entities.Conversation;
 import io.github.nickm980.smallville.entities.Dialog;
 import io.github.nickm980.smallville.entities.Location;
-import io.github.nickm980.smallville.entities.SimulatedObject;
-import io.github.nickm980.smallville.entities.memory.Characteristic;
-import io.github.nickm980.smallville.entities.memory.Memory;
-import io.github.nickm980.smallville.entities.memory.Plan;
-import io.github.nickm980.smallville.entities.memory.Reflection;
-import io.github.nickm980.smallville.entities.memory.TemporalMemory;
+import io.github.nickm980.smallville.memory.Characteristic;
+import io.github.nickm980.smallville.memory.Memory;
+import io.github.nickm980.smallville.memory.Plan;
+import io.github.nickm980.smallville.memory.Reflection;
+import io.github.nickm980.smallville.memory.TemporalMemory;
 
 public class ModelMapper {
 
@@ -24,21 +23,16 @@ public class ModelMapper {
 	result.setAction(agent.getCurrentActivity());
 	result.setEmoji(agent.getEmoji());
 	if (agent.getLocation() != null) {
-	    result.setLocation(agent.getLocation().getName());
+	    result.setLocation(agent.getLocation().getFullPath());
 	}
 	result.setName(agent.getFullName());
-	if (agent.getObject() != null) {
-	    result.setObject(agent.getObject().asNaturalLanguage());
-	}
 	return result;
     }
 
     public LocationStateResponse fromLocation(Location location) {
 	LocationStateResponse result = new LocationStateResponse();
-	result.setName(location.getName());
-	if (location instanceof SimulatedObject) {
-	    result.setState(((SimulatedObject) location).getState());
-	}
+	result.setName(location.getFullPath());
+	result.setState(location.getState());
 	return result;
     }
 

@@ -13,17 +13,7 @@ import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 
 import io.github.nickm980.smallville.LogCache;
-import io.github.nickm980.smallville.api.SimulationService;
-import io.github.nickm980.smallville.api.dto.AgentStateResponse;
-import io.github.nickm980.smallville.api.dto.AskQuestionRequest;
-import io.github.nickm980.smallville.api.dto.ConversationResponse;
-import io.github.nickm980.smallville.api.dto.CreateAgentRequest;
-import io.github.nickm980.smallville.api.dto.CreateLocationRequest;
-import io.github.nickm980.smallville.api.dto.CreateMemoryRequest;
-import io.github.nickm980.smallville.api.dto.CreateObjectRequest;
-import io.github.nickm980.smallville.api.dto.LocationStateResponse;
-import io.github.nickm980.smallville.api.dto.SetGoalRequest;
-import io.github.nickm980.smallville.api.dto.SetTimestepRequest;
+import io.github.nickm980.smallville.api.v1.dto.*;
 import io.github.nickm980.smallville.entities.SimulationTime;
 import io.javalin.Javalin;
 import static io.github.nickm980.smallville.api.SmallvilleServer.*;
@@ -85,7 +75,7 @@ public class EndpointsV1 {
 
 	    service.setGoal(ctx.pathParam("name"), request.getGoal());
 
-	    ctx.json(Map.of("success", true));
+	    ctx.json(Map.of("success", true, "message", "Goal updated"));
 	});
 
 	app.post("/agents", (ctx) -> {
@@ -120,18 +110,6 @@ public class EndpointsV1 {
 	    String state = rootNode.get("state").asText();
 
 	    service.setState(location, state);
-	    ctx.json(Map.of("success", true));
-	});
-
-	app.post("/objects", (ctx) -> {
-	    CreateObjectRequest request = ctx
-		.bodyValidator(CreateObjectRequest.class)
-		.check((req) -> exists(req.getName()), "{name} cannot be missing")
-		.check((req) -> exists(req.getParent()), "{parent} location cannot be missing")
-		.check((req) -> exists(req.getState()), "{state} cannot be missing")
-		.get();
-
-	    service.createObject(request);
 	    ctx.json(Map.of("success", true));
 	});
 
@@ -170,7 +148,7 @@ public class EndpointsV1 {
 	    SetTimestepRequest request = ctx.bodyAsClass(SetTimestepRequest.class);
 	    int minutes = Integer.valueOf(request.getNumOfMinutes());
 	    SimulationTime.setStep(Duration.ofMinutes(minutes));
-	    ctx.json(Map.of("success", true));
+	    ctx.json(Map.of("success", true, "message", "Timestep updated to " + minutes + " per update"));
 	});
 
 	app.get("/progress", (ctx) -> {

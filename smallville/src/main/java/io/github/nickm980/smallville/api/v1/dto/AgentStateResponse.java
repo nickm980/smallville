@@ -1,4 +1,4 @@
-package io.github.nickm980.smallville.api.dto;
+package io.github.nickm980.smallville.api.v1.dto;
 
 public class AgentStateResponse {
     private String name;
