@@ -3,7 +3,6 @@ package io.github.nickm980.smallville.prompts.dto;
 import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.entities.Agent;
 import io.github.nickm980.smallville.entities.Location;
-import io.github.nickm980.smallville.entities.SimulatedObject;
 
 public class WorldModel {
 
@@ -22,14 +21,7 @@ public class WorldModel {
 	String description = "Available Locations: ";
 
 	for (Location location : world.getLocations()) {
-	    description += location.asNaturalLanguage() + "; ";
-	}
-
-	description += "Object States: ";
-
-	for (SimulatedObject obj : world.getObjects()) {
-	    description += obj.getName() + " is " + obj.getState() + " ";
-	    description += System.lineSeparator();
+	    description += location.getFullPath() + "; ";
 	}
 
 	for (Agent agent : world.getAgents()) {
@@ -37,7 +29,7 @@ public class WorldModel {
 		continue;
 	    }
 	    description += agent.getFullName() + " is " + agent.getCurrentActivity() + " at "
-		    + agent.getLocation().getName() + " ";
+		    + agent.getLocation().getFullPath() + " ";
 	}
 
 	result.setDescription(description);

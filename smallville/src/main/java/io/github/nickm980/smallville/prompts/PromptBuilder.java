@@ -6,7 +6,7 @@ import java.util.Map;
 import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.entities.Agent;
 import io.github.nickm980.smallville.entities.Conversation;
-import io.github.nickm980.smallville.entities.SimulatedLocation;
+import io.github.nickm980.smallville.entities.Location;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
 import io.github.nickm980.smallville.prompts.dto.DateModel;
 import io.github.nickm980.smallville.prompts.dto.WorldModel;
@@ -57,7 +57,7 @@ public class PromptBuilder {
 	return this;
     }
 
-    public PromptBuilder withLocations(List<SimulatedLocation> locations) {
+    public PromptBuilder withLocations(List<Location> locations) {
 	data.put("locations", locations);
 	return this;
     }

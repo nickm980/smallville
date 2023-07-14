@@ -1,18 +1,19 @@
 package io.github.nickm980.smallville.entities;
 
 import java.util.List;
-import io.github.nickm980.smallville.entities.memory.Characteristic;
-import io.github.nickm980.smallville.entities.memory.MemoryStream;
+
+import io.github.nickm980.smallville.memory.Characteristic;
+import io.github.nickm980.smallville.memory.MemoryStream;
 
 public class Agent {
 
     private MemoryStream memories;
     private String name;
     private ActionHistory currentAction;
-    private AgentLocation location;
+    private Location location;
     private String traits;
     
-    public Agent(String name, List<Characteristic> characteristics, String currentAction, AgentLocation location) {
+    public Agent(String name, List<Characteristic> characteristics, String currentAction, Location location) {
 	this.name = name;
 	this.memories = new MemoryStream();
 	this.memories.addAll(characteristics);
@@ -36,15 +37,11 @@ public class Agent {
 	this.currentAction.setActivity(description);
     }
 
-    public SimulatedObject getObject() {
-	return location.getObject();
+    public Location getLocation() {
+	return location;
     }
 
-    public SimulatedLocation getLocation() {
-	return location.getLocation();
-    }
-
-    public void setLocation(AgentLocation location) {
+    public void setLocation(Location location) {
 	this.location = location;
     }
 
