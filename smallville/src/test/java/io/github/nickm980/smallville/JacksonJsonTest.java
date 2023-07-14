@@ -10,7 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.github.nickm980.smallville.entities.SimulatedLocation;
+import io.github.nickm980.smallville.entities.Location;
 
 public class JacksonJsonTest {
 
@@ -19,7 +19,7 @@ public class JacksonJsonTest {
     @BeforeAll
     public static void setUp() {
 	sim = new World();
-	sim.create(new SimulatedLocation("red house"));
+	sim.create(new Location("red house"));
     }
 
     @Test
