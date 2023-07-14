@@ -67,17 +67,6 @@ public class EndpointsV1 {
 	    ctx.json(Map.of("answer", res));
 	});
 
-	app.post("/agents/{name}/goal", (ctx) -> {
-	    SetGoalRequest request = ctx
-		.bodyValidator(SetGoalRequest.class)
-		.check((req) -> exists(req.getGoal()), "{goal} cannot be blank")
-		.get();
-
-	    service.setGoal(ctx.pathParam("name"), request.getGoal());
-
-	    ctx.json(Map.of("success", true, "message", "Goal updated"));
-	});
-
 	app.post("/agents", (ctx) -> {
 	    CreateAgentRequest request = ctx
 		.bodyValidator(CreateAgentRequest.class)
@@ -88,7 +77,7 @@ public class EndpointsV1 {
 			"{memories} cannot be missing")
 		.get();
 
-	    service.createPerson(request);
+	    service.createAgent(request);
 	    ctx.json(Map.of("success", true));
 	});
 
