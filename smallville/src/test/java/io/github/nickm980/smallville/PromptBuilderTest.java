@@ -11,12 +11,9 @@ import org.junit.jupiter.api.Test;
 
 import io.github.nickm980.smallville.config.SmallvilleConfig;
 import io.github.nickm980.smallville.entities.Agent;
-import io.github.nickm980.smallville.entities.AgentLocation;
-import io.github.nickm980.smallville.entities.ObjectState;
-import io.github.nickm980.smallville.entities.SimulatedLocation;
-import io.github.nickm980.smallville.entities.SimulatedObject;
-import io.github.nickm980.smallville.entities.memory.Characteristic;
-import io.github.nickm980.smallville.entities.memory.Plan;
+import io.github.nickm980.smallville.entities.Location;
+import io.github.nickm980.smallville.memory.Characteristic;
+import io.github.nickm980.smallville.memory.Plan;
 import io.github.nickm980.smallville.prompts.PromptRequest;
 import io.github.nickm980.smallville.prompts.PromptBuilder;
 
@@ -28,13 +25,11 @@ public class PromptBuilderTest {
     @BeforeAll
     public static void setUp() {
 	world = new World();
-	SimulatedLocation location = new SimulatedLocation("location");
-	SimulatedObject obj = new SimulatedObject("obj", new ObjectState("off", List.of()), location);
+	Location location = new Location("location");
 
-	world.create(obj);
 	world.create(location);
 
-	agent = new Agent("name", List.of(new Characteristic("desc")), "test", new AgentLocation(location));
+	agent = new Agent("name", List.of(new Characteristic("desc")), "test", location);
 	agent.setCurrentActivity("Doing nothing");
 	agent.setCurrentActivity("making dinner");
 	agent

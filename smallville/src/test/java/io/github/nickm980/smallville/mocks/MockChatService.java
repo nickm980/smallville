@@ -4,9 +4,8 @@ import java.util.List;
 
 import io.github.nickm980.smallville.entities.Agent;
 import io.github.nickm980.smallville.entities.Conversation;
-import io.github.nickm980.smallville.entities.memory.Memory;
-import io.github.nickm980.smallville.entities.memory.Plan;
-import io.github.nickm980.smallville.entities.memory.Reflection;
+import io.github.nickm980.smallville.memory.Plan;
+import io.github.nickm980.smallville.memory.Reflection;
 import io.github.nickm980.smallville.prompts.Prompts;
 import io.github.nickm980.smallville.prompts.dto.CurrentActivity;
 import io.github.nickm980.smallville.prompts.dto.ObjectChangeResponse;
