@@ -1,4 +1,4 @@
-package io.github.nickm980.smallville.entities.memory;
+package io.github.nickm980.smallville.memory;
 
 public class Reflection extends Memory {
 

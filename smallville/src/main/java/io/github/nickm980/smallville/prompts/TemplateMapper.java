@@ -4,14 +4,16 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.github.nickm980.smallville.config.SmallvilleConfig;
 import io.github.nickm980.smallville.entities.Agent;
-import io.github.nickm980.smallville.entities.memory.MemoryStream;
-import io.github.nickm980.smallville.entities.memory.Plan;
-import io.github.nickm980.smallville.entities.memory.PlanType;
+import io.github.nickm980.smallville.memory.MemoryStream;
+import io.github.nickm980.smallville.memory.Plan;
+import io.github.nickm980.smallville.memory.PlanType;
 
 /**
  * Creates the prompts used by other prompts and converts objects to natural
@@ -26,8 +28,8 @@ public class TemplateMapper {
 	MemoryStream stream = agent.getMemoryStream();
 	Map<String, Object> data = new HashMap<String, Object>();
 	data.put("agent.name", agent.getFullName());
-	data.put("agent.locationName", agent.getLocation().getName());
-	data.put("agent.description", stream.getCharacteristics().stream().map(c -> c.getDescription()).toList());
+	data.put("agent.locationName", agent.getLocation().getFullPath());
+	data.put("agent.description", stream.getCharacteristics().stream().map(c -> c.getDescription()).collect(Collectors.toList()));
 	data.put("agent.traits", agent.getTraits());
 
 	return new TemplateEngine().format(prompt, data);
@@ -37,19 +39,19 @@ public class TemplateMapper {
 	Map<String, Object> result = new HashMap<String, Object>();
 
 	MemoryStream stream = agent.getMemoryStream();
-	String desc = String.join("; ", stream.getCharacteristics().stream().map(c -> c.getDescription()).toList());
+	String desc = String.join("; ", stream.getCharacteristics().stream().map(c -> c.getDescription()).collect(Collectors.toList()));
 
 	if (stream.getPlans() == null) {
 	    LOG.error("no plans found!!!");
 	}
 
 	result.put("name", agent.getFullName());
-	result.put("memories", agent.getMemoryStream().getMemories().stream().limit(10).toList());
+	result.put("memories", agent.getMemoryStream().getMemories().stream().limit(10).collect(Collectors.toList()));
 	result.put("activity", agent.getCurrentActivity());
 	result.put("lastActivity", agent.getLastActivity());
 	result.put("summary", buildAgentSummary(agent));
-	result.put("locationName", agent.getLocation().getName());
-	result.put("locationChildren", agent.getLocation().getObjects());
+	result.put("locationName", agent.getLocation().getFullPath());
+	result.put("locationChildren", agent.getLocation().getFullPath());
 	result.put("description", desc);
 	result.put("plans", stream.getPlans());
 	result.put("shortPlans", stream.getPlans(PlanType.SHORT_TERM));
@@ -106,7 +108,7 @@ public class TemplateMapper {
 	    .getRelevantMemories(observation)
 	    .stream()
 	    .map(item -> item.getDescription())
-	    .toList();
+	    .collect(Collectors.toList());
 
 	String result = String.join("; ", memories);
 	

@@ -1,4 +1,4 @@
-package io.github.nickm980.smallville.entities.memory;
+package io.github.nickm980.smallville.memory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,7 +54,7 @@ public class MemoryStream {
 	List<Double> keys = new ArrayList<Double>(scores.keySet());
 	Collections.sort(keys);
 
-	List<Integer> indices = scores.values().stream().toList();
+	List<Integer> indices = scores.values().stream().collect(Collectors.toList());
 
 	if (scores.size() > 3) {
 	    double first = keys.get(keys.size() - 1);
@@ -76,7 +76,7 @@ public class MemoryStream {
     public List<Memory> getUnweightedMemories() {
 	return memories.stream().filter(memory -> {
 	    return memory.getImportance() == 0 && !(memory instanceof Plan);
-	}).toList();
+	}).collect(Collectors.toList());
     }
 
     public double sumRecency() {
@@ -87,7 +87,7 @@ public class MemoryStream {
 	List<Memory> result = memories
 	    .stream()
 	    .filter(memory -> memory.getRecency() > .4 && !(memory instanceof Plan))
-	    .toList();
+	    .collect(Collectors.toList());
 	return result;
     }
 
@@ -96,17 +96,16 @@ public class MemoryStream {
     }
 
     public List<Observation> getObservations() {
-	return filterMemoriesByType(Observation.class).toList();
+	return filterMemoriesByType(Observation.class).collect(Collectors.toList());
     }
 
     public List<Characteristic> getCharacteristics() {
-	return filterMemoriesByType(Characteristic.class).toList();
+	return filterMemoriesByType(Characteristic.class).collect(Collectors.toList());
     }
 
     public List<Plan> getPlans() {
-	return filterMemoriesByType(Plan.class)
-	    .sorted(new TemporalMemory.TemporalComparator())
-	    .collect(Collectors.toList());
+	return filterMemoriesByType(Plan.class).sorted(new TemporalMemory.TemporalComparator())
+		.collect(Collectors.toList());
     }
 
     private <T extends Memory> Stream<T> filterMemoriesByType(Class<T> memoryType) {
@@ -133,11 +132,11 @@ public class MemoryStream {
 	    public int compare(TemporalMemory o1, TemporalMemory o2) {
 		return o1.getTime().compareTo(o2.getTime());
 	    }
-	}).toList();
+	}).collect(Collectors.toList());
     }
 
     public List<Plan> getPlans(PlanType term) {
-	return getPlans().stream().filter(plan -> plan.getType() == term).toList();
+	return getPlans().stream().filter(plan -> plan.getType() == term).collect(Collectors.toList());
     }
 
     public Observation getLastObservation() {

@@ -1,4 +1,4 @@
-package io.github.nickm980.smallville.entities.memory;
+package io.github.nickm980.smallville.memory;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;

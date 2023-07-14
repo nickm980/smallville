@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +22,10 @@ import io.github.nickm980.smallville.config.SmallvilleConfig;
 import io.github.nickm980.smallville.entities.Agent;
 import io.github.nickm980.smallville.entities.Conversation;
 import io.github.nickm980.smallville.entities.Dialog;
-import io.github.nickm980.smallville.entities.memory.Memory;
-import io.github.nickm980.smallville.entities.memory.Plan;
-import io.github.nickm980.smallville.entities.memory.Reflection;
 import io.github.nickm980.smallville.llm.LLM;
+import io.github.nickm980.smallville.memory.Memory;
+import io.github.nickm980.smallville.memory.Plan;
+import io.github.nickm980.smallville.memory.Reflection;
 import io.github.nickm980.smallville.nlp.LocalNLP;
 import io.github.nickm980.smallville.prompts.dto.CurrentActivity;
 import io.github.nickm980.smallville.prompts.dto.ObjectChangeResponse;
@@ -281,11 +282,11 @@ public class ChatService implements Prompts {
 	filter.addAll(agent.getMemoryStream().getRelevantMemories(query.substring(2)));
 	List<Memory> memories = new ArrayList<>(filter); // Convert the set back to a list
 
-	LOG.debug(String.join(",", memories.stream().map(m -> m.getDescription()).toList()));
+	LOG.debug(String.join(",", memories.stream().map(m -> m.getDescription()).collect(Collectors.toList())));
 
 	PromptRequest secondPrompt = new PromptBuilder()
 	    .withAgent(agent)
-	    .withStatements(memories.stream().map(m -> m.getDescription()).toList())
+	    .withStatements(memories.stream().map(m -> m.getDescription()).collect(Collectors.toList()))
 	    .setPrompt(SmallvilleConfig.getPrompts().getAgent().getReflectionResult())
 	    .build();
 

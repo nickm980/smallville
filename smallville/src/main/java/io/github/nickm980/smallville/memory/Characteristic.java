@@ -1,4 +1,4 @@
-package io.github.nickm980.smallville.entities.memory;
+package io.github.nickm980.smallville.memory;
 
 /**
  * A Characteristic is a type of memory given to an agent before the simulation

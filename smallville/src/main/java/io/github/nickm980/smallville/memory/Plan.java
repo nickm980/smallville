@@ -1,9 +1,8 @@
-package io.github.nickm980.smallville.entities.memory;
+package io.github.nickm980.smallville.memory;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-import io.github.nickm980.smallville.entities.NaturalLanguageConvertible;
 import io.github.nickm980.smallville.entities.SimulationTime;
 import io.github.nickm980.smallville.math.SmallvilleMath;
 
@@ -13,7 +12,7 @@ import io.github.nickm980.smallville.math.SmallvilleMath;
  * have enough plans for the rest of the day but need to recalculate
  * periodically
  */
-public class Plan extends Memory implements TemporalMemory, NaturalLanguageConvertible {
+public class Plan extends Memory implements TemporalMemory {
 
     private final LocalDateTime time;
     public PlanType type;
@@ -44,11 +43,6 @@ public class Plan extends Memory implements TemporalMemory, NaturalLanguageConve
 	var timeSinceStart = ChronoUnit.SECONDS.between(now, SimulationTime.startedAt());
 
 	return SmallvilleMath.normalize(SmallvilleMath.decay(a, b), timeSinceStart, 0);
-    }
-
-    @Override
-    public String asNaturalLanguage() {
-	return getDescription();
     }
 
     public void convert(PlanType type) {
