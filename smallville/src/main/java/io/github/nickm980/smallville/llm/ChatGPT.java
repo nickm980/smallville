@@ -17,7 +17,7 @@ import io.github.nickm980.smallville.LogCache;
 import io.github.nickm980.smallville.Settings;
 import io.github.nickm980.smallville.config.SmallvilleConfig;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
-import io.github.nickm980.smallville.prompts.Prompt;
+import io.github.nickm980.smallville.prompts.PromptRequest;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -28,7 +28,7 @@ public class ChatGPT implements LLM {
     private final static ObjectMapper MAPPER = new ObjectMapper();
 
     @Override
-    public String sendChat(Prompt prompt, double temperature) {
+    public String sendChat(PromptRequest prompt, double temperature) {
 	int maxRetries = SmallvilleConfig.getConfig().getMaxRetries();
 	int retryCount = 0;
 	String result = null;
@@ -64,6 +64,7 @@ public class ChatGPT implements LLM {
 	return result;
     }
 
+    
     @Override
     public float[] getTokenEmbeddings(String text) {
 	OkHttpClient client = new OkHttpClient();
@@ -93,7 +94,7 @@ public class ChatGPT implements LLM {
 	return result;
     }
 
-    private String attemptRequest(Prompt prompt, double temperature) throws IOException, SmallvilleException {
+    private String attemptRequest(PromptRequest prompt, double temperature) throws IOException, SmallvilleException {
 	long start = System.currentTimeMillis();
 
 	OkHttpClient client = new OkHttpClient.Builder()
@@ -122,8 +123,8 @@ public class ChatGPT implements LLM {
 	json = json.replaceAll("\t", "");
 	json = json.strip();
 	if (prompt.isFunctional()) {
-	    json = json
-		.replace("%functions", MAPPER.writeValueAsString(SmallvilleConfig.getFunctions().get("functions")));
+//	    json = json
+//		.replace("%functions", MAPPER.writeValueAsString(SmallvilleConfig.getFunctions().get("functions")));
 
 	    json = json.replace("%function_name", prompt.getFunction());
 	}
@@ -157,6 +158,7 @@ public class ChatGPT implements LLM {
 		    "Invalid api token, rate limit reached, or the LLM is overloaded with requests.");
 	}
 
+	
 	result = node.get("choices").get(0).get("message").get("content").asText();
 
 	try {
