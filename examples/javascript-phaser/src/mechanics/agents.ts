@@ -1,5 +1,5 @@
-import { getCoordinates } from './locations'
 import { updateHTMLElement } from './dom'
+import { getLocation } from './locations'
 
 var agents: Agent[] = []
 
@@ -9,8 +9,8 @@ class Agent {
     private text: Phaser.GameObjects.Text
     private emoji: string
     private activity: string
-    private memories: string[]
     private location: string
+    private memories: string[]
 
     constructor({
         name,
@@ -18,13 +18,13 @@ class Agent {
         text,
         activity,
         location,
-        memories,
+        memories
     }: {
         name: string
         agent: Phaser.GameObjects.Container
         text: Phaser.GameObjects.Text
         activity: string
-        location: string
+        location: string,
         memories: string[]
     }) {
         this.name = name
@@ -32,17 +32,15 @@ class Agent {
         this.text = text
         this.emoji = '?'
         this.activity = activity
-        this.memories = memories
         this.location = location
+        this.memories = memories
     }
 
-    moveTo(locationName: string) {
-        const coords = getCoordinates(locationName)
+    teleportTo(x: integer, y: integer) {
+        this.agent.setX(x)
+        this.agent.setY(y)
 
-        this.agent.setX(coords.x)
-        this.agent.setY(coords.y)
-
-        console.log(this.name + ' moved to ' + locationName)
+        console.log(this.name + ' moved to ' + x + ", " + y)
     }
 
     say(message: string) {
@@ -106,7 +104,7 @@ function updateAgent({
     }
 
     updateHTMLElement({ name, location, activity })
-    moveAgent({ scene: nMesh, name: name, location: location })
+    moveAgent({ name: name, locationName: location })
     agent.setEmoji(emoji)
     agent.setActivity(activity)
 }
@@ -116,53 +114,53 @@ function createAgent({
     name,
     location,
     activity,
-    memories,
+    skin,
+    memories
 }: {
     scene: Phaser.Scene
     name: string
     location: string
     activity: string
     memories: string[]
+    skin: string
 }) {
     if (nMesh == undefined) {
         nMesh = scene
     }
+    loadAnimations(scene, name, skin)
 
     updateHTMLElement({ name, location, activity })
-    var player = scene.add.sprite(0, 0, 'player')
-    player.setFrame(28)
-
+    var player = scene.add.sprite(0, 0, name)
     var group = scene.add.container()
 
     var dialog = scene.add.sprite(25, -30, 'dialog')
+    dialog.setScale(0.75)
 
     var emoji = scene.add.text(0, -42, name[0] + ': ?', {
         font: '16px Courier New',
-        backgroundColor: '#00000',
+        backgroundColor: '#fffff',
     })
 
     var activityText = scene.add.text(0, 0, "Game hasn't started!", {
         font: '16px Courier New',
-        backgroundColor: '#00000',
+        backgroundColor: '#fffff',
     })
     // dialog.addChild(text)
     // player.addChild(dialog)
     activityText.visible = false
-    player.setInteractive()
 
-    player.on('pointerover ', function () {
-        // agent.reset()
-    })
+    const graphics = scene.add.graphics({ lineStyle: { color: 0xff0000 } });
 
-    player.on('pointerout', function () {
-        // agent.visible = false
-    })
+    const circle = new Phaser.Geom.Circle(0, 0, 100);
+    graphics.strokeCircleShape(circle);
 
-    dialog.setScale(0.75)
     group.add(dialog)
+    group.add(graphics)
     group.add(activityText)
     group.add(emoji)
     group.add(player)
+
+
 
     scene.physics.world.enable(group)
 
@@ -172,123 +170,83 @@ function createAgent({
         text: emoji,
         activity: activity,
         location: location,
-        memories: memories,
+        memories: memories
     })
 
     agents.push(agent)
-    player.play('idle')
-    //-300, -140
+    player.play(name + '-idle')
+
     console.log('[Agent] Created a new agent ' + name)
-    const coords = getCoordinates(location)
-    agent.getAgent().setX(coords.x)
-    agent.getAgent().setY(coords.y)
-    moveAgent({ scene: scene, name: name, location: location })
+    moveAgent({ name: name, locationName: location })
 }
 
 function moveAgent({
-    scene,
     name,
-    location,
+    locationName,
 }: {
-    scene: any
     name: string
-    location: string
+    locationName: string
 }) {
     const agent = agents.find((agent) => name == agent.getName())
-    const coords = getCoordinates(location)
+    const location = getLocation(locationName)
 
-    if (!agent) {
+    if (agent === undefined) {
         console.error(`No agent found with name ${name}`)
         return
     }
 
-    const path = scene.navMesh.findPath(
-        { x: agent.getX(), y: agent.getY() },
-        { x: coords.x, y: coords.y }
-    )
-
-    let navMeshPolys = scene.navMesh.navMesh.getPolygons()
-    let newPath: any = []
-
-    if (path == undefined) {
-        console.error('no path to object')
+    if (location === undefined) {
+        console.error("location not found")
         return
     }
 
-    path.forEach((point: any) => {
-        navMeshPolys.forEach((poly: any) => {
-            if (poly.contains(point)) {
-                newPath.push(poly.centroid)
-            }
-        })
-    })
-
-    newPath = path
-    let i = 1 // Initialize the index at 0
-
-    const moveNext = () => {
-        const item = newPath[i]
-        const x = item.x
-        const y = item.y
-        var deltaX = x - agent.getX()
-        var deltaY = y - agent.getY()
-
-        let direction: string
-
-        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-            direction = deltaX > 0 ? 'right' : 'left'
-        } else {
-            direction = deltaY > 0 ? 'down' : 'up'
-        }
-
-        const sprite: any = agent.getAgent().list[3]
-        sprite.play(`walk-${direction}`)
-
-        // Calculate the distance to the target
-        const distance = Phaser.Math.Distance.Between(
-            agent.getX(),
-            agent.getY(),
-            x,
-            y
-        )
-
-        // Calculate the duration based on the distance (you can adjust the speed as needed)
-        const duration = distance * 20
-
-        // Create the tween
-        scene.tweens.add({
-            targets: agent.getAgent(),
-            x: x,
-            y: y,
-            duration: duration,
-            onComplete: function () {
-                i++
-                if (i >= newPath.length) {
-                    sprite.play(`idle`, true)
-                } else {
-                    moveNext() // Move to the next location recursively
-                }
-            },
-        })
-    }
-
-    moveNext() // Start moving to the first location
+    console.log(location.getX(), location.getY())
+    console.log(location.getName())
+    agent.teleportTo(location.getX(), location.getY())
 }
 
-function loadAnimations(scene: Phaser.Scene) {
+function loadAnimations(scene: Phaser.Scene, name: string, skin: string) {
     scene.anims.create({
-        key: 'idle',
-        frames: scene.anims.generateFrameNumbers('player', {
+        key: name + '-idle',
+        frames: scene.anims.generateFrameNumbers(skin, {
             start: 42,
             end: 47,
         }),
         frameRate: 10,
         repeat: -1,
     })
+    scene.anims.create({
+        key: name + '-idle-left',
+        frames: scene.anims.generateFrameNumbers(skin, {
+            start: 36,
+            end: 41,
+        }),
+        frameRate: 10,
+        repeat: -1,
+    })
+    scene.anims.create({
+        key: name + '-idle-up',
+        frames: scene.anims.generateFrameNumbers(skin, {
+            start: 30,
+            end: 35,
+        }),
+        frameRate: 10,
+        repeat: -1,
+    })
 
     scene.anims.create({
-        key: 'walk-down',
-        frames: scene.anims.generateFrameNumbers('player', {
+        key: name + '-idle-right',
+        frames: scene.anims.generateFrameNumbers(skin, {
+            start: 24,
+            end: 29,
+        }),
+        frameRate: 10,
+        repeat: -1,
+    })
+
+    scene.anims.create({
+        key: name + '-walk-down',
+        frames: scene.anims.generateFrameNumbers(skin, {
             start: 66,
             end: 71,
         }),
@@ -297,8 +255,8 @@ function loadAnimations(scene: Phaser.Scene) {
     })
 
     scene.anims.create({
-        key: 'walk-left',
-        frames: scene.anims.generateFrameNumbers('player', {
+        key: name + '-walk-left',
+        frames: scene.anims.generateFrameNumbers(skin, {
             start: 60,
             end: 65,
         }),
@@ -306,9 +264,8 @@ function loadAnimations(scene: Phaser.Scene) {
         repeat: -1,
     })
     scene.anims.create({
-        //find correct sprite sheet frames
-        key: 'walk-right',
-        frames: scene.anims.generateFrameNumbers('player', {
+        key: name + '-walk-right',
+        frames: scene.anims.generateFrameNumbers(skin, {
             start: 48,
             end: 53,
         }),
@@ -316,8 +273,8 @@ function loadAnimations(scene: Phaser.Scene) {
         repeat: -1,
     })
     scene.anims.create({
-        key: 'walk-up',
-        frames: scene.anims.generateFrameNumbers('player', {
+        key: name + '-walk-up',
+        frames: scene.anims.generateFrameNumbers(skin, {
             start: 54,
             end: 59,
         }),

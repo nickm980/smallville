@@ -15,27 +15,7 @@ export class UIScene extends Phaser.Scene {
                     </button>`
 			)
 			updateStateButton.setScrollFactor(0, 0)
-			scene.add.dom(200, 30).createFromHTML(
-				/*html*/
-				`<button class="nes-btn is-secondary" id="auto-update">
-                        Auto-Update?
-                    </button>`
-			)
-
-			scene.add.dom(330, 30).createFromHTML(
-				/*html*/
-				`<div
-                        style="display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0; box-sizing: border-box; height: 50px; width: 70px"
-                        class="nes-container is-dark"
-                    >
-                        <span
-                            style="align-items: center; text-align: center;"
-                            id="seconds-indicator"
-                            class="nes-text"
-                        ></span>
-                    </div>`
-			)
-
+			
 			let moreButton = scene.add.dom(800 - 30, 30).createFromHTML(
 				/*html*/
 				`<button class="nes-btn is-secondary">⋮</button>`
@@ -100,15 +80,6 @@ export class UIScene extends Phaser.Scene {
 				})
 
 			return [updateStateButton]
-		}
-
-		function setupDebug(scene: Phaser.Scene) {
-			let debug = scene.add.dom(500, 0).createFromHTML(
-				/*html*/
-				`<div id="debug"><p>Mouse Coords <span id="smallville--debug-mouse">(0, 0)</span></p></div>`
-			)
-			debug.setScrollFactor(0, 0)
-			return [debug]
 		}
 
 		setupButtons(this)

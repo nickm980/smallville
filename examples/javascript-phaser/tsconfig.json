@@ -3,10 +3,14 @@
         "target": "ES6",
         "module": "CommonJS",
         "moduleResolution": "node",
-        "noImplicitAny": true
+        "noImplicitAny": true,
+        "types": [
+            "mocha"
+            // ... your other types
+        ]
     },
     "allowJs": true,
     "declaration": true,
-    "include": ["src/**/*"],
+    "include": ["src/**/*", "test/**/*"],
     "exclude": ["node_modules"]
 }

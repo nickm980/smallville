@@ -1,52 +1,46 @@
-const locations: any = {
-    'Red House': {
-        x: -100,
-        y: 100,
-    },
-    'Green House': {
-        x: -296,
-        y: -140,
-    },
-    'Campfire': {
-        x: 590,
-        y: 380,
-    },
-    'Forest': {
-        x: 490,
-        y: 500,
-    },
-    'Branches': {
-        x: 810,
-        y: 355,
-    },
-    'Main Island': {
-        x: 330,
-        y: 110,
-    },
-}
+let locations: Location[] = []
 
-function getCoordinates(name: string) {
-    var location = getLeafLocation(name)
-    if (locations[location] == undefined) {
-        location = name.split(':')[0]
+class Location {
+    private name: string
+    private x: integer
+    private y: integer
+
+    constructor(name: string, x: integer, y:integer){
+        this.name = name
+        this.x = x
+        this.y = y
     }
 
-    return { x: locations[location].x, y: locations[location].y }
+    getName(): string{
+        return this.name
+    }
+
+    getX(): integer {
+        return this.x
+    }
+
+    getY(): integer {
+        return this.y
+    }
 }
 
-function getLeafLocation(location: string) {
-    const parts = location.split(':')
-    return parts[parts.length - 1].trim().replace(':', '')
+function addLocation(name: string, x: integer, y: integer){
+    locations.push(new Location(name, x, y))
 }
 
-function getRootLocation(location: string) {
-    const parts = location.split(':')
-    return parts[parts.length - 1].trim().replace(':', '')
+function getLocation(name: string){
+    console.debug('looking for location: ' + name)
+    const result = locations.find((location) => location.getName() == name)
+
+    if (result === undefined){
+        console.error(name + ' does not exist')
+    }
+
+    return result
 }
 
 function updateLocations(locations: any) {
     const element = document.getElementById('locations')
-    var str
     element.innerHTML = ''
 
     for (const location of locations) {
@@ -55,4 +49,4 @@ function updateLocations(locations: any) {
     }
 }
 
-export { getCoordinates, updateLocations }
+export { addLocation, getLocation, updateLocations }

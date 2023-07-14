@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <style>
+            .bold {
+                font-weight: 600;
+            }
+
+            .chat-box {
+                background-color: rgba(2, 2, 2, 0.527);
+                color: white;
+                width: 350px;
+                height: 200px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+            .messages {
+                overflow-y: auto;
+            }
+
+            .message {
+                overflow-wrap: break-word;
+            }
+
+            p {
+                line-height: 1em;
+                display: inline;
+                margin-top: 1em;
+            }
+
+            .chat-box {
+                display: none;
+            }
+
+        </style>
+    </head>
+    <body>
+        <form>
+            <div class="chat-box">
+                <div class="messages">
+                    <div class="message">
+                        <p><span class="bold">J: </span> Hello!</p>
+                    </div>
+                    <div class="message">
+                        <p>
+                            <span class="bold">J: </span>
+                            Hellasdfasfdasdfasdfasdfasdfasdfasdfasfdasdfasfdasdfasdfaffffffffffffffo!
+                        </p>
+                    </div>
+                    <div class="message">
+                        <p><span class="bold">J: </span> Hello!</p>
+                    </div>
+                    <div class="message">
+                        <p><span class="bold">J: </span> Hello!</p>
+                    </div>
+                </div>
+                <input id="chat" placeholder="Press 't' to say something..." />
+            </div>
+        </form>
+    </body>
+</html>
