@@ -10,6 +10,14 @@ reactions:
 
     A: Hello, how are you today?
     B: I am good, and you?
+    
+  say: |
+    {{agent.summary}}
+    
+    
+    {{observation}}
+    
+    What would {{agent.name}} say?
 
   reaction: |
     {{world.description}} 
@@ -61,16 +69,14 @@ plans:
   shortTerm: |
     {{world.description}}
     {{agent.summary}}
-    Plans: {{#agent.plans}}{{description}};{{/agent.plans}}
+    Daily Requirement: {{#agent.plans}}{{description}};{{/agent.plans}}
     Relevant Memories: {{#memories.relevant}}{{description}}; {{/memories.relevant}}
     Observation: {{observation}}
     
-    * Every plan should get its own line.
-    * Give a start time for every plan and format the time as "hh:mm a"
-    * Start each plan with a hypen
+    * Give a duration for every plan
     
-    What will {{agent.name}} do every minute for the next 20 minutes? Start at the current time and end 20 minutes from now.
-    Respond with 20 plans.
+    Break down {{agent.name}}'s plan for the next hour starting at the current time.
+
     The current time is {{date.time}}
 
   longTerm: |

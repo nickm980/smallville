@@ -4,6 +4,7 @@ import java.util.List;
 
 import io.github.nickm980.smallville.entities.Agent;
 import io.github.nickm980.smallville.entities.Conversation;
+import io.github.nickm980.smallville.entities.Dialog;
 import io.github.nickm980.smallville.memory.Plan;
 import io.github.nickm980.smallville.memory.Reflection;
 import io.github.nickm980.smallville.prompts.dto.CurrentActivity;
@@ -103,4 +104,6 @@ public interface Prompts {
      * @return `true` if the plans should be updated, `false` otherwise.
      */
     Reaction shouldUpdatePlans(Agent agent, String observation);
+
+    Dialog saySomething(Agent agent, String observation);
 }

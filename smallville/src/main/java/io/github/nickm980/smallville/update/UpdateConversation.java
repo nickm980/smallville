@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.entities.Agent;
 import io.github.nickm980.smallville.entities.Conversation;
+import io.github.nickm980.smallville.entities.Dialog;
 import io.github.nickm980.smallville.memory.Observation;
 import io.github.nickm980.smallville.nlp.LocalNLP;
 import io.github.nickm980.smallville.nlp.NLPCoreUtils;
@@ -32,7 +33,9 @@ public class UpdateConversation extends AgentUpdate {
 	}
 
 	if (subject == null) {
-	    LOG.warn("[Conversation] Conversation detected but no subject found. Not attempting to say isolated dialouge");
+	    LOG.warn("[Conversation] Conversation detected but no subject found. Attempting isolated dialogue");
+	    Dialog dialog =  converter.saySomething(agent, observation);
+	    LOG.info(agent.getFullName() + " said " + dialog.getMessage());
 	    return true;
 	}
 

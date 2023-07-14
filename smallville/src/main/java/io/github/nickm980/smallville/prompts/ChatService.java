@@ -329,4 +329,17 @@ public class ChatService implements Prompts {
 
 	return chat.sendChat(prompt, .5);
     }
+
+    @Override
+    public Dialog saySomething(Agent agent, String observation) {
+	PromptRequest request = new PromptBuilder()
+	    .withObservation(observation)
+	    .withAgent(agent)
+	    .setPrompt(SmallvilleConfig.getPrompts().getReactions().getSay())
+	    .build();
+	
+	String result = chat.sendChat(request, .5);
+	
+	return new Dialog(agent.getFullName(), result);
+    }
 }
