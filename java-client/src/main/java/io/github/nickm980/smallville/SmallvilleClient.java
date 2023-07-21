@@ -115,20 +115,18 @@ public class SmallvilleClient {
     }
 
     /**
-     * Creates a new leaf location
+     * Creates a new location
      * 
-     * @param parent The parent of the object.
-     * @param name   The unique name of the object.
-     * @param state  The state of the object such as "empty" or "on"
-     * @return True if the object creation is successful, false otherwise.
+     * @param name The unique name of the location.
+     * @param state The state of the location.
+     * @return True if the location creation is successful, false otherwise.
      */
-    public boolean createObject(String parent, String name, ObjectState state) {
-	String url = host + "/objects";
+    public boolean createLocation(String name, String state) {
+	String url = host + "/locations";
 	try {
 	    JSONObject requestBody = new JSONObject();
-	    requestBody.put("parent", parent);
 	    requestBody.put("name", name);
-	    requestBody.put("state", state.getState());
+	    requestBody.put("state", state);
 
 	    HttpClient client = HttpClient.newHttpClient();
 	    HttpRequest request = HttpRequest
@@ -144,7 +142,7 @@ public class SmallvilleClient {
 		System.out.println(response.body());
 		return true;
 	    } else {
-		System.out.println("Object creation failed. Status code: " + response.statusCode());
+		System.out.println("Location creation failed. Status code: " + response.statusCode());
 		return false;
 	    }
 	} catch (Exception e) {
