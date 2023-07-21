@@ -8,7 +8,6 @@ import io.github.nickm980.smallville.ObjectState;
 import io.github.nickm980.smallville.SimulationUpdateEvent;
 import io.github.nickm980.smallville.SmallvilleAgent;
 import io.github.nickm980.smallville.SmallvilleClient;
-import io.github.nickm980.smallville.SmallvilleLocation;
 
 public class Example {
 
@@ -16,17 +15,25 @@ public class Example {
 	SmallvilleClient client = SmallvilleClient.create("http://localhost:8080", new AgentHandlerCallback() {
 	    public void handle(SimulationUpdateEvent event) {
 		List<SmallvilleAgent> agents = event.getAgents();
-		List<SmallvilleLocation> locations = event.getLocations();
+		
+		for (SmallvilleAgent agent : agents) {
+		    System.out.println(agent.getName() + " : " + agent.getAction());
+		}
 	    }
 	});
 	
-	client.createLocation("Red House");
-	client.createObject("Red House", "Kitchen", new ObjectState("occupied"));
+	client.createLocation("Ice Cream shop");
+	client.createObject("Ice Cream Shop", "Seat", new ObjectState("test"));
 
 	List<String> memories = new ArrayList<String>();
-	memories.add("Memory1");
+	memories.add("Father of Toni");
+	
+	List<String> toniMemories = new ArrayList<String>();
+	memories.add("son of John");
+	
 	client.createAgent("John", memories, "Red House: Kitchen", "Cooking");
+	client.createAgent("Toni", toniMemories, "Red House: Bedroom", "Playing video games");
 
-	client.updateState();
+	client.addObservation("John", "The Red House: Bedroom is on fire", true);
     }
 }
