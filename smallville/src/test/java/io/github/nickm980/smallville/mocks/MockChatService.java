@@ -4,6 +4,7 @@ import java.util.List;
 
 import io.github.nickm980.smallville.entities.Agent;
 import io.github.nickm980.smallville.entities.Conversation;
+import io.github.nickm980.smallville.entities.Dialog;
 import io.github.nickm980.smallville.memory.Plan;
 import io.github.nickm980.smallville.memory.Reflection;
 import io.github.nickm980.smallville.prompts.Prompts;
@@ -64,6 +65,12 @@ public class MockChatService implements Prompts {
 
     @Override
     public Conversation getConversationIfExists(Agent agent, Agent other, String topic) {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public Dialog saySomething(Agent agent, String observation) {
 	// TODO Auto-generated method stub
 	return null;
     }
