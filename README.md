@@ -5,9 +5,6 @@ Generative agents are virtual characters that can store memories and dynamically
 
 Generative Agents save time programming interactions by hand and make NPC's more realistic / dynamic
 
-## Example Game World Map
-![world_map](https://github.com/nickm980/smallville/assets/81270095/75d48ba3-cea9-4072-af50-3efd7c293f69)
-
 ## Getting Started
 Create new agents (as in the example project) [example project](/example/javascript/smallville.js)
 
@@ -92,30 +89,7 @@ This example isn't finished yet but is a basic example of how to get started.
 [example javascript project](/example)
 
 ## Configuration
-### Prompt Templates
-| Template Variable | Description |
-| --- | --- |
-| agent.name | Full name of the agent |
-| agent.memories | List of all the memories (has child of {{description}}) |
-| agent.activity | What the agent is currently doing |
-| agent.lastActivity | What the agent was last doing |
-| agent.summary | Cached summary from prompts.yaml |
-| agent.description | Comma delimited characteristics |
-| agent.locationName | The current location |
-| agent.locationChildren | List of objects contained by the current location |
-| agent.plans | List of the two most recent plans |
-| tenses | For example, x is no longer {past tense} and is now {current activity} |
-| memories.unranked | Memories with a weight of 0 (except short term plans) |
-| memories.characteristics | Initial memories added to the agent |
-| memories.relevant | The three most relevant memories to an observation |
-| date.full | Full date (as formatted in config.yaml) |
-| date.time | Time of day (as formatted in config.yaml) |
-| date.yesterday | Yesterday’s full date (as formatted in config.yaml) |
-| world.description | World description (includes available locations) |
-| question | Question asked to agent |
-| tenses | For example, x is no longer {past tense} and is now {current activity} |
-| memories.characteristics | Initial memories added to the agent |
-
+Configure prompts and other options
 ### Running Locally
 Start LocalAI and change the apiPath and model options to the correct values
 
