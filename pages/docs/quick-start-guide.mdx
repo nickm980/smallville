@@ -1,0 +1,43 @@
+
+import Image from 'next/image'
+import { Callout } from 'nextra/components'
+
+<Callout type="warning" emoji="⚠️">
+  Use commit id 4f80277 if working with < 2.0.0 because of breaking changes with the latest version
+</Callout>
+
+# Running the example phaser simulation
+Learn how to get started with a pre-made simulation and [view the code](https://github.com/nickm980/smallville/tree/main/examples)
+
+## Simulation Information
+The map consists of 8 main areas, traversable by the WASD keys
+- School
+- Basketball Court
+- Park
+- Appartments
+- Supermarket
+- Construction Site
+- Ice Cream Shop
+- Parking Lot
+
+By default, there are 2 agents and a main character. The states of objects are able to be changed through the dashboard.
+
+## Download and run the server
+By default, the server will start on port 8080. To change this use the --port option.
+
+[Download v1.2.0](https://github.com/nickm980/smallville/releases/download/v1.2.0/smallville-v1.2.0.zip)
+```sh copy
+java -jar smallville.jar --api-key <YOUR_OPEN_AI_KEY> --port 8080
+```
+
+## Clone the GitHub repository
+```sh copy
+git clone 
+```
+
+Then cd into the examples/javascript-phaser directory and run the following command
+```sh copy
+npm run start
+```
+
+The game will start on http://localhost:8081/.

@@ -1,0 +1,47 @@
+import { Tab, Tabs } from 'nextra/components'
+import { Callout } from 'nextra/components'
+
+<Callout type="warning">
+ The client for the memory stream API will be added with v2.0.0
+</Callout>
+
+# Memory Stream Database
+Smallville can also be used for just it's memory stream database, without needing to create agents. The memory stream is different from vector databases 
+because memories are retrieved by recency and importance in addition to relevancy.
+
+## Create a new connection
+[Install the smallville server](/docs/quick-start-guide#download-and-run-the-server) and [setup the clients](/docs/programming-clients).
+
+## Use the memory stream through the clients
+Use the cilents to store and retrieve memories.
+
+<Tabs items={['Java', 'Javascript']} defaultIndex={0}>
+  <Tab>
+    Create a new memory stream
+    ```java copy
+    UUID uuid = client.createMemoryStream();
+    ```
+    Add new memories
+    ```java copy
+    client.addMemory(uuid, "John went to the mall");
+    ```
+    Fetch the 3 most relevant memories
+    ```java copy
+    List<String> memories = client.fetchMemories(uuid, "John went to the mall");
+    ```
+  </Tab>
+  <Tab>
+    Create a new memory stream
+    ```javascript copy
+    const uuid = client.createMemoryStream();
+    ```
+    Add new memories
+    ```javascript copy
+    client.addMemory({id: uuid, memory: "John went to the mall"});
+    ```
+    Fetch the 3 most relevant memories
+    ```java copy
+    List<String> memories = client.fetchMemories({id: uuid, query: "John went to the mall"});
+    ```
+  </Tab>
+</Tabs>

@@ -1,0 +1,20 @@
+import Image from 'next/image'
+
+# Introduction to Smallville
+Smallville is a framework to create generative agents for video games and simulations. 
+
+## About Generative Agents
+Generative Agents are characters capable of planning, storing memories, and reacting to observations.
+
+<Image src="/game.png" alt="Hello" width={1000} height={600} />
+_An agent living through their daily routine_
+
+If an agent observes their garden is on fire, the agent could retrieve their memories based on past experiences, create plans 
+to put out the fire, and then realistically react to those plans to extinguish the flames. 
+Agents are also able to hold believable conversations and coordinate plans with each other.
+
+## Architecture Overview
+<Image src="/architecture.png" alt="Hello" width={1000} height={600} />
+
+Agents first retrieve relevant memories from their memory stream, update existing plans or create new ones, then act on those observations (ex. initiating or responding
+to a conversation). Memory retrieval is scored by relevancy, importance, and recency.

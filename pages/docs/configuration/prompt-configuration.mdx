@@ -1,0 +1,34 @@
+import { Callout } from 'nextra/components'
+import Image from 'next/image'
+
+<Callout type="warning" emoji="⚠️">
+  Some placeholders are outdated or missing 
+</Callout>
+
+## Prompt Configuration
+The [prompts.yaml](https://github.com/nickm980/smallville/blob/main/smallville/src/main/resources/prompts.yaml) file can be configured 
+for more customization between the interactions of the server and the LLM.
+## Prompt Placeholders
+Placeholders are surrounded by double brackets
+
+| placeholder   | descrpition |
+| :----- | :----- |
+| agent.name | Full name of the agent |
+| agent.memories | List of all the memories |
+| agent.activity | What the agent is currently doing |
+| agent.lastActivity | What the agent was last doing |
+| agent.summary | Cached summary from prompts.yaml |
+| agent.description | Comma delimited characteristics |
+| agent.locationName | The current location |
+| agent.locationChildren | List of objects contained by the current location |
+| agent.plans | List of the two most recent plans |
+| tenses | For example, x is no longer a and is now b |
+| memories.unranked | Memories with a weight of 0 (except short term plans) |
+| memories.characteristics | Initial memories added to the agent |
+| memories.relevant | The three most relevant memories to an observation |
+| date.full | Full date (as formatted in config.yaml) |
+| date.time | Time of day (as formatted in config.yaml) |
+| date.yesterday | Yesterday’s full date (as formatted in config.yaml) |
+| world.description | World description (includes available locations) |
+| question | Question asked to agent |
+| memories.characteristics | Initial memories added to the agent |

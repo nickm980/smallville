@@ -1,0 +1,145 @@
+# Java and JavaScript Clients
+Create custom simulations or add generative agents to your own video games by using the clients.
+
+## Add the dependencies
+
+import { Tab, Tabs } from 'nextra/components'
+import { Callout } from 'nextra/components'
+
+<Tabs items={['Java', 'Javascript']} defaultIndex={0}>
+  <Tab>
+    Use maven to add jitpack to your repositories
+
+    ```xml filename="pom.xml" copy
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+    ```
+
+    Then you can add any commit version as a dependency
+    ```xml filename="pom.xml" copy
+    <dependencies>
+        <dependency>
+            <groupId>com.github.nickm980</groupId>
+            <artifactId>smallville</artifactId>
+            <version>2b663b0</version>
+        </dependency>
+    </dependencies>
+    ```
+
+    For a full example visit this [pom.xml](https://github.com/nickm980/smallville/blob/main/examples/java-example/pom.xml)
+  </Tab>
+  <Tab>
+    ```sh copy
+    npm init
+    ```
+    ```sh copy
+    npm i smallville
+    ```
+  </Tab>
+</Tabs>
+
+## Initialize a new connection
+The client will attempt to recconect to the server on initialization, and will call the callback whenever the state is updated. The server will run on http://localhost:8080/ by default
+
+<Tabs items={['Java', 'Javascript']} defaultIndex={0}>
+  <Tab>
+    ```java copy
+    SmallvilleClient client = SmallvilleClient.create("http://localhost:8080", new AgentHandlerCallback() {
+        public void handle(SimulationUpdateEvent event) {}
+    });
+    ```
+  </Tab>
+  <Tab>
+    ```javascript copy
+    const client = new Smallville({
+        host: "http://localhost:8080",
+        stateHandler: function(state) {
+            //in here you would update the location of the agent using your own pathfinding algorithm
+        },
+    });
+    ```
+  </Tab>
+</Tabs>
+
+## Create new locations
+It's reccomended to create locations for interactable leaf objects. For example, create a location for Red House: John's Room: Chair, 
+but not for Red House: Bedroom. Every simulation needs at least 1 location before creating agents, but it's reccomended to have more.
+
+<Tabs items={['Java', 'Javascript']} defaultIndex={0}>
+  <Tab>
+    ```java copy
+    client.createLocation("Red House: Bathroom: Sink");
+    ```
+
+    You can also set the initial state
+
+    ```java copy
+    client.createLocation("Red House: Kitchen: Stove",  "off");
+    ```
+
+  </Tab>
+  <Tab>
+    ```javascript copy
+    client.createLocation({
+        name: 'Red House: Bathroom: Stove',
+        state: 'off'
+    })
+    ```
+  </Tab>
+</Tabs>
+
+## Add a generative agent
+<Callout type="info">
+ Locations need to be created before adding agents
+</Callout>
+
+Initial memories should include characteristics, relationships, and occupations
+
+<Tabs items={['Java', 'Javascript']} defaultIndex={0}>
+  <Tab>
+    Create the memories
+    ```java copy
+    List<String> memories = new ArrayList<String>();
+    memories.add("John is the son of Medina");
+    ```
+    Add the agent
+    ```java copy
+    client.createAgent("John", memories, "Red House: Kitchen: Stove", "Cooking");
+    ```
+  </Tab>
+  <Tab>
+    ```javascript copy
+    client.createAgent({
+      name: 'John',
+      location: 'Red House: Kitchen: Stove',
+      memories: [
+        "John is a farmer at the Barn",
+        "John is a nice and outgoing person"
+      ]
+    })
+    ```
+  </Tab>
+</Tabs>
+
+## Update the state
+Updating the state can take up to 5 minutes while reactions usually take 1-5 minutes. The agent handler callback function will be called when the state is finished updating.
+
+<Tabs items={['Java', 'Javascript']} defaultIndex={0}>
+  <Tab>
+    ```java copy
+    client.updateState();
+    ```
+  </Tab>
+  <Tab>
+    ```javascript copy
+    client.updateState()
+    ```
+  </Tab>
+</Tabs>
+
+## Example Projects
+For more in depth example projects view the code of the [example projects](https://github.com/nickm980/smallville/tree/main/examples)

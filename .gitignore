@@ -1,8 +1,2 @@
-options.txt
-glove.840B.300d.txt
-.classpath
-.project
-/logs/
-/.settings
-*.log
-*.prefs
+.next
+node_modules

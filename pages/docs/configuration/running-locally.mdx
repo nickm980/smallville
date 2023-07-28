@@ -1,0 +1,17 @@
+
+import { Callout } from 'nextra/components'
+import Image from 'next/image'
+
+<Callout type="warning" emoji="⚠️">
+  Local support hasn't been tested. Please report bugs through GitHub issues or discord
+</Callout>
+
+# Running Locally
+Running locally can be done through [Local AI](https://github.com/go-skynet/LocalAI) and changing the apiPath and model options.
+
+```yaml
+#Configuration options to run through LocalAI
+apiPath: https://api.openai.com/v1/chat/completions
+# LLM model should support function calling
+model: gpt-3.5-turbo
+```
