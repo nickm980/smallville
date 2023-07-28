@@ -7,6 +7,7 @@ html[class~='light'] {
   --highlight-color: #ececec;
   --background-color: white;
   --title-color: black;
+  --main-title-color: var(--title-color);
 }
 
 html[class~='dark'] {
@@ -18,7 +19,9 @@ html[class~='dark'] {
     --highlight-color: #494949;
     --background-color: #111111;
     --title-color: white;
+    --main-title-color: var(--title-color);
   }
+
   .bg-text {
     position: absolute;
     opacity: 0.05;
@@ -179,9 +182,6 @@ html[class~='dark'] {
     .hero::before {
       display: none;
     }
-    .mt-extra {
-      margin-top: inherit !important;
-    }
   }
   @keyframes glow {
     0% {
@@ -226,7 +226,7 @@ html[class~='dark'] {
     margin-bottom: 10rem;
   }
   b {
-    color: rgb(43, 43, 43);
+    color: var(--title-color);
     font-weight: normal;
   }
   .border {
@@ -257,8 +257,8 @@ html[class~='dark'] {
   }
   .faq__label {
     padding-block: 7px;
-    color: #525252;
-    font-weight: 600;
+    color: var(--body-color);
+    font-weight: 500;
     cursor: pointer;
   }
   .faq__panel-answer {
@@ -269,7 +269,7 @@ html[class~='dark'] {
   .label {
     font-weight: bold;
     white-space: nowrap;    margin: 0 auto;
-    background: -webkit-linear-gradient(left, var(--color-primary), var(--color-primary));
+    background: -webkit-linear-gradient(left, var(--main-title-color), var(--main-title-color));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: max(48px,min(5vw,76px));
@@ -278,7 +278,9 @@ html[class~='dark'] {
   .mt-extra {
     margin-top: 20rem;
   }
-
+.section--inner {
+  padding-top: 1em;
+}
   .full {
     max-width: 100%;
   }

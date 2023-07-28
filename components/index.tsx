@@ -27,6 +27,7 @@ function HomePage() {
       </div>
 
       <div className="section mt-extra">
+        <h2 className="title">Applications</h2>
         <div className="section--inner">
           <div className="cards">
             <div className="card">
