@@ -330,7 +330,7 @@
     max-height: 450px;
     border-radius: 1rem;
     position: relative;
-    background: url("./public/architecture.png") center center no-repeat;
+    background: url("./architecture.png") center center no-repeat;
     background-size: cover;
   }
 
