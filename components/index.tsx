@@ -1,6 +1,6 @@
 function HomePage() {
   return (
-    <div className="bg--dark">
+    <div>
          <div className="content">
       <div className="hero">
         <div className="circle"></div>
