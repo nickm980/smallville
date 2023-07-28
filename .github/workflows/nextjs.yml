@@ -50,7 +50,7 @@ jobs:
       - name: create env file
         run: |
           touch .env
-          echo ENGINE_API_KEY=${{ secrets.ENGINE_API_KEY }} >> .env
+          echo NODE_ENV=production >> .env
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
