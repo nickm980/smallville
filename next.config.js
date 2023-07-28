@@ -10,5 +10,5 @@ module.exports = {
   images: {
     unoptimized: true,
   },
-  assetPrefix: isProd ? '/docs/' : '',
+  assetPrefix: isProd ? '/smallville/' : '',
 };
