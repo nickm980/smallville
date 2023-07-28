@@ -6,23 +6,22 @@ function HomePage() {
         <div className="circle"></div>
         <div className="hero--content">
           <p className="text label small">Smallville</p>
-          <h1>Generative Agents For Video Games</h1>
+          <p>Generative Agents For Video Games And Simulations</p>
           <div className="hero--section-buttons">
             <a
-              href="https://github.com/nickm980/smallville/releases/download/v1.2.0/smallville-v1.2.0.zip"
+              href="/smallville/docs"
             >
-              <button className="button white gradient">
-                <i className="fa-solid fa-download"></i> Download Latest
+              <button className="button primary gradient">
+                <i className="fa-solid fa-download"></i> Get Started
               </button>
             </a>
-            <button className="button transparent inverted-logo">
-              <a
-                className="white"
-                href="https://www.youtube.com/watch?v=jS_YsytBbD8"
-              >
-                <i className="fa-solid fa-play"></i>Watch Tutorial Video</a
-              >
-            </button>
+                       <a
+              href="https://github.com/nickm980/smallville/releases/download/v1.2.0/smallville-v1.2.0.zip"
+            >
+              <button className="button outline">
+                <i className="fa-solid fa-download"></i> Download v1.2.0
+              </button>
+            </a>
           </div>
         </div>
       </div>
@@ -51,30 +50,18 @@ function HomePage() {
           </div>
         </div>
       </div>
-      <div className="section">
-        <div className="section--inner">
-          <h2 className="title">Easy to Use Dashboard</h2>
-          <div className="box">
-            <div className="box-item">Conversation History</div>
-            <div className="box-item">Edit Locations</div>
-            <div className="box-item">Interview Agents</div>
-            <div className="box-item">Agent Information</div>
-            <div className="box-item">Prompt Debugging</div>
-          </div>
-        </div>
-      </div>
       <div className="section full">
         <div className="section--inner">
           <div className="flex left">
             <div className="flex-image">
               <div className="img__gradient">
-                <img className="large rounded wide" src="config.png" />
+                <img className="large rounded wide" src="smallville/config.png" />
               </div>
             </div>
             <div className="flex-2">
               <h2 className="title">Highly Configurable</h2>
               <p className="text">
-                Fine tune dozens of configurable controls such as reflection
+                Fine tune configurable controls such as reflection
                 weight cutoffs and prompts
               </p>
             </div>
@@ -88,17 +75,8 @@ function HomePage() {
               <h2 className="title">Programming Clients</h2>
               <p className="text">
                 No programming is needed to configure simulations for research
-                purposes, but our
-                <a
-                  href="https://github.com/nickm980/smallville/tree/main/java-client"
-                  >Java</a
-                >
-                and
-                <a href="https://www.npmjs.com/package/smallville"
-                  >JavaScript</a
-                >
-                clients allow for more control in creating custom simulations
-                and for video games.
+                purposes, but the clients allow for creating custom simulations
+                and for adding agents to video games.
               </p>
               <br />
               <i
@@ -108,27 +86,9 @@ function HomePage() {
             </div>
             <div className="flex-image">
               <div className="img__gradient">
-                <img className="large rounded wide" src="javaclient.png" />
+                <img className="large rounded wide" src="/smallville/javaclient.png" />
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <div className="section">
-        <div className="section--inner">
-          <h2></h2>
-          <div className="hero--section-buttons" id="cta">
-            <a href="https://github.com/nickm980/smallville/tree/main">
-              <button className="button white">
-                <i className="fa-brands fa-github fa-lg"></i>View Source On GitHub
-              </button>
-            </a>
-            <p className="text">Or</p>
-            <a href="https://discord.com/invite/APVSw2DrCX">
-              <button className="button outline">
-                <i className="fa-brands fa-discord fa-lg"></i> Join the Discord
-              </button>
-            </a>
           </div>
         </div>
       </div>

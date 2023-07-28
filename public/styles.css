@@ -1,13 +1,28 @@
-:root {
+html[class~='light'] {
+  --title-color: rgb(105, 105, 105);
+  --body-color: #2f2f31;
+  --color-primary: rgba(143, 0, 0, 0.7);
+  --button-primary: rgba(63, 63, 63, 1);
+  --enable-particles: 0;
+}
+
+html[class~='dark'] {
     --title-color: rgb(105, 105, 105);
     --body-color: #2f2f31;
+    --color-primary: rgba(143, 0, 0, 0.7);
+    --button-primary: rgb(187, 187, 187);
+    --enable-particles: 0;
   }
 
-  .button.white {
-    --button-border: rgb(230, 230, 230);
-    --button-background: white;
-    --buton-color: black;
-    --button-highlight: rgb(230, 230, 230);
+  a.white {
+    color: rgba(255, 23, 23, 0.7);
+  }
+
+  .button.primary {
+    --button-border: var(--color-primary);
+    --button-background: var(--color-primary);
+    --buton-color: white;
+    --button-highlight: var(--color-primary);
   }
 
   .button.transparent {
@@ -17,34 +32,9 @@
     text-decoration: underline;
   }
   .button.outline {
-    --button-border: white;
+    --button-border: var(--button-primary);
     --button-background: transparent;
-    --buton-color: white;
-  }
-
-  .particle-container {
-    position: relative;
-  }
-
-  .particle {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background-color: green;
-    border-radius: 50%;
-    top: 0;
-    left: 1000px;
-    animation: particleAnimation 3s linear infinite;
-    z-index: -1;
-  }
-
-  @keyframes particleAnimation {
-    100% {
-      top: 50%;
-      left: 50%;
-      opacity: 0;
-      transform: translate(-50%, -50%);
-    }
+    --buton-color:  var(--button-primary);
   }
   /*css resets*/
   * {
@@ -120,9 +110,9 @@
   }
 
   .button {
-    font-weight: 600;
-    border-radius: 0.3rem;
-    padding: 0.75em 1em 0.75em 1em;
+    font-weight: 500;
+    border-radius: .5rem;
+    padding: 0.5em 1em 0.5em 1em;
     background-color: transparent;
     cursor: pointer;
     box-shadow: none;
@@ -148,7 +138,7 @@
     border: 5px solid transparent;
   }
 
-  .gradient-border::before,
+  /* .gradient-border::before,
   .card:hover::before {
     content: "";
     position: absolute;
@@ -160,8 +150,8 @@
     left: -2px;
     z-index: -1;
     background-image: linear-gradient(180deg, #2323ff, #1893ff);
-  }
-  .gradient-border::after,
+  } */
+  /* .gradient-border::after,
   .card:hover::after {
     content: "";
     position: absolute;
@@ -171,7 +161,7 @@
     right: -2px;
     z-index: -1;
     background-image: linear-gradient(180deg, #2323ff, #1893ff);
-  }
+  } */
   .button:hover {
     /* outline: 2px solid var(--button-highlight); Border bottom */
     box-shadow: 0px 0px 1px 1px var(--button-highlight); /* Border bottom */
@@ -180,6 +170,7 @@
   .hero--section-buttons {
     margin-top: 2rem;
     display: flex;
+    gap: .5rem;
     justify-content: center;
   }
 
@@ -202,7 +193,6 @@
     margin: 0 auto;
     z-index: -1;
     border-radius: 50%;
-    box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.7);
     animation: glow 5s linear infinite;
   }
 
@@ -216,14 +206,14 @@
   }
   @keyframes glow {
     0% {
-      box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.7);
+      box-shadow: 0 0 20px 10px rgba(255, 23, 23, min(0.25, var(--enable-particles)));
     }
     50% {
-      box-shadow: 0 0 40px 20px rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 20px 10px rgba(255, 23, 23, min(0.1, var(--enable-particles)));
       opacity: 0.3;
     }
     100% {
-      box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.7);
+      box-shadow: 0 0 20px 10px rgba(255, 23, 23, min(0.25, var(--enable-particles)));
     }
   }
   .hero {
@@ -283,14 +273,14 @@
   .faq__panel {
     padding: 7px 21px;
     margin-bottom: 0.5rem;
-    border: 1px solid #8c8c8d;
     background-color: #fcfcfc;
     border-radius: 7px;
     text-align: left;
   }
   .faq__label {
     padding-block: 7px;
-    color: #f4f5f6;
+    color: #525252;
+    font-weight: 600;
     cursor: pointer;
   }
   .faq__panel-answer {
@@ -298,19 +288,17 @@
     padding-top: 5px;
     padding-bottom: 7px;
   }
-  .label.small {
-    margin-bottom: 1em;
-  }
   .label {
     font-weight: bold;
     text-transform: uppercase;
     width: fit-content;
     margin: 0 auto;
     letter-spacing: 0.25em;
-    background: -webkit-linear-gradient(left, #1893ff, #2418ff);
+    background: -webkit-linear-gradient(left, var(--color-primary), #161616);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-position: left center; /* Add this line */
+    font-size: 2rem;
   }
   .mt-extra {
     margin-top: 20rem;
@@ -344,9 +332,6 @@
     right: 0;
     bottom: 0;
     left: 0;
-  }
-  a.white {
-    color: #198dff;
   }
   .box {
     display: flex;
