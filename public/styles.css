@@ -1,28 +1,48 @@
 html[class~='light'] {
   --title-color: rgb(105, 105, 105);
-  --body-color: #2f2f31;
-  --color-primary: rgba(143, 0, 0, 0.7);
-  --button-primary: rgba(63, 63, 63, 1);
+  --body-color: #161616;
+  --color-primary: rgba(143, 0, 0, 1);
+  --button-primary: rgb(12, 12, 12);
   --enable-particles: 0;
+  --highlight-color: #ececec;
+  --background-color: white;
+  --title-color: black;
 }
 
 html[class~='dark'] {
     --title-color: rgb(105, 105, 105);
-    --body-color: #2f2f31;
-    --color-primary: rgba(143, 0, 0, 0.7);
-    --button-primary: rgb(187, 187, 187);
+    --body-color: #b8b8b8;
+    --color-primary: rgba(143, 0, 0, 1);
+    --button-primary: rgba(143, 0, 0, 1);
     --enable-particles: 0;
+    --highlight-color: #494949;
+    --background-color: #111111;
+    --title-color: white;
+  }
+  .bg-text {
+    position: absolute;
+    opacity: 0.05;
+    font-size: 4rem;
+    font-weight: normal;
+    line-height: .75em;
+    white-space: pre-line;
+    z-index: -1;
+  }
+
+  .bg-memories {
+    overflow: hidden;
+    padding: 1em;
   }
 
   a.white {
-    color: rgba(255, 23, 23, 0.7);
+    color: rgba(255, 23, 23, 1);
   }
 
   .button.primary {
-    --button-border: var(--color-primary);
-    --button-background: var(--color-primary);
+    --button-border: var(--button-primary);
+    --button-background: var(--button-primary);
     --buton-color: white;
-    --button-highlight: var(--color-primary);
+    --button-highlight: var(--button-primary);
   }
 
   .button.transparent {
@@ -69,25 +89,9 @@ html[class~='dark'] {
     padding: 1em;
   }
 
-  .pill {
-    display: inline;
-    padding: 0.5em 1em 0.5em 1em;
-    font-size: 0.8em;
-    border-radius: 1em;
-    background-color: rgba(231, 231, 231, 0.135);
-    backdrop-filter: blur(10px);
-  }
   .content {
     padding-top: 10rem;
     text-align: center;
-  }
-
-  .content::before {
-    background-color: orange;
-    height: 100px;
-    width: 100px;
-    border: 1px solid red;
-    position: absolute;
   }
   a {
     color: #198eff;
@@ -96,8 +100,9 @@ html[class~='dark'] {
   h2.title {
     color: var(--title-color);
   }
+
   h1.title {
-    font-size: 3rem !important;
+    font-size: max(48px,min(5vw,76px)) !important;
     text-transform: uppercase;
   }
   h2.title {
@@ -105,8 +110,7 @@ html[class~='dark'] {
     font-weight: bold;
   }
   p.text {
-    line-height: 2em;
-    color: #908ea0;
+    color: var(--body-color);
   }
 
   .button {
@@ -121,19 +125,12 @@ html[class~='dark'] {
     color: var(--buton-color);
     border: 2px solid var(--button-border);
   }
-
-  .button i {
-    margin-right: 0.5em;
-  }
-
-  .button.inverted-logo i {
-    margin-left: 0.5em;
-  }
+  
   .gradient-border,
   .card {
     padding: 0.5rem 1rem;
     position: relative;
-    background-color: white;
+    background-color: var(--background-color);
     background-clip: padding-box;
     border: 5px solid transparent;
   }
@@ -174,26 +171,8 @@ html[class~='dark'] {
     justify-content: center;
   }
 
-  .nav--socials a {
-    color: inherit;
-    margin: 0.25em;
-  }
   img.wide {
     max-width: 100%;
-  }
-  .hero::before {
-    content: "";
-    position: absolute;
-    top: -100px;
-    left: -10px;
-    right: -10px;
-    bottom: -10px;
-    width: 750px;
-    height: 750px;
-    margin: 0 auto;
-    z-index: -1;
-    border-radius: 50%;
-    animation: glow 5s linear infinite;
   }
 
   @media (max-width: 1000px) {
@@ -220,16 +199,14 @@ html[class~='dark'] {
     margin: 0 auto;
     flex-direction: column;
     padding: 1rem;
-    max-width: 600px;
   }
 
-  nav i {
-    color: white;
-  }
   .card {
-    padding: 1em;
-    /* border: 2px solid #201c35; */
-    background-color: #fcfcfc;
+    padding: 2em;
+    border-radius: .5rem;
+    border: 1px solid var(--highlight-color);
+    background-color: var(--background-color);
+
     min-height: 100px;
     flex-basis: 300px;
     text-align: left;
@@ -267,13 +244,14 @@ html[class~='dark'] {
   /**FAQ Styles**/
   .faq_header-title {
     font-size: 24px;
-    color: #494949;
+    color: var(--title-color);
     margin-bottom: 30px;
   }
   .faq__panel {
     padding: 7px 21px;
     margin-bottom: 0.5rem;
-    background-color: #fcfcfc;
+    border: 1px solid var(--highlight-color);
+    background-color: var(--background-color);
     border-radius: 7px;
     text-align: left;
   }
@@ -290,15 +268,12 @@ html[class~='dark'] {
   }
   .label {
     font-weight: bold;
-    text-transform: uppercase;
-    width: fit-content;
-    margin: 0 auto;
-    letter-spacing: 0.25em;
-    background: -webkit-linear-gradient(left, var(--color-primary), #161616);
+    white-space: nowrap;    margin: 0 auto;
+    background: -webkit-linear-gradient(left, var(--color-primary), var(--color-primary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    font-size: max(48px,min(5vw,76px));
     background-position: left center; /* Add this line */
-    font-size: 2rem;
   }
   .mt-extra {
     margin-top: 20rem;

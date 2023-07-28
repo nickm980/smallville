@@ -5,7 +5,7 @@ function HomePage() {
       <div className="hero">
         <div className="circle"></div>
         <div className="hero--content">
-          <p className="text label small">Smallville</p>
+          <p className="text label">Smallville Generative Agents</p>
           <p>Generative Agents For Video Games And Simulations</p>
           <div className="hero--section-buttons">
             <a
