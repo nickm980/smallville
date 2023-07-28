@@ -141,5 +141,46 @@ Updating the state can take up to 5 minutes while reactions usually take 1-5 min
   </Tab>
 </Tabs>
 
+## Adding observations
+For the agents to react to their environment they need to have observations of the world.
+Reactions can take a long time so it's not reccomended to request reactions on reptitive events. 
+
+Reactable observations can cause agents to initiate conversation
+
+<Tabs items={['Java', 'Javascript']} defaultIndex={0}>
+  <Tab>
+    Setting the last argument to true will make the agent possibly react to the observation.
+    ```java copy
+    client.addObservation("John", "desk is idle", true);
+    ```
+  </Tab>
+  <Tab>
+    ```javascript copy
+    client.addObservation({name: "John", observation: "desk is idle", reactable: true})
+    ```
+  </Tab>
+</Tabs>
+
+## Interviewing agents
+During interviews, agents assume they are being interviewed by a newscaster. This can be changed in the [prompts configuration](/docs/configuration/prompt-configuration).
+
+<Callout type="info">
+Agent interviews will not add the conversation to the agent's memory stream.
+</Callout>
+
+<Tabs items={['Java', 'Javascript']} defaultIndex={0}>
+  <Tab>
+    Setting the last argument to true will request a reaction from the agent. The agent will then choose if they should react and what that reaction should be.
+    ```java copy
+    client.ask("John", "How are you today?");
+    ```
+  </Tab>
+  <Tab>
+    ```javascript copy
+    client.addObservation({name: "John", question: "How are you today?"})
+    ```
+  </Tab>
+</Tabs>
+
 ## Example Projects
 For more in depth example projects view the code of the [example projects](https://github.com/nickm980/smallville/tree/main/examples)
