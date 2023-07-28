@@ -54,6 +54,9 @@ jobs:
         run: |
           touch .env
           echo NODE_ENV=production >> .env
+      - name: test environment variable
+        run: |
+          echo $NODE_ENV
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -91,9 +94,6 @@ jobs:
         uses: actions/upload-pages-artifact@v2
         with:
           path: ./out
-      - name: test environment variable
-        run: |
-          echo $NODE_ENV
 
   # Deployment job
   deploy:
