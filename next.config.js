@@ -10,5 +10,6 @@ module.exports = {
   images: {
     unoptimized: true,
   },
-  assetPrefix: isProd ? '/smallville/' : '',
+  basePath: '/smallville',
+  assetPrefix: '/smallville/',
 };
