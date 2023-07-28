@@ -1,7 +1,7 @@
 {
   "index": {
     "type": "page",
-    "title": "Nextra",
+    "title": "Smallville",
     "display": "hidden",
     "theme": {
         "layout": "raw",
@@ -13,9 +13,36 @@
         "pagination": false
       }
   },
+  "memories": {
+    "type": "page",
+    "display": "hidden",
+    "theme": {
+        "layout": "raw",
+        "navbar": true,
+        "breadcrumb": false,
+        "footer": false,
+        "sidebar": false,
+        "toc": false,
+        "pagination": false
+      }
+  },
   "docs": {
     "type": "page",
     "title": "Documentation"
+  },
+  "projects": {
+    "type": "menu",
+    "title": "Projects",
+    "items": {
+      "memory": {
+        "title": "Memory Stream",
+        "href": "/memories"
+      },
+      "generativeagents": {
+        "title": "Generative Agents",
+        "href": "/"
+      }
+    }
   },
   "about": {
     "type": "page",
