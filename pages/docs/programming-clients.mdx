@@ -4,7 +4,7 @@ Create custom simulations or add generative agents to your own video games by us
 ## Add the dependencies
 
 import { Tab, Tabs } from 'nextra/components'
-import { Callout } from 'nextra/components'
+import { Callout, Steps } from 'nextra/components'
 
 <Tabs items={['Java', 'Javascript']} defaultIndex={0}>
   <Tab>
@@ -42,104 +42,108 @@ import { Callout } from 'nextra/components'
   </Tab>
 </Tabs>
 
-## Initialize a new connection
-The client will attempt to recconect to the server on initialization, and will call the callback whenever the state is updated. The server will run on http://localhost:8080/ by default
+## Get Started
 
-<Tabs items={['Java', 'Javascript']} defaultIndex={0}>
-  <Tab>
-    ```java copy
-    SmallvilleClient client = SmallvilleClient.create("http://localhost:8080", new AgentHandlerCallback() {
-        public void handle(SimulationUpdateEvent event) {}
-    });
-    ```
-  </Tab>
-  <Tab>
-    ```javascript copy
-    const client = new Smallville({
-        host: "http://localhost:8080",
-        stateHandler: function(state) {
-            //in here you would update the location of the agent using your own pathfinding algorithm
-        },
-    });
-    ```
-  </Tab>
-</Tabs>
+<Steps>
+  ### Initialize a new connection
+  The client will attempt to recconect to the server on initialization, and will call the callback whenever the state is updated. The server will run on http://localhost:8080/ by default
 
-## Create new locations
-It's reccomended to create locations for interactable leaf objects. For example, create a location for Red House: John's Room: Chair, 
-but not for Red House: Bedroom. Every simulation needs at least 1 location before creating agents, but it's reccomended to have more.
+  <Tabs items={['Java', 'Javascript']} defaultIndex={0}>
+    <Tab>
+      ```java copy
+      SmallvilleClient client = SmallvilleClient.create("http://localhost:8080", new AgentHandlerCallback() {
+          public void handle(SimulationUpdateEvent event) {}
+      });
+      ```
+    </Tab>
+    <Tab>
+      ```javascript copy
+      const client = new Smallville({
+          host: "http://localhost:8080",
+          stateHandler: function(state) {
+              //in here you would update the location of the agent using your own pathfinding algorithm
+          },
+      });
+      ```
+    </Tab>
+  </Tabs>
 
-<Tabs items={['Java', 'Javascript']} defaultIndex={0}>
-  <Tab>
-    ```java copy
-    client.createLocation("Red House: Bathroom: Sink");
-    ```
+  ### Create new locations
+  It's reccomended to create locations for interactable leaf objects. For example, create a location for Red House: John's Room: Chair, 
+  but not for Red House: Bedroom. Every simulation needs at least 1 location before creating agents, but it's reccomended to have more.
 
-    You can also set the initial state
+  <Tabs items={['Java', 'Javascript']} defaultIndex={0}>
+    <Tab>
+      ```java copy
+      client.createLocation("Red House: Bathroom: Sink");
+      ```
 
-    ```java copy
-    client.createLocation("Red House: Kitchen: Stove",  "off");
-    ```
+      You can also set the initial state
 
-  </Tab>
-  <Tab>
-    ```javascript copy
-    client.createLocation({
-        name: 'Red House: Bathroom: Stove',
-        state: 'off'
-    })
-    ```
-  </Tab>
-</Tabs>
+      ```java copy
+      client.createLocation("Red House: Kitchen: Stove",  "off");
+      ```
 
-## Add a generative agent
-<Callout type="info">
- Locations need to be created before adding agents
-</Callout>
+    </Tab>
+    <Tab>
+      ```javascript copy
+      client.createLocation({
+          name: 'Red House: Bathroom: Stove',
+          state: 'off'
+      })
+      ```
+    </Tab>
+  </Tabs>
 
-Initial memories should include characteristics, relationships, and occupations
+  ### Add a generative agent
+  <Callout type="info">
+  Locations need to be created before adding agents
+  </Callout>
 
-<Tabs items={['Java', 'Javascript']} defaultIndex={0}>
-  <Tab>
-    Create the memories
-    ```java copy
-    List<String> memories = new ArrayList<String>();
-    memories.add("John is the son of Medina");
-    ```
-    Add the agent
-    ```java copy
-    client.createAgent("John", memories, "Red House: Kitchen: Stove", "Cooking");
-    ```
-  </Tab>
-  <Tab>
-    ```javascript copy
-    client.createAgent({
-      name: 'John',
-      location: 'Red House: Kitchen: Stove',
-      memories: [
-        "John is a farmer at the Barn",
-        "John is a nice and outgoing person"
-      ]
-    })
-    ```
-  </Tab>
-</Tabs>
+  Initial memories should include characteristics, relationships, and occupations
 
-## Update the state
-Updating the state can take up to 5 minutes while reactions usually take 1-5 minutes. The agent handler callback function will be called when the state is finished updating.
+  <Tabs items={['Java', 'Javascript']} defaultIndex={0}>
+    <Tab>
+      Create the memories
+      ```java copy
+      List<String> memories = new ArrayList<String>();
+      memories.add("John is the son of Medina");
+      ```
+      Add the agent
+      ```java copy
+      client.createAgent("John", memories, "Red House: Kitchen: Stove", "Cooking");
+      ```
+    </Tab>
+    <Tab>
+      ```javascript copy
+      client.createAgent({
+        name: 'John',
+        location: 'Red House: Kitchen: Stove',
+        memories: [
+          "John is a farmer at the Barn",
+          "John is a nice and outgoing person"
+        ]
+      })
+      ```
+    </Tab>
+  </Tabs>
 
-<Tabs items={['Java', 'Javascript']} defaultIndex={0}>
-  <Tab>
-    ```java copy
-    client.updateState();
-    ```
-  </Tab>
-  <Tab>
-    ```javascript copy
-    client.updateState()
-    ```
-  </Tab>
-</Tabs>
+  ### Update the state
+  Updating the state can take up to 5 minutes while reactions usually take 1-5 minutes. The agent handler callback function will be called when the state is finished updating.
+
+  <Tabs items={['Java', 'Javascript']} defaultIndex={0}>
+    <Tab>
+      ```java copy
+      client.updateState();
+      ```
+    </Tab>
+    <Tab>
+      ```javascript copy
+      client.updateState()
+      ```
+    </Tab>
+  </Tabs>
+</Steps>
 
 ## Adding observations
 For the agents to react to their environment they need to have observations of the world.
