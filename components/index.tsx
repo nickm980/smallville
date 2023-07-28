@@ -55,7 +55,7 @@ function HomePage() {
           <div className="flex left">
             <div className="flex-image">
               <div className="img__gradient">
-                <img className="large rounded wide" src="smallville/config.png" />
+                <img className="large rounded wide" src="/smallville/config.png" />
               </div>
             </div>
             <div className="flex-2">
