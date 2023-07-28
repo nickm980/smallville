@@ -143,9 +143,10 @@ html[class~='dark'] {
   }
   .logo--small {
     font-weight: bold;
-    background: -webkit-linear-gradient(left, var(--color-primary), black);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--title-color);
+    display: flex;
+    gap: .5rem;
+    align-items: center;
   }
   .button:hover {
     /* outline: 2px solid var(--button-highlight); Border bottom */
