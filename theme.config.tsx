@@ -7,9 +7,9 @@ const config: DocsThemeConfig = {
     link: 'https://github.com/nickm980/smallville',
   },
   chat: {
-    link: 'https://discord.com',
+    link: 'https://discord.com/invite/APVSw2DrCX',
   },
-  docsRepositoryBase: 'https://github.com/nickm980/smallville',
+  docsRepositoryBase: 'https://github.com/nickm980/smallville/tree/docs',
   footer: {
     text: 'Smallville',
   },
