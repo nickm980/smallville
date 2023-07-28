@@ -47,6 +47,10 @@ jobs:
             echo "Unable to determine package manager"
             exit 1
           fi
+      - name: create env file
+      run: |
+        touch .env
+        echo NODE_ENV=production >> .env
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
