@@ -11,6 +11,9 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  NODE_ENV: "production"  # Set your desired value here
+
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
@@ -78,16 +81,19 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Next.js
         env:
-          NODE_ENV: production
+          NODE_ENV: "production"
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
       - name: Static HTML export with Next.js
         env:
-          NODE_ENV: production
+          NODE_ENV: "production"
         run: ${{ steps.detect-package-manager.outputs.runner }} next export
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
           path: ./out
+      - name: test environment variable
+        run: |
+          echo $NODE_ENV
 
   # Deployment job
   deploy:
