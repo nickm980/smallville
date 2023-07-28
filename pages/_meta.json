@@ -34,13 +34,13 @@
     "type": "menu",
     "title": "Projects",
     "items": {
-      "memory": {
-        "title": "Memory Stream",
-        "href": "/memories"
-      },
       "generativeagents": {
         "title": "Generative Agents",
         "href": "/"
+      },
+      "memory": {
+        "title": "Memory Stream",
+        "href": "/memories"
       }
     }
   },
