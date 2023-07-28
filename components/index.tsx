@@ -54,13 +54,6 @@ function HomePage() {
       <div className="section">
         <div className="section--inner">
           <h2 className="title">Easy to Use Dashboard</h2>
-          <p>
-            * Update the state, view memories, interview agents, and edit
-            locations through the UI *
-          </p>
-          <div className="img__gradient">
-            <div id="dashboard">f</div>
-          </div>
           <div className="box">
             <div className="box-item">Conversation History</div>
             <div className="box-item">Edit Locations</div>
@@ -196,7 +189,6 @@ function HomePage() {
         </div>
       </div>
     </div>
-    <footer>© 2023 nickm980</footer>
     </div>
   )
 }

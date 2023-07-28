@@ -7,7 +7,7 @@
         "layout": "raw",
         "navbar": true,
         "breadcrumb": false,
-        "footer": false,
+        "footer": true,
         "sidebar": false,
         "toc": false,
         "pagination": false

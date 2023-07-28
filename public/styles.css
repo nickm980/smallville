@@ -1,10 +1,10 @@
 :root {
-    --title-color: rgb(220, 220, 220);
-    --body-color: #7a7883;
+    --title-color: rgb(105, 105, 105);
+    --body-color: #2f2f31;
   }
 
   .button.white {
-    --button-border: white;
+    --button-border: rgb(230, 230, 230);
     --button-background: white;
     --buton-color: black;
     --button-highlight: rgb(230, 230, 230);
@@ -30,7 +30,7 @@
     position: absolute;
     width: 4px;
     height: 4px;
-    background-color: white;
+    background-color: green;
     border-radius: 50%;
     top: 0;
     left: 1000px;
@@ -58,9 +58,6 @@
     font-family: sans-serif;
   }
 
-  .bg--dark {
-    background-color: #030014;
-  }
   .flex {
     display: flex;
     gap: 4rem;
@@ -87,7 +84,7 @@
     padding: 0.5em 1em 0.5em 1em;
     font-size: 0.8em;
     border-radius: 1em;
-    background-color: rgba(173, 173, 173, 0.135);
+    background-color: rgba(231, 231, 231, 0.135);
     backdrop-filter: blur(10px);
   }
   .content {
@@ -110,8 +107,12 @@
     color: var(--title-color);
   }
   h1.title {
-    font-size: 3rem;
+    font-size: 3rem !important;
     text-transform: uppercase;
+  }
+  h2.title {
+    font-size: 2rem !important;
+    font-weight: bold;
   }
   p.text {
     line-height: 2em;
@@ -238,7 +239,7 @@
   .card {
     padding: 1em;
     /* border: 2px solid #201c35; */
-    background-color: #0e0a24;
+    background-color: #fcfcfc;
     min-height: 100px;
     flex-basis: 300px;
     text-align: left;
@@ -258,7 +259,7 @@
     margin-bottom: 10rem;
   }
   b {
-    color: white;
+    color: rgb(43, 43, 43);
     font-weight: normal;
   }
   .border {
@@ -276,14 +277,14 @@
   /**FAQ Styles**/
   .faq_header-title {
     font-size: 24px;
-    color: #fff;
+    color: #494949;
     margin-bottom: 30px;
   }
   .faq__panel {
     padding: 7px 21px;
     margin-bottom: 0.5rem;
-    border: 1px solid #201c35;
-    background-color: #0e0a24;
+    border: 1px solid #8c8c8d;
+    background-color: #fcfcfc;
     border-radius: 7px;
     text-align: left;
   }
@@ -330,7 +331,7 @@
     max-height: 450px;
     border-radius: 1rem;
     position: relative;
-    background: url("./architecture.png") center center no-repeat;
+    background: url("./dashboard.png") center center no-repeat;
     background-size: cover;
   }
 
@@ -343,14 +344,9 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      #030014 90%
-    );
   }
   a.white {
-    color: white;
+    color: #198dff;
   }
   .box {
     display: flex;
@@ -363,9 +359,7 @@
     flex: 1;
     padding: 1em;
   }
-  .box-item:not(:last-child) {
-    border-right: 2px solid #201c35;
-  }
+
   #cta {
     gap: 1rem;
   }
