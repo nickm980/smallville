@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { type DocsThemeConfig, useConfig } from 'nextra-theme-docs';
 
 const config: DocsThemeConfig = {
-  logo: <span>Smallville</span>,
+  logo: <span className="logo--small">Smallville</span>,
   project: {
     link: 'https://github.com/nickm980/smallville',
   },
