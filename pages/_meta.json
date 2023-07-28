@@ -4,8 +4,14 @@
     "title": "Nextra",
     "display": "hidden",
     "theme": {
-      "layout": "raw"
-    }
+        "layout": "raw",
+        "navbar": true,
+        "breadcrumb": false,
+        "footer": false,
+        "sidebar": false,
+        "toc": false,
+        "pagination": false
+      }
   },
   "docs": {
     "type": "page",
