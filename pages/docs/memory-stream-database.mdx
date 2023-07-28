@@ -1,3 +1,8 @@
+---
+title: 'Memory Stream Database'
+description: 'The memory stream is different from existing vector databases because memories are retrieved by recency and importance in addition to relevancy.'
+---
+
 import { Tab, Tabs } from 'nextra/components'
 import { Callout } from 'nextra/components'
 
@@ -41,7 +46,7 @@ Use the cilents to store and retrieve memories.
     ```
     Fetch the 3 most relevant memories
     ```java copy
-    List<String> memories = client.fetchMemories({id: uuid, query: "John went to the mall"});
+    const memories = client.fetchMemories({id: uuid, query: "John went to the mall"});
     ```
   </Tab>
 </Tabs>
