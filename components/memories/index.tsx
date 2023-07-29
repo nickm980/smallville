@@ -47,7 +47,7 @@ function MemoriesPage() {
           <div className="hero--content">
             
             <p className="text label small">Smallville Memories</p>
-            <p>Memory stream API for natural language data</p>
+            <p>Memory stream database for natural language data</p>
             <div className="hero--section-buttons">
               <a href="/smallville/docs/memory-stream-database">
                 <button className="button primary gradient">
