@@ -6,3 +6,7 @@ glove.840B.300d.txt
 /.settings
 *.log
 *.prefs
+.next
+out
+pages
+node_modules

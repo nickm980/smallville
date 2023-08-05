@@ -1,32 +1,39 @@
 {
-  "name": "muse-vue-ant-design-dashboard",
-  "version": "1.0.0",
-  "description": "A user-friendly, open source and beautiful dashboard based on Ant Design Vue.",
-  "main": "src/main.js",
-  "homepage": "https://demos.creative-tim.com/muse-ant-design-dashboard/",
-  "repository": "https://github.com/creativetimofficial/muse-ant-design-dashboard",
-  "license": "MIT",
   "private": true,
+  "license": "MIT",
   "scripts": {
-    "serve": "vue-cli-service serve --port 3000 --open",
-    "build": "vue-cli-service build",
-    "dev": "npm run serve"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "ant-design-vue": "1.7.6",
-    "chart.js": "3.4.1",
-    "core-js": "3.15.2",
-    "mustache": "^4.2.0",
-    "vue": "2.6.14",
-    "vue-github-buttons": "^3.1.0",
-    "vue-router": "3.5.2"
+    "@headlessui/react": "^1.7.15",
+    "@heroicons/react": "^2.0.18",
+    "@tremor/react": "^3.2.6",
+    "@types/js-cookie": "^3.0.3",
+    "@types/node": "20.3.0",
+    "@types/react": "18.2.11",
+    "@types/react-dom": "18.2.4",
+    "autoprefixer": "^10.4.14",
+    "eslint": "8.42.0",
+    "eslint-config-next": "13.4.5",
+    "js-cookie": "^3.0.5",
+    "next": "13.4.5",
+    "postcss": "^8.4.24",
+    "prettier": "^2.8.8",
+    "prop-types": "^15.8.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "server-only": "^0.0.1",
+    "smallville": "^1.0.3",
+    "tailwindcss": "^3.3.2",
+    "typescript": "5.1.3"
   },
-  "devDependencies": {
-    "@vue/cli-plugin-babel": "4.5.13",
-    "@vue/cli-plugin-router": "4.5.13",
-    "@vue/cli-service": "4.5.13",
-    "node-sass": "6.0.1",
-    "sass-loader": "^10",
-    "vue-template-compiler": "2.6.14"
+  "prettier": {
+    "arrowParens": "always",
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "none"
   }
 }
