@@ -7,7 +7,10 @@ import org.slf4j.LoggerFactory;
 import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.config.SmallvilleConfig;
 import io.github.nickm980.smallville.entities.Agent;
+import io.github.nickm980.smallville.entities.Location;
 import io.github.nickm980.smallville.entities.SimulationTime;
+import io.github.nickm980.smallville.events.EventBus;
+import io.github.nickm980.smallville.events.agent.AgentUpdateEvent;
 import io.github.nickm980.smallville.llm.LLM;
 import io.github.nickm980.smallville.prompts.ChatService;
 
@@ -23,7 +26,8 @@ public class UpdateService {
     private final World world;
     private final ChatService chatService;
     private final Logger LOG = LoggerFactory.getLogger(UpdateService.class);
-
+    private final EventBus events = EventBus.getEventBus();
+    
     public UpdateService(LLM chat, World world) {
 	this.world = world;
 	this.chatService = new ChatService(world, chat);
@@ -43,18 +47,18 @@ public class UpdateService {
 		    + SimulationTime
 			.now()
 			.format(DateTimeFormatter.ofPattern(SmallvilleConfig.getConfig().getTimeFormat())));
-
+	
+	Location oldLocation = agent.getLocation();
+	
 	AgentUpdate update = new UpdateMemoryWeights()
 	    .setNext(new UpdatePlans())
 	    .setNext(new UpdateCurrentActivity())
 	    .setNext(new UpdateConversation())
 	    .setNext(new UpdateReflection());
 
-	UpdateInfo info = new UpdateInfo();
-	info.setObservation(null);
+	update.start(chatService, world, agent, new UpdateInfo());
 
-	update.start(chatService, world, agent, info);
-
+	events.postEvent(new AgentUpdateEvent(agent, oldLocation, agent.getLocation()));
 	LOG.info("Agent updated");
     }
 
@@ -63,6 +67,7 @@ public class UpdateService {
 
 	UpdateInfo info = new UpdateInfo();
 	info.setObservation(observation);
+	Location oldLocation = agent.getLocation();
 
 	AgentUpdate update = new UpdatePlans().setNext(new UpdateConversation());
 
@@ -73,6 +78,7 @@ public class UpdateService {
 	    update.start(chatService, world, agent, info);
 	}
 
+	events.postEvent(new AgentUpdateEvent(agent, oldLocation, agent.getLocation()));
 	LOG.info("Agent updated");
     }
 
