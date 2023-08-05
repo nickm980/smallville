@@ -39,4 +39,8 @@ public final class SimulationTime {
     public static synchronized Duration getStepDuration() {
 	return step;
     }
+
+    public static int getStepDurationInMinutes() {
+	return (int) getStepDuration().getSeconds()/60;
+    }
 }
