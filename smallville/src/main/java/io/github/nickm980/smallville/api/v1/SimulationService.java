@@ -9,10 +9,10 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.github.nickm980.smallville.LogCache;
 import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.api.v1.dto.*;
 import io.github.nickm980.smallville.entities.*;
+import io.github.nickm980.smallville.events.EventBus;
 import io.github.nickm980.smallville.exceptions.AgentNotFoundException;
 import io.github.nickm980.smallville.exceptions.LocationNotFoundException;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
@@ -23,8 +23,8 @@ import io.github.nickm980.smallville.update.UpdateService;
 
 public class SimulationService {
 
-    private Logger LOG  = LoggerFactory.getLogger(SimulationService.class);
-    
+    private Logger LOG = LoggerFactory.getLogger(SimulationService.class);
+
     private final ModelMapper mapper;
     private final UpdateService prompts;
     private final World world;
@@ -60,7 +60,7 @@ public class SimulationService {
 	return agents.stream().map(mapper::fromAgent).collect(Collectors.toList());
     }
 
-    public List<LocationStateResponse> getChangedLocations() {
+    public List<LocationStateResponse> getAllLocations() {
 	List<LocationStateResponse> result = new ArrayList<LocationStateResponse>();
 
 	for (Location location : world.getLocations()) {
@@ -71,16 +71,19 @@ public class SimulationService {
     }
 
     public void createAgent(CreateAgentRequest request) {
-	List<Characteristic> characteristics = request.getMemories().stream().map(c -> new Characteristic(c)).collect(Collectors.toList());
+	List<Characteristic> characteristics = request
+	    .getMemories()
+	    .stream()
+	    .map(c -> new Characteristic(c))
+	    .collect(Collectors.toList());
 	// Location : Object
 	Location location = world.getLocation(request.getLocation()).orElse(null);
-	
+
 	if (location == null) {
-	    LOG.error("Could not find location "  + request.getLocation());
+	    LOG.error("Could not find location " + request.getLocation());
 	    throw new LocationNotFoundException(request.getLocation());
 	}
-	
-	
+
 	Agent agent = new Agent(request.getName(), characteristics, request.getActivity(), location);
 
 	if (world.create(agent)) {
@@ -98,10 +101,15 @@ public class SimulationService {
     }
 
     public List<MemoryResponse> getMemories(String pathParam) {
-	List<MemoryResponse> result = world.getAgent(pathParam).orElseThrow(() -> new AgentNotFoundException(pathParam))
-		.getMemoryStream().getMemories().stream().map(mapper::fromMemory)
-		.sorted(Comparator.comparing(MemoryResponse::getTime, Comparator.nullsLast(Comparator.naturalOrder())))
-		.collect(Collectors.toList());
+	List<MemoryResponse> result = world
+	    .getAgent(pathParam)
+	    .orElseThrow(() -> new AgentNotFoundException(pathParam))
+	    .getMemoryStream()
+	    .getMemories()
+	    .stream()
+	    .map(mapper::fromMemory)
+	    .sorted(Comparator.comparing(MemoryResponse::getTime, Comparator.nullsLast(Comparator.naturalOrder())))
+	    .collect(Collectors.toList());
 
 	return result;
     }
@@ -114,7 +122,7 @@ public class SimulationService {
     }
 
     public void updateState() throws SmallvilleException {
-	LogCache.refresh();
+//	AnalyticsListener.refresh();
 	if (world.getAgents().size() == 0) {
 	    throw new SmallvilleException("Must create an agent before changing the state");
 	}
@@ -129,7 +137,7 @@ public class SimulationService {
     public List<ConversationResponse> getConversations() {
 	List<ConversationResponse> result = new ArrayList<ConversationResponse>();
 	List<Conversation> conversations = world
-		.getConversationsAfter(SimulationTime.now().minus(SimulationTime.getStepDuration()));
+	    .getConversationsAfter(SimulationTime.now().minus(SimulationTime.getStepDuration()));
 
 	for (Conversation conversation : conversations) {
 	    result.addAll(mapper.fromConversation(conversation));

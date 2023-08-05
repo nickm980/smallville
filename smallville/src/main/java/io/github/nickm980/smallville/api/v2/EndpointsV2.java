@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 
-import io.github.nickm980.smallville.LogCache;
 import io.github.nickm980.smallville.api.v1.dto.*;
 import io.github.nickm980.smallville.entities.SimulationTime;
 import io.javalin.Javalin;
@@ -51,10 +50,10 @@ public class EndpointsV2 {
 	app.get("/v2/info", (ctx) -> {
 	    String time = SimulationTime.now().format(DateTimeFormatter.ofPattern("h:mm a"));
 
-	    ctx
-		.json(Map
-		    .of("time", time, "step", (int) SimulationTime.getStepDuration().getSeconds() / 60, "prompts",
-			    LogCache.getPrompts()));
+//	    ctx
+//		.json(Map
+//		    .of("time", time, "step", (int) SimulationTime.getStepDuration().getSeconds() / 60, "prompts",
+//			    AnalyticsListener.getPrompts()));
 	});
 
 	app.get("/v2/ping", (ctx) -> {

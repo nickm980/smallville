@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 
-import io.github.nickm980.smallville.LogCache;
+import io.github.nickm980.smallville.analytics.Analytics;
 import io.github.nickm980.smallville.api.v1.dto.*;
 import io.github.nickm980.smallville.entities.SimulationTime;
 import io.javalin.Javalin;
@@ -20,7 +20,7 @@ import static io.github.nickm980.smallville.api.SmallvilleServer.*;
 
 public class EndpointsV1 {
 
-    public static void register(SimulationService service, MustacheFactory mf, Javalin app) {
+    public static void register(Analytics analytics, SimulationService service, MustacheFactory mf, Javalin app) {
 	app.updateConfig(config -> {
 	    config.staticFiles.add("./");
 	});
@@ -39,8 +39,8 @@ public class EndpointsV1 {
 
 	    ctx
 		.json(Map
-		    .of("time", time, "step", (int) SimulationTime.getStepDuration().getSeconds() / 60, "prompts",
-			    LogCache.getPrompts()));
+		    .of("time", time, "step", SimulationTime.getStepDurationInMinutes(), "prompts",
+			    analytics.getPromptHistory(), "locationVisits", analytics.getVisits()));
 	});
 
 	app.get("/ping", (ctx) -> {
@@ -103,7 +103,7 @@ public class EndpointsV1 {
 	});
 
 	app.get("/locations", (ctx) -> {
-	    List<LocationStateResponse> request = service.getChangedLocations();
+	    List<LocationStateResponse> request = service.getAllLocations();
 
 	    ctx.json(Map.of("locations", request));
 	});
@@ -118,7 +118,7 @@ public class EndpointsV1 {
 	app.post("/state", (ctx) -> {
 	    service.updateState();
 	    List<AgentStateResponse> agents = service.getAgents();
-	    List<LocationStateResponse> locations = service.getChangedLocations();
+	    List<LocationStateResponse> locations = service.getAllLocations();
 	    List<ConversationResponse> conversations = service.getConversations();
 
 	    ctx.json(Map.of("agents", agents, "location_states", locations, "conversations", conversations));
@@ -126,7 +126,7 @@ public class EndpointsV1 {
 
 	app.get("/state", (ctx) -> {
 	    List<AgentStateResponse> agents = service.getAgents();
-	    List<LocationStateResponse> locations = service.getChangedLocations();
+	    List<LocationStateResponse> locations = service.getAllLocations();
 	    List<ConversationResponse> conversations = service.getConversations();
 
 	    ctx.json(Map.of("agents", agents, "location_states", locations, "conversations", conversations));

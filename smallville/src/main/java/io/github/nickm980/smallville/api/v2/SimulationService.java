@@ -6,11 +6,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import io.github.nickm980.smallville.LogCache;
 import io.github.nickm980.smallville.Util;
 import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.api.v1.dto.*;
 import io.github.nickm980.smallville.entities.*;
+import io.github.nickm980.smallville.events.EventBus;
 import io.github.nickm980.smallville.exceptions.AgentNotFoundException;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
 import io.github.nickm980.smallville.llm.LLM;
@@ -26,7 +26,7 @@ public class SimulationService {
     private final World world;
     private int progress;
 
-    public SimulationService(LLM llm, World world) {
+    public SimulationService(EventBus events, LLM llm, World world) {
 	this.world = world;
 	this.mapper = new ModelMapper();
 	this.prompts = new UpdateService(llm, world);
@@ -103,7 +103,7 @@ public class SimulationService {
     }
 
     public void updateState() throws SmallvilleException {
-	LogCache.refresh();
+//	AnalyticsListener.refresh();
 	if (world.getAgents().size() == 0) {
 	    throw new SmallvilleException("Must create an agent before changing the state");
 	}
