@@ -4,8 +4,10 @@ import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.MustacheFactory;
 
 import io.github.nickm980.smallville.World;
+import io.github.nickm980.smallville.analytics.Analytics;
 import io.github.nickm980.smallville.api.v1.EndpointsV1;
 import io.github.nickm980.smallville.api.v1.SimulationService;
+import io.github.nickm980.smallville.events.EventBus;
 import io.github.nickm980.smallville.llm.LLM;
 import io.javalin.Javalin;
 
@@ -13,10 +15,12 @@ public class SmallvilleServer {
 
     private final SimulationService service;
     private MustacheFactory mf;
-
-    public SmallvilleServer(LLM llm, World sim) {
+    private Analytics analytics;
+    
+    public SmallvilleServer(Analytics analytics, LLM llm, World sim) {
 	this.service = new SimulationService(llm, sim);
 	this.mf = new DefaultMustacheFactory();
+	this.analytics = analytics;
     }
 
     public void start() {
@@ -34,7 +38,7 @@ public class SmallvilleServer {
 	    });
 	});
 
-	EndpointsV1.register(service, mf, app);
+	EndpointsV1.register(analytics, service, mf, app);
 	ExceptionRoutes.registerExceptions(app);
 
 	app.start(port);
