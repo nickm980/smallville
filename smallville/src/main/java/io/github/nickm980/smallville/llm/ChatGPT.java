@@ -1,7 +1,6 @@
 package io.github.nickm980.smallville.llm;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Semaphore;
@@ -13,9 +12,10 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.github.nickm980.smallville.LogCache;
 import io.github.nickm980.smallville.Settings;
 import io.github.nickm980.smallville.config.SmallvilleConfig;
+import io.github.nickm980.smallville.events.EventBus;
+import io.github.nickm980.smallville.events.llm.PromptReceievedEvent;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
 import io.github.nickm980.smallville.prompts.PromptRequest;
 import okhttp3.OkHttpClient;
@@ -26,7 +26,8 @@ import okhttp3.Response;
 public class ChatGPT implements LLM {
     private final static Logger LOG = LoggerFactory.getLogger(ChatGPT.class);
     private final static ObjectMapper MAPPER = new ObjectMapper();
-
+    private final EventBus events = EventBus.getEventBus();
+    
     @Override
     public String sendChat(PromptRequest prompt, double temperature) {
 	int maxRetries = SmallvilleConfig.getConfig().getMaxRetries();
@@ -172,8 +173,11 @@ public class ChatGPT implements LLM {
 
 	long end = System.currentTimeMillis();
 	LOG.debug("[Chat] Response took " + String.valueOf(start - end) + "ms");
-	LogCache.addPrompt(prompt.getContent());
-	LogCache.addPrompt(result);
-	return result;
+//	Analytics.addPrompt(prompt.getContent());
+//	Analytics.addPrompt(result);
+	PromptReceievedEvent promptReceievedEvent = new PromptReceievedEvent(prompt.getContent(), result, start-end);
+	events.postEvent(promptReceievedEvent);
+	
+	return promptReceievedEvent.getResult();
     }
 }
