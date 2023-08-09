@@ -4,7 +4,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -117,7 +119,7 @@ public class SmallvilleClient {
     /**
      * Creates a new location
      * 
-     * @param name The unique name of the location.
+     * @param name  The unique name of the location.
      * @param state The state of the location.
      * @return True if the location creation is successful, false otherwise.
      */
@@ -303,6 +305,109 @@ public class SmallvilleClient {
 		return true;
 	    } else {
 		System.out.println("Observation addition failed. Status code: " + response.statusCode());
+		return false;
+	    }
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    return false;
+	}
+    }
+
+    public UUID createMemoryStream() {
+	String url = host + "/memories/stream";
+	try {
+	    JSONObject requestBody = new JSONObject();
+
+	    HttpClient client = HttpClient.newHttpClient();
+	    HttpRequest request = HttpRequest
+		.newBuilder()
+		.uri(URI.create(url))
+		.header("Content-Type", "application/json")
+		.POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
+		.build();
+
+	    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+	    if (response.statusCode() == 200) {
+		// Parse the JSON response body
+		JSONObject responseBody = new JSONObject(response.body());
+
+		// Extract the UUID from the response
+		String uuidString = responseBody.getString("uuid");
+		UUID result = UUID.fromString(uuidString);
+		return result;
+	    } else {
+		System.out.println("Memory stream creation failed. Status code: " + response.statusCode());
+		return null;
+	    }
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    public List<String> fetchMemories(UUID uuid, String query) {
+	String url = host + "/memories/stream/" + uuid;
+	try {
+	    JSONObject requestBody = new JSONObject();
+	    requestBody.put("query", query);
+	    
+	    HttpClient client = HttpClient.newHttpClient();
+	    HttpRequest request = HttpRequest
+		.newBuilder()
+		.uri(URI.create(url))
+		.header("Content-Type", "application/json")
+		.POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
+		.build();
+
+	    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+	    if (response.statusCode() == 200) {
+		// Parse the JSON response body
+		List<String> memoryList = new ArrayList<>();
+		System.out.println(response.body());
+
+		// Parse the JSON text
+		Object memories= new JSONObject(response.body()).get("memories");
+		JSONArray jsonArray = new JSONArray(memories);
+
+		// Iterate through the JSON array and extract the memories
+		for (int i = 0; i < jsonArray.length(); i++) {
+		    String memory = jsonArray.getString(i);
+		    memoryList.add(memory);
+		}
+		
+		return memoryList;
+	    } else {
+		System.out.println("Memory stream creation failed. Status code: " + response.statusCode());
+		return null;
+	    }
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+    
+    public boolean addMemory(UUID uuid, String memory) {
+	String url = host + "/memories/stream/" + uuid;
+	try {
+	    JSONObject requestBody = new JSONObject();
+	    requestBody.put("memory", memory);
+	    
+	    HttpClient client = HttpClient.newHttpClient();
+	    HttpRequest request = HttpRequest
+		.newBuilder()
+		.uri(URI.create(url))
+		.header("Content-Type", "application/json")
+		.POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
+		.build();
+
+	    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+	    if (response.statusCode() == 200) {
+		return true;
+	    } else {
+		System.out.println("Memory stream creation failed. Status code: " + response.statusCode());
 		return false;
 	    }
 	} catch (Exception e) {
