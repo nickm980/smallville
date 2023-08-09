@@ -3,7 +3,10 @@ package io.github.nickm980.smallville.api.v1;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -18,6 +21,7 @@ import io.github.nickm980.smallville.exceptions.LocationNotFoundException;
 import io.github.nickm980.smallville.exceptions.SmallvilleException;
 import io.github.nickm980.smallville.llm.LLM;
 import io.github.nickm980.smallville.memory.Characteristic;
+import io.github.nickm980.smallville.memory.MemoryStream;
 import io.github.nickm980.smallville.memory.Observation;
 import io.github.nickm980.smallville.update.UpdateService;
 
@@ -158,5 +162,23 @@ public class SimulationService {
 
     public void setState(String location, String state) {
 	world.setState(location, state);
+    }
+
+    Map<UUID, MemoryStream> memories = new HashMap<UUID, MemoryStream>();
+
+    public UUID createMemoryStream() {
+	UUID uuid = UUID.randomUUID();
+	memories.put(uuid, new MemoryStream());
+	return uuid;
+    }
+
+    public List<String> getMemories(UUID uuid, String query) {
+	MemoryStream stream = memories.get(uuid);
+	
+	return stream
+	    .getRelevantMemories(query)
+	    .stream()
+	    .map(memory -> memory.getDescription())
+	    .collect(Collectors.toList());
     }
 }
