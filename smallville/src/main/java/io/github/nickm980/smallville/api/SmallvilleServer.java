@@ -7,7 +7,6 @@ import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.analytics.Analytics;
 import io.github.nickm980.smallville.api.v1.EndpointsV1;
 import io.github.nickm980.smallville.api.v1.SimulationService;
-import io.github.nickm980.smallville.events.EventBus;
 import io.github.nickm980.smallville.llm.LLM;
 import io.javalin.Javalin;
 
@@ -30,7 +29,6 @@ public class SmallvilleServer {
     public void start(int port) {
 	Javalin app = Javalin.create(config -> {
 	    config.showJavalinBanner = false;
-	    config.staticFiles.add("./");
 	    config.plugins.enableCors(cors -> {
 		cors.add(it -> {
 		    it.anyHost();

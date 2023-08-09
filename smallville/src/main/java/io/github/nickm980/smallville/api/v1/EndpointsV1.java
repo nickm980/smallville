@@ -6,11 +6,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import io.github.nickm980.smallville.analytics.Analytics;
 import io.github.nickm980.smallville.api.v1.dto.*;
@@ -21,9 +24,6 @@ import static io.github.nickm980.smallville.api.SmallvilleServer.*;
 public class EndpointsV1 {
 
     public static void register(Analytics analytics, SimulationService service, MustacheFactory mf, Javalin app) {
-	app.updateConfig(config -> {
-	    config.staticFiles.add("./");
-	});
 
 	app.get("/memories/{name}", (ctx) -> {
 	    Map<String, Object> model = new HashMap<>();
