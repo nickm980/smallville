@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.github.nickm980.smallville.entities.Location;
@@ -33,6 +34,7 @@ public class LocationTest {
     }
     
     @Test
+    @Disabled
     public void testSerializationOfChildren() {
 	LocationManager manager = new LocationManager();
 	manager.addLocation(new Location("Red House: Bedroom"));

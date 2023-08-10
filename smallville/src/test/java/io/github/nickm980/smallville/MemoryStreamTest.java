@@ -61,6 +61,8 @@ public class MemoryStreamTest {
  	stream.add(new Observation("played Battlefield 1 for an hour"));
  	stream.add(new Observation("likes to play video games"));
  	stream.add(new Observation("saw a bird fly by"));
+ 	stream.add(new Observation("memory"));
+ 	stream.add(new Observation("memory two"));
 
  	List<Memory> memories = stream.getRelevantMemories("memory", 0);
 

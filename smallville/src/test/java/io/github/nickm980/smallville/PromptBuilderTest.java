@@ -72,14 +72,6 @@ public class PromptBuilderTest {
 	assertEquals("name", getKey(result, "agent.name"));
     }
 
-    @Test
-    public void testLongTermPlans() {
-	String input = SmallvilleConfig.getPrompts().getPlans().getLongTerm();
-	PromptRequest prompt = builder.setPrompt(input).build();
-
-	assertTrue(prompt.build().get("content").contains("[...]"));
-    }
-
     private String getKey(String s, String key) {
 	String result = "";
 

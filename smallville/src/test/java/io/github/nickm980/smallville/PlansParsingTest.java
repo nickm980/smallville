@@ -1,14 +1,11 @@
 package io.github.nickm980.smallville;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import io.github.nickm980.smallville.entities.Agent;
 import io.github.nickm980.smallville.llm.ChatGPT;
 import io.github.nickm980.smallville.memory.MemoryStream;
 import io.github.nickm980.smallville.memory.Plan;
@@ -58,6 +55,6 @@ public class PlansParsingTest {
 
 	stream.addAll(plans);
 
-	assertTrue(stream.getPlans().size() == 1);
+	assertEquals(3, stream.getPlans().size());
     }
 }

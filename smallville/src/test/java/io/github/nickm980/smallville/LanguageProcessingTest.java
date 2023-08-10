@@ -14,8 +14,7 @@ public class LanguageProcessingTest {
     public void testObservationalEntities() {
 	String[] values = nlp.getEntities("John finished cooking dinner with the rock");
 	String entities = nlp.getNamedEntities("John finished cooking dinner with the rock");
-	System.out.println(entities);
-	System.out.println("testing!!");
+
 	for (String s : values) {
 	    System.out.println(s);
 	}

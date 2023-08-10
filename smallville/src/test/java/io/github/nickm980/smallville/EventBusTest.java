@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import io.github.nickm980.smallville.analytics.Analytics;
 import io.github.nickm980.smallville.analytics.AnalyticsListener;
