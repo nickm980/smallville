@@ -24,6 +24,24 @@ import static io.github.nickm980.smallville.api.SmallvilleServer.*;
 public class EndpointsV1 {
 
     public static void register(Analytics analytics, SimulationService service, MustacheFactory mf, Javalin app) {
+	Gson gson = new Gson();
+
+	app.post("/memories/stream", (ctx) -> {
+	    UUID uuid = service.createMemoryStream();
+	    ctx.json(Map.of("success", true, "uuid", uuid));
+	});
+
+	app.post("/memories/stream/{uuid}", (ctx) -> {
+	    UUID uuid = UUID.fromString(ctx.pathParam("uuid"));
+
+	    Map<String, String> dataMap = gson.fromJson(ctx.body(), new TypeToken<Map<String, String>>() {
+	    }.getType());
+
+	    String query = (String) dataMap.get("query");
+
+	    List<String> result = service.getMemories(uuid, query);
+	    ctx.status(200).json(Map.of("success", true, "memories", result));
+	});
 
 	app.get("/memories/{name}", (ctx) -> {
 	    Map<String, Object> model = new HashMap<>();
@@ -138,15 +156,6 @@ public class EndpointsV1 {
 	    int minutes = Integer.valueOf(request.getNumOfMinutes());
 	    SimulationTime.setStep(Duration.ofMinutes(minutes));
 	    ctx.json(Map.of("success", true, "message", "Timestep updated to " + minutes + " per update"));
-	});
-
-	app.get("/progress", (ctx) -> {
-	    int progress = service.getProgress();
-	    ctx.json(Map.of("max", 100, "current", progress));
-	});
-
-	app.get("/conversations", (ctx) -> {
-	    ctx.json(Map.of("messages", service.getConversations()));
 	});
     }
 }
