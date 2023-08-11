@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 public class DecayTest {
 
     @Test
-    public void testDecay() {
+    public void test_decay_method_changes_original_value() {
 	double original = 10.0;
 	double changeInTime = 1.0;
 	double expected = 0.1;

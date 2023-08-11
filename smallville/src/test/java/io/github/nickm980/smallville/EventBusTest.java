@@ -14,7 +14,7 @@ import io.github.nickm980.smallville.events.llm.PromptReceievedEvent;
 public class EventBusTest {
 
     @Test
-    public void testEventBus() {
+    public void test_event_bus_triggers_listener() {
 	EventBus eventBus = EventBus.getEventBus();
 
 	Analytics analytics = new Analytics();
