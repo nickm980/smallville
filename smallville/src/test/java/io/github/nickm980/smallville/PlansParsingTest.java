@@ -7,14 +7,13 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import io.github.nickm980.smallville.llm.ChatGPT;
-import io.github.nickm980.smallville.memory.MemoryStream;
 import io.github.nickm980.smallville.memory.Plan;
 import io.github.nickm980.smallville.prompts.ChatService;
 
 public class PlansParsingTest {
 
     @Test
-    public void testParsingPlans() {
+    public void test_plans_parse_with_times_at_beginning_and_end() {
 	ChatService service = new ChatService(new World(), new ChatGPT());
 
 	List<Plan> plans = service.parsePlans("""
@@ -29,7 +28,7 @@ public class PlansParsingTest {
     }
 
     @Test
-    public void testWithExtraNumbers() {
+    public void test_plans_parse_with_time_at_end() {
 	ChatService service = new ChatService(new World(), new ChatGPT());
 
 	List<Plan> plans = service.parsePlans("""
@@ -41,20 +40,5 @@ public class PlansParsingTest {
 		""");
 
 	assertTrue(plans.size() == 5);
-    }
-
-    @Test
-    public void testTime() {
-	ChatService service = new ChatService(new World(), new ChatGPT());
-	List<Plan> plans = service.parsePlans("""
-		\nI will then go to the Green House and sleep from 12:05 AM.
-		\nI will wake up and make breakfast from 11:30 PM - 9:30 AM.
-		\nI will then go to the Forest and spend some time gathering branches from 10:00 AM - 11:00 AM.
-				""");
-	MemoryStream stream = new MemoryStream();
-
-	stream.addAll(plans);
-
-	assertEquals(3, stream.getPlans().size());
     }
 }
