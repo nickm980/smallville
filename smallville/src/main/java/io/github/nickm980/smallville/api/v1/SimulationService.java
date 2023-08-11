@@ -103,10 +103,10 @@ public class SimulationService {
 	world.create(new Location(request.getName()));
     }
 
-    public List<MemoryResponse> getMemories(String pathParam) {
+    public List<MemoryResponse> getMemoriesOfAgent(String agentName) {
 	List<MemoryResponse> result = world
-	    .getAgent(pathParam)
-	    .orElseThrow(() -> new AgentNotFoundException(pathParam))
+	    .getAgent(agentName)
+	    .orElseThrow(() -> new AgentNotFoundException(agentName))
 	    .getMemoryStream()
 	    .getMemories()
 	    .stream()
