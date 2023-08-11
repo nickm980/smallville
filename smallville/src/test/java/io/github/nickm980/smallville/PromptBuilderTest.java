@@ -55,7 +55,7 @@ public class PromptBuilderTest {
 	String input = SmallvilleConfig.getPrompts().getMisc().getDebug();
 	PromptRequest prompt = builder.setPrompt(input).build();
 	String result = prompt.build().get("content");
-	System.out.println(result);
+
 	assertEquals("pong", getKey(result, "ping"));
 	assertEquals("hello there!", getKey(result, "question"));
 	assertTrue(!getKey(result, "date.time").isEmpty());
@@ -81,7 +81,7 @@ public class PromptBuilderTest {
 		System.out.println(key + " : " + s);
 	    }
 	}
-
+	
 	return result.replace(":", "").trim();
     }
 }
