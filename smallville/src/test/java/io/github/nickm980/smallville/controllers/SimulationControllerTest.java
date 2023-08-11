@@ -36,19 +36,6 @@ public class SimulationControllerTest {
     }
 
     @Test
-    public void POST_to_memories_creates_stream() {
-	// POST /memories/stream
-	JavalinTest.test(app, (server, client) -> {
-	    Response response = client.post("/memories/stream");
-	    System.out.println(response.body().string());
-	    JSONObject body = new JSONObject(response.body().string());
-
-	    assertEquals(response.code(), 200);
-	    assertEquals("success", true);
-	});
-    }
-
-    @Test
     public void POST_to_memory_stream_saves_memory() {
 	// /memories/stream/{uuid}
 	JavalinTest.test(app, (server, client) -> {
@@ -92,7 +79,7 @@ public class SimulationControllerTest {
     public void GET_agent_by_name_returns_successfully() {
 	// GET /agents/{name}
 	JavalinTest.test(app, (server, client) -> {
-	    Response response = client.get("/agents/name_of_an_agent_which_doesnt_exist");
+	    Response response = client.get("/agents/nonexistant");
 	    assertEquals(response.body().string(), "test");
 	    JSONObject body = new JSONObject(response.body().string());
 

@@ -1,6 +1,8 @@
 package io.github.nickm980.smallville;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -34,7 +36,7 @@ public class JacksonJsonTest {
 	try {
 	    jsonNode = objectMapper.readTree(response);
 	} catch (JsonProcessingException e) {
-	    e.printStackTrace();
+	    fail("could not read the response data");
 	}
 
 	JsonNode objNode = jsonNode.get(0);
