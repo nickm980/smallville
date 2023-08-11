@@ -45,7 +45,7 @@ public final class SimulationController {
     
     @Get("/ping")
     public void ping(Context ctx) {
-	ctx.json(Map.of("success", true, "ping", "pong"));
+	ctx.status(200).json(Map.of("success", true, "ping", "pong"));
     }
     
     @Post("/memories/stream")
@@ -70,7 +70,7 @@ public final class SimulationController {
     @Get("/memories/{name}")
     public void getMemoryByName(Context ctx, @Param String name) {
 	Map<String, Object> model = new HashMap<>();
-	model.put("memories", service.getMemories(name));
+	model.put("memories", service.getMemoriesOfAgent(name));
 
 	Mustache mustache = mf.compile("agent.mustache");
 	String output = mustache.execute(new StringWriter(), model).toString();
