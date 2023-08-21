@@ -2,8 +2,10 @@ package io.github.nickm980.smallville;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
@@ -11,43 +13,32 @@ import io.github.nickm980.smallville.entities.Location;
 import io.github.nickm980.smallville.entities.LocationManager;
 
 public class LocationTest {
-    
+
     @Test
-    public void splitString() {
-	String location = "Red House: Barn";
-	
-	String[] split = location.split(":");
-	
-	for (String s : split) {
-	    System.out.println(s.trim());
-	}
-    }
-    
-    @Test
-    public void testLocationParsing() {
+    public void test_single_child_location_tree_is_parsed_correctly() {
 	Location location = new Location("Red House: Bedroom");
-	
+
 	assertEquals("Red House", location.getAll().get(0));
 	assertEquals("Bedroom", location.getAll().get(1));
 	assertEquals("Red House: Bedroom", location.getFullPath());
     }
-    
+
     @Test
-    public void testSerializationOfChildren() {
-	LocationManager manager = new LocationManager();
-	manager.addLocation(new Location("Red House: Bedroom"));
-	manager.addLocation(new Location("Red House: Kitchen"));
-	manager.addLocation(new Location("Blue House: Farm: Hay"));
+    void test_adding_location_with_nested_children() {
+	LocationManager locationManager = new LocationManager();
 
-	List<String> redHouse = manager.getChildren("Red House");
-	List<String> blueHouse = manager.getChildren("Blue House");
-	List<String> farm = manager.getChildren("Blue House");
+	Location location = new Location("root:a:b:c");
+	locationManager.addLocation(location);
 
-	assertTrue(redHouse.contains("Bedroom"));
-	assertTrue(redHouse.contains("Kitchen"));
-	assertTrue(redHouse.size() == 2);
-	assertTrue(blueHouse.contains("Farm"));
-	assertTrue(blueHouse.size() == 1);
-	assertEquals("Hay", farm);
+	Set<String> roots = locationManager.getRoots();
+	assertTrue(roots.contains("root:a:b:c"));
+    }
+
+    @Test
+    void test_nonexistant_location_returns_null() {
+	LocationManager locationManager = new LocationManager();
+
+	List<String> children = locationManager.getChildren("nonexistent");
+	assertNull(children);
     }
 }

@@ -1,7 +1,5 @@
 package io.github.nickm980.smallville;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -16,7 +14,7 @@ import io.github.nickm980.smallville.events.llm.PromptReceievedEvent;
 public class EventBusTest {
 
     @Test
-    public void testEventBus() {
+    public void test_event_bus_triggers_listener() {
 	EventBus eventBus = EventBus.getEventBus();
 
 	Analytics analytics = new Analytics();
@@ -28,7 +26,5 @@ public class EventBusTest {
 	PromptReceievedEvent event2 = new PromptReceievedEvent(null, null, 0);
 	eventBus.postEvent(event2);
 	eventBus.postEvent( new PromptReceievedEvent(null, null, 0));
-
-	assertEquals(true, true);
     }
 }

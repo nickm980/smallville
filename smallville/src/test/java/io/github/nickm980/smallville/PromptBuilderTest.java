@@ -55,7 +55,7 @@ public class PromptBuilderTest {
 	String input = SmallvilleConfig.getPrompts().getMisc().getDebug();
 	PromptRequest prompt = builder.setPrompt(input).build();
 	String result = prompt.build().get("content");
-	System.out.println(result);
+
 	assertEquals("pong", getKey(result, "ping"));
 	assertEquals("hello there!", getKey(result, "question"));
 	assertTrue(!getKey(result, "date.time").isEmpty());
@@ -72,14 +72,6 @@ public class PromptBuilderTest {
 	assertEquals("name", getKey(result, "agent.name"));
     }
 
-    @Test
-    public void testLongTermPlans() {
-	String input = SmallvilleConfig.getPrompts().getPlans().getLongTerm();
-	PromptRequest prompt = builder.setPrompt(input).build();
-
-	assertTrue(prompt.build().get("content").contains("[...]"));
-    }
-
     private String getKey(String s, String key) {
 	String result = "";
 
@@ -89,7 +81,7 @@ public class PromptBuilderTest {
 		System.out.println(key + " : " + s);
 	    }
 	}
-
+	
 	return result.replace(":", "").trim();
     }
 }

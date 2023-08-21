@@ -77,21 +77,6 @@ public class Repository<T> {
     }
 
     /**
-     * Returns a list of items created after the specified time.
-     *
-     * @param time the reference time to filter the items
-     * @return a list of items created after the specified time
-     */
-    public List<T> after(LocalDateTime time) {
-	return data
-	    .values()
-	    .stream()
-	    .filter(t -> t.createdAt().compareTo(time) < 0)
-	    .map(item -> item.getData())
-	    .collect(Collectors.toList());
-    }
-
-    /**
      * Returns a list of all items in the repository.
      *
      * @return a list of all items in the repository

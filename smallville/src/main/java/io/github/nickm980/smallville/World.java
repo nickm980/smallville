@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import io.github.nickm980.smallville.entities.Agent;
 import io.github.nickm980.smallville.entities.Conversation;
 import io.github.nickm980.smallville.entities.Location;
+import io.github.nickm980.smallville.exceptions.SmallvilleException;
 import io.github.nickm980.smallville.repository.Repository;
 
 /**
@@ -30,7 +31,11 @@ public class World {
 
     public void create(Conversation conversation) {
 	if (conversation.size() == 0) {
-	    return;
+	    throw new SmallvilleException("Cannot have an empty conversation");
+	}
+
+	if (conversation.getTalker().equals(conversation.getTalkee())) {
+	    throw new SmallvilleException("Agents cannot have conversations with themselves");
 	}
 
 	conversations.save(UUID.randomUUID().toString(), conversation);
@@ -67,9 +72,7 @@ public class World {
     public void setState(String object, String state) {
 	Location obj = getLocation(object).orElseThrow();
 
-	if (obj != null) {
-	    LOG.info("Changing state. " + object + ": " + state);
-	    obj.setState(state);
-	}
+	LOG.info("Changing state. " + object + ": " + state);
+	obj.setState(state);
     }
 }

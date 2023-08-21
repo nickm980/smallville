@@ -13,11 +13,6 @@ public class Conversation {
 
     public Conversation(String agent, String other, List<Dialog> messages) {
 	this.messages = new ArrayList<Dialog>();
-
-	if (agent.equals(other)) {
-	    throw new SmallvilleException("Agents cannot have conversations with themselves");
-	}
-
 	this.agent = agent;
 	this.other = other;
 	this.messages = messages;
@@ -33,5 +28,13 @@ public class Conversation {
     
     public int size() {
 	return messages.size();
+    }
+
+    public String getTalker() {
+	return agent;
+    }
+    
+    public String getTalkee() {
+	return other;
     }
 }
