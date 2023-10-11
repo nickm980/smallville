@@ -86,7 +86,7 @@ The dashboard can be accessed from http://localhost:8080/dashboard by default. T
 
 ## Example
 This example isn't finished yet but is a basic example of how to get started.
-[example javascript project](/example)
+[example javascript project](/examples)
 
 ## Configuration
 Configure prompts and other options
