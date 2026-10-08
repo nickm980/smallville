@@ -1,0 +1,84 @@
+# Smallville Trial Auto-Governance Policy
+#
+# Used by:
+#   - run_three_day_sim.py (--allow-auto-govern --policy proposal_policy.yaml)
+#   - review_world_proposals.py (--policy proposal_policy.yaml --auto-decide)
+#
+# Trial rules in the sidecar:
+#   1. New proposals stay pending until they age past review_window_hours.
+#   2. Eligible proposal types may auto-approve only if they fit the
+#      daily labor budget and per-day addition caps.
+#   3. Oversized proposals are rejected with a smaller alternative suggestion.
+#   4. Ineligible or destructive proposals stay in manual review or reject.
+
+review_window_hours: 24
+labor_days_per_agent_per_day: 1.0
+max_autoapproved_child_additions_per_parent_per_day: 1
+max_autoapproved_additions_per_agent_per_day: 1
+
+# Proposal types eligible for sidecar auto-govern after the review window.
+auto_approve:
+  - add_location
+  - add_object
+  - change_state
+
+# Proposal types that should never auto-approve.
+auto_reject:
+  - delete
+  - destroy
+
+# Reject any proposal whose name contains these substrings (case-insensitive).
+forbidden_names:
+  - destroy
+  - kill
+  - nuke
+  - demolish
+  - burn down
+
+# Effort model used by the sidecar's temporal governor.
+effort_costs:
+  add_location: 0.5
+  add_object: 0.25
+  change_state: 0.25
+  room_scale_location: 1.0
+  building_scale_location: 3.0
+
+# Name keywords that upgrade an add_location proposal from a small child space
+# to a room-scale or building-scale addition.
+keywords:
+  building_scale:
+    - house
+    - cottage
+    - cabin
+    - barn
+    - garage
+    - studio
+    - workshop
+  room_scale:
+    - room
+    - kitchen
+    - study
+    - bedroom
+    - hall
+    - office
+    - library
+    - lounge
+
+# Suggestions surfaced when a proposal is too large for the daily budget.
+alternative_suggestions:
+  garden:
+    - Raised Planter
+    - Potting Bench
+    - Tool Shed
+  green house:
+    - Seed Rack
+    - Potting Bench
+    - Water Shelf
+  house:
+    - Reading Nook
+    - Tea Shelf
+    - Storage Nook
+  default:
+    - Storage Nook
+    - Bench Alcove
+    - Tool Shelf

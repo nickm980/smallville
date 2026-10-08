@@ -3,51 +3,41 @@ reactions:
     {{agent.summary}}
     {{other.summary}}
 
-    Create a fake conversation between {{agent.name}} and {{other.name}}
+    Create a short natural conversation between {{agent.name}} and {{other.name}} only if it feels natural.
     Topic: {{observation}}
 
-    For example, a conversation between people named A and B would look like this
+    Return either no text at all or only dialogue lines in this format:
+    {{agent.name}}: ...
+    {{other.name}}: ...
 
-    A: Hello, how are you today?
-    B: I am good, and you?
-    
+    Keep it grounded, optional, and brief.
+    Write 4 to 8 lines total when a conversation happens.
+    Do not add narration or extra commentary.
+
   say: |
     {{agent.summary}}
-    
-    
+
+
     {{observation}}
-    
+
     What would {{agent.name}} say?
+    Reply with one short line only. Do not add quotes or the speaker name.
 
   reaction: |
-    {{world.description}} 
+    {{world.description}}
     {{agent.summary}}
-      
+
     Plans: {{#agent.plans}}{{description}}; {{/agent.plans}}
-    Relevant Memories: {{#memories.relevant}}{{description}}; {{/memories.relevant}}
+    Relevant Memories: {{memories.relevant}}
 
-    List the reasons and say yes or no whether or not {{agent.name}} would change their plans given the observation.
+    Decide whether {{agent.name}} should change plans because of the observation.
 
-    Respond in the following format.
-    Observation: a burning house
-    Reasoning: a burning house is highly important. {{agent.name}} would likely react to a burning house.
-    Answer: Yes, {{agent.name}} would react and try to put the fire out
-    Conversation: No, there is no one to talk to
-
-    Observation: a chirping bird
-    Reasoning: a chirping bird is a common occurence and doesn't interest {{agent.name}}
-    Answer: No, {{agent.name}} would not react
-    Conversation: No, there is no one to talk to and the event doesn't interest {{agent.name}} enough
-
-    Observation: {{agent.name}} sees x in a burning house
-    Reasoning: x being stuck in a burning house interests {{agent.name}}
-    Answer: Yes, {{agent.name}} would change their plans
-    Conversation: Yes, with x to make sure they are OK. x cannot have the same name as {{agent.name}}
+    Return exactly these lines and nothing else:
+    Reasoning: one concise reason
+    Answer: Yes or No
+    Conversation: Yes or No
 
     Observation: {{observation}}
-    Reasoning: ...
-    Answer: ...
-    Conversation: ...
 
 world:
   objectStates: |
@@ -56,78 +46,160 @@ world:
     {{tenses}}
 
     What are the new states of the objects?
+    Return only changed objects as `Object: State` lines.
+    If nothing changes, return no lines.
 
     For example:
-    House has cofee machine and a shower;
+    House has coffee machine and a shower;
 
     you are no longer cooking coffee and are now taking a shower
 
     Coffee Machine: Off
     Shower: On
 
+  proposal: |
+    {{world.description}}
+    {{agent.summary}}
+
+    Current activity: {{agent.activity}}
+    Goals: {{#agent.goals}}{{.}}; {{/agent.goals}}
+    Rituals: {{#agent.rituals}}{{.}}; {{/agent.rituals}}
+    World-building frame: {{worldBuilding.summary}}
+    Rules: {{#worldBuilding.rules}}{{.}}; {{/worldBuilding.rules}}
+
+    Decide whether {{agent.name}} wants to propose one grounded world change.
+    Allowed proposal types only: add_location, add_object, change_state
+    Do not suggest deleting, renaming, removing, or breaking anything.
+    Keep the proposal domestic, garden-scale, and plausible inside the current world.
+    Valid add_location parents in this world: {{world.validAddLocationParents}}
+    Do not use these object-like leaf parents for add_location: {{world.invalidAddLocationParents}}
+    If the best parent is a table, bench, barrel, tray, shelf, pot, rack, gate, or other leaf object, prefer add_object instead of add_location, or answer No.
+
+    Return exactly these lines and nothing else:
+    Answer: Yes or No
+    Type: add_location | add_object | change_state
+    ParentLocation: exact existing location or blank
+    Name: proposed object/location name or target location name
+    ProposedState: short state or blank
+    Reason: one concise reason grounded in the agent's goals, rituals, or current work
+    If proposing a change, Answer must be exactly Yes.
+    If not proposing a change, Answer must be exactly No and leave the remaining lines blank.
+    For Type add_location, ParentLocation must come from the valid add_location parent list above.
+    If Answer is Yes, do not omit any required line.
+    If any required proposal line would be blank, Answer must be No.
+    Reason must be one short non-empty sentence tied to the current activity, goals, rituals, or world-building frame.
+    If you cannot supply a grounded non-empty Reason, Answer must be No.
+    Example valid Yes response:
+    Answer: Yes
+    Type: add_location
+    ParentLocation: Garden: South Bed
+    Name: Raised Planter
+    ProposedState: empty
+    Reason: to create a dedicated space for transplanting and bed tidy work during afternoon tea breaks.
+    Never put add_location, add_object, or change_state on the Answer line.
+
 plans:
   shortTerm: |
     {{world.description}}
     {{agent.summary}}
+    Daily Rhythm: breakfast {{dailyRhythm.breakfast}}, lunch {{dailyRhythm.lunch}}, dinner {{dailyRhythm.dinner}}, morning tea {{dailyRhythm.morningTea}}, afternoon tea {{dailyRhythm.afternoonTea}}, snack {{dailyRhythm.snack}}
     Daily Requirement: {{#agent.plans}}{{description}};{{/agent.plans}}
-    Relevant Memories: {{#memories.relevant}}{{description}}; {{/memories.relevant}}
+    Relevant Memories: {{memories.relevant}}
     Observation: {{observation}}
-    
-    * Give a duration for every plan
-    
+
     Break down {{agent.name}}'s plan for the next hour starting at the current time.
+    Keep the actions grounded in the existing world and current relationships.
+    Respect the daily rhythm softly rather than rigidly.
+    Morning plans should lean toward waking, tea, breakfast, light snacks, tending, sketching, or setup work.
+    Dinner should stay in the evening unless there is a very clear reason otherwise.
+    Use only the available locations and copy the chosen location name exactly.
+    Return only final plan lines with no bullets, numbering, commentary, intro sentence, heading, or helper text.
+    Use one line per plan.
+    Start every line with a time in `h:mm a` format.
+    Every plan line must contain the time, exact location, and action on the same line.
+    Never put the location on one line and the activity on the next line.
+    Never start with assistant narration such as "I'd be happy to help" or "Here is the plan".
+    Do not echo location-description text from the available locations list as its own line.
+    Use only the location name in the plan line, then add the action.
+    Keep each line short and practical.
+    Example format: 12:00 am at Blue House: Kitchen, have a glass of water
+    Example format: 12:15 am at Blue House: Study, review planting notes and weather sketches
 
     The current time is {{date.time}}
 
   longTerm: |
     {{world.description}}
     {{agent.summary}}
-    Relevant Memories: {{#memories.relevant}}{{description}}; {{/memories.relevant}}
+    Daily Rhythm: breakfast {{dailyRhythm.breakfast}}, lunch {{dailyRhythm.lunch}}, dinner {{dailyRhythm.dinner}}, morning tea {{dailyRhythm.morningTea}}, afternoon tea {{dailyRhythm.afternoonTea}}, snack {{dailyRhythm.snack}}
+    Relevant Memories: {{memories.relevant}}
     Observation ({{date.time}}): {{observation}}
 
     * Only use the available locations
-    * Include the time {{agent.name}} wake's up and falls asleep
+    * Copy location names exactly from the available locations list
+    * Include the time {{agent.name}} wakes up and falls asleep
+    * Let goals, rituals, and personality shape the day
+    * Keep meals plausible for the time of day and treat the rhythm as a soft preference, not a rigid obligation
+    * Return only final plan lines with no heading, intro sentence, blank line, or helper text
+    * Use one line per plan
+    * Start every line with a time in `h:mm a` format
+    * Do not add a header or intro sentence
+    * Do not split a single plan entry across multiple lines
+    * Every plan line must contain the time, exact location, and action on the same line
+    * Never start with assistant narration such as "I'd be happy to help" or "Here is the plan"
+    * Do not echo location-description text from the available locations list as its own line
 
-    Example of a plan: 
-    8:00 am at the Oak Hill College Dorm: Klaus Mueller's room: bed, wake up and get ready for school;
-    9:00 am at the Oak Hill College Dorm: Klaus Mueller's room: desk, read and take notes for research paper;
-    5:00 pm at the Oak Hill College Dorm: Kitchen, get ready for dinner
-    10:00 am at the Oak Hill College Dorm: Klaus Mueller's room: bathroom, get ready for bed
+    Example of a plan:
+    7:30 am at Green House: Glass Table, review plan sheets and tray maps
+    8:00 am at Blue House: Kitchen, pour tea and open the garden notebook
+    9:00 am at Blue House: Study, update planting notes after the first checks
 
-    Today is Wednesday February 13. Here is {{agent.name}}'s
-    plan today in broad strokes:
+    Today is Wednesday February 13.
+    Return {{agent.name}}'s full-day plan now.
 
   current: |
     {{world.description}}
+    {{agent.summary}}
     Schedule: {{#agent.shortPlans}}{{description}}; {{/agent.shortPlans}}
+    Recent Memories: {{#agent.recentMemories}}{{description}}; {{/agent.recentMemories}}
+    Daily Rhythm: breakfast {{dailyRhythm.breakfast}}, lunch {{dailyRhythm.lunch}}, dinner {{dailyRhythm.dinner}}, morning tea {{dailyRhythm.morningTea}}, afternoon tea {{dailyRhythm.afternoonTea}}, snack {{dailyRhythm.snack}}
 
+    * Keep the response grounded in the current world frame and relationships
     * The location should always include a leaf location or object chosen from the available locations
+    * Copy the location exactly from the available locations list
+    * Do not add notes, parentheses, or invented locations
+    * Honor the agent's rituals, goals, and social preference
+    * Do not force conversation just because another agent is nearby
+    * Morning activity should not describe making dinner unless the context explicitly demands it
+    * Return exactly three lines and nothing else
+    * Use this format:
+    Activity: ...
+    Location: ...
+    Emoji: one emoji or one short ASCII label
 
     What is your activity at {{date.time}}?
 
     For example:
     Activity: swimming laps in the pool
     Location: Gym: Swimming Pool
-    Emoji: 🏊
+    Emoji: swimmer
 
     Activity: ...
     Location: ...
     Emoji: ...
 
 agent:
-  # statements are from the memory stream
   reflectionResult: |
     Statements about {{agent.name}}
     {{statements}}
     What single high-level insight can you infer from
     the above statements? (example format: insight (because of 1, 5, 3))
 
-  # The result of this prompt is sent to fetch memories from memory stream
   reflectionQuestion: |
     {{#agent.recentMemories}}
     - {{description}}
     {{/agent.recentMemories}}
     Given only the information above, what are 3 most salient high-level questions we can answer about the subjects in the statements?
+    Return exactly 3 lines and start each line with `- `.
 
   characteristics: |
     How would one describe {{agent.name}}'s core characteristics in 3 words
@@ -135,6 +207,7 @@ agent:
     {{#memories.characteristics}}
      - {{description}}
     {{/memories.characteristics}}
+    Respond with exactly three short comma-separated traits.
 
   summary: |
     Pretend you are {{agent.name}}
@@ -142,7 +215,12 @@ agent:
     Name: {{agent.name}}
     Innate Traits: {{agent.traits}}
     Characteristics: {{agent.description}}
+    Active Continuity: {{#agent.workingMemories}}{{description}}; {{/agent.workingMemories}}
     Current Location: {{agent.locationName}}
+    Goals: {{#agent.goals}}{{.}}; {{/agent.goals}}
+    Rituals: {{#agent.rituals}}{{.}}; {{/agent.rituals}}
+    Social Preference: {{agent.socialPreference}}
+    Preferred Model: {{agent.model}}
 
     {{date.full}}
 
@@ -151,8 +229,9 @@ agent:
     {{memories.relevant}}
 
     Pretend you are answering questions from a news reporter. It is currently {{date.full}}
-        
+
     The news reporter has asked you: {{question}}
+    Answer in first person using 2 to 4 sentences.
 
 misc:
   combineSentences: |
@@ -164,11 +243,10 @@ misc:
     On the scale of 1 to 10, where 1 is purely mundane
     (e.g., brushing teeth, making bed) and 10 is extremely poignant (e.g., a break up, college
     acceptance), rate the likely poignancy of the following pieces of memory. Always answer with only a list of numbers. For example, if given the following memories Memories: John did nothing; John lin went to school; John lin saw a concert
-    respond with [1, 2, 6]. If just given one memory still respond in a list. Memories are separated by semi colans (;) 
+    respond with [1, 2, 6]. If just given one memory still respond in a list. Return valid JSON only. Memories are separated by semi colans (;)
 
     Memories: {{#memories.unranked}}{{description}}; {{/memories.unranked}}
 
-  # Do not touch, debug is just used for testing purposes
   debug: |
     ping: {{ping}}
     memories.characteristics: {{memories.characteristics}}

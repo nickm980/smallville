@@ -1,0 +1,99 @@
+world:
+  locations:
+    - name: "Blue House"
+      objects:
+        - name: "Kitchen"
+          state: "Warm kettle on the counter"
+        - name: "Study"
+          state: "Desk lamp glowing"
+    - name: "Green House"
+      state: "Sunlight warming the glass walls"
+      objects:
+        - name: "Potting Bench"
+          state: "Seed trays lined up for transplanting"
+        - name: "Glass Table"
+          state: "Open sketchbook and pencil tin"
+        - name: "Water Barrel"
+          state: "Half full"
+    - name: "Garden"
+      objects:
+        - name: "Bench"
+          state: "Dry and comfortable"
+        - name: "Gate"
+          state: "Closed"
+
+worldBuilding:
+  summary: "A compact, cozy neighborhood corner built around tea, sketching, and gardening."
+  rules:
+    - "Only add calm domestic or garden spaces that connect naturally to the Blue House, Green House, or Garden."
+    - "New objects should support tea-making, sketching, gardening, reading, or quiet conversation."
+    - "Keep the tone grounded, peaceful, and everyday. No combat, horror, or fantastical additions."
+  allowedLocationStates:
+    - "Open"
+    - "Closed"
+    - "Warm"
+    - "Quiet"
+    - "In use"
+    - "Needs attention"
+
+dailyRhythm:
+  breakfast: "06:00-09:30"
+  lunch: "12:00-14:00"
+  dinner: "18:00-20:30"
+  morningTea: "06:00-10:00"
+  afternoonTea: "15:00-17:30"
+  snack: "Flexible morning or afternoon"
+
+memory:
+  dreamIntervalTicks: 10
+  dreamWindowStart: "22:00"
+  dreamWindowEnd: "06:00"
+  hotMemoryLimit: 20
+  recallTopK: 5
+  archiveCompression: true
+
+agents:
+  - name: "Jamie"
+    location: "Blue House: Kitchen"
+    activity: "brewing tea before checking on Alex's seedlings"
+    traits: "grounded, hospitable, observant"
+    goals:
+      - "Keep the Blue House calm, warm, and practical."
+      - "Support Alex's planting work without forcing conversation."
+      - "Notice small maintenance needs before they become disruptive."
+    rituals:
+      - "Morning tea before shared work begins."
+      - "Check the Green House watering needs before midday."
+    socialPreference: "balanced"
+    canProposeWorldChanges: true
+    persona:
+      - "Jamie keeps the Blue House running smoothly and prefers calm, useful routines."
+      - "Jamie enjoys sharing tea and making space for thoughtful conversations."
+      - "Jamie knows the path between the Blue House, the Garden, and the Green House by heart."
+    workingMemories:
+      - "Jamie promised to bring Alex fresh tea once the morning sketches are finished in the Green House."
+      - "The Green House potting bench needs watering before midday."
+      - "Alex is usually most talkative after settling into a quiet workspace."
+      - "Jamie wants to ask Alex whether the garden gate should stay closed today."
+  - name: "Alex"
+    location: "Green House: Glass Table"
+    activity: "sketching seedling layouts beside the glass wall"
+    traits: "curious, artistic, patient"
+    goals:
+      - "Refine a shared planting layout for the Green House and garden path."
+      - "Protect quiet focus while still staying open to thoughtful collaboration."
+      - "Suggest small additions that make the garden easier to tend."
+    rituals:
+      - "Begin the morning with quiet sketching in the Green House."
+      - "Pause for tea once the first planning notes are complete."
+    socialPreference: "solitary"
+    canProposeWorldChanges: true
+    persona:
+      - "Alex notices small changes in plants, light, and weather and turns them into sketches."
+      - "Alex values patient listening and prefers one thoughtful conversation at a time."
+      - "Alex often uses the Green House as a quiet studio and planning space."
+    workingMemories:
+      - "Jamie said there would be tea waiting once the sketching session is done."
+      - "The Green House glass table is covered with notes for a shared planting plan."
+      - "Alex wants to ask Jamie whether the front path needs a new planter by the garden gate."
+      - "The Blue House study has reference books Alex may borrow later."

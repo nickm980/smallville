@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -16,10 +17,13 @@ import org.junit.jupiter.api.TestMethodOrder;
 @TestMethodOrder(OrderAnnotation.class)
 public class SmallvilleClientTest {
     private static SmallvilleClient client;
+    private static MockSmallvilleHttpServer server;
 
     @BeforeAll
-    public static void setUp() {
-	client = SmallvilleClient.create("http://localhost:8080", new AgentHandlerCallback() {
+    public static void setUp() throws Exception {
+	server = new MockSmallvilleHttpServer();
+	server.start();
+	client = SmallvilleClient.create(server.getBaseUrl(), new AgentHandlerCallback() {
 	    @Override
 	    public void handle(SimulationUpdateEvent event) {
 		System.out.println("Finished updating");
@@ -28,6 +32,11 @@ public class SmallvilleClientTest {
 		}
 	    }
 	});
+    }
+
+    @AfterAll
+    public static void tearDown() {
+	server.stop();
     }
 
     @Test

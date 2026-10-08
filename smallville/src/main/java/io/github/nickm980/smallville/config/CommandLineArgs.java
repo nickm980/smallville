@@ -7,7 +7,7 @@ public class CommandLineArgs {
     @Parameter(names = "--port", description = "Port to run server on", required = false)
     private int port = 8080;
 
-    @Parameter(names = "--api-key", description = "Open AI private key for chat completions", required = true)
+    @Parameter(names = "--api-key", description = "Optional API key for hosted providers. Not required for local Ollama.", required = false)
     private String apiKey;
 
     @Parameter(names = "--python-server-port", description = "Python server port", required = false)

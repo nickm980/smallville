@@ -2,9 +2,12 @@ package io.github.nickm980.smallville.api.v1;
 
 import static io.github.nickm980.smallville.api.SmallvilleServer.exists;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.io.StringWriter;
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +25,8 @@ import com.google.gson.reflect.TypeToken;
 import io.github.nickm980.smallville.analytics.Analytics;
 import io.github.nickm980.smallville.api.v1.dto.*;
 import io.github.nickm980.smallville.entities.SimulationTime;
+import io.github.nickm980.smallville.exceptions.AgentNotFoundException;
+import io.github.nickm980.smallville.exceptions.SmallvilleException;
 import io.javalin.community.routing.annotations.Endpoints;
 import io.javalin.community.routing.annotations.Get;
 import io.javalin.community.routing.annotations.Param;
@@ -55,26 +60,70 @@ public final class SimulationController {
     }
 
     @Post("/memories/stream/{uuid}")
-    public void saveMemory(Context ctx, @Param String uuidStr) {
+	public void saveMemory(Context ctx, @Param("uuid") String uuidStr) {
 	UUID uuid = UUID.fromString(uuidStr);
+	Map<String, String> dataMap = parseMemoryStreamPayload(ctx.body());
+	String memory = dataMap.get("memory");
+	String query = dataMap.get("query");
 
-	Map<String, String> dataMap = gson.fromJson(ctx.body(), new TypeToken<Map<String, String>>() {
-	}.getType());
-
-	String query = (String) dataMap.get("query");
+	if (exists(memory)) {
+	    boolean success = service.addMemory(uuid, memory);
+	    ctx.status(success ? 200 : 404).json(Map.of("success", success));
+	    return;
+	}
 
 	List<String> result = service.getMemories(uuid, query);
 	ctx.status(200).json(Map.of("success", true, "memories", result));
     }
 
-    @Get("/memories/{name}")
-    public void getMemoryByName(Context ctx, @Param String name) {
-	Map<String, Object> model = new HashMap<>();
-	model.put("memories", service.getMemoriesOfAgent(name));
+    private Map<String, String> parseMemoryStreamPayload(String body) {
+	if (!exists(body)) {
+	    return Map.of();
+	}
 
-	Mustache mustache = mf.compile("agent.mustache");
-	String output = mustache.execute(new StringWriter(), model).toString();
-	ctx.html(output);
+	try {
+	    JsonNode root = new ObjectMapper().readTree(body);
+	    Map<String, String> values = new HashMap<String, String>();
+	    if (root.hasNonNull("memory")) {
+		values.put("memory", root.get("memory").asText());
+	    }
+	    if (root.hasNonNull("query")) {
+		values.put("query", root.get("query").asText());
+	    }
+	    return values;
+	} catch (JsonProcessingException ignored) {
+	    return Arrays
+		.stream(body.split("&"))
+		.map(part -> part.split("=", 2))
+		.filter(parts -> parts.length == 2)
+		.collect(HashMap::new, (result, parts) -> {
+		    result.put(decodeFormValue(parts[0]), decodeFormValue(parts[1]));
+		}, HashMap::putAll);
+	}
+    }
+
+    private String decodeFormValue(String value) {
+	return URLDecoder.decode(value, StandardCharsets.UTF_8);
+    }
+
+    private void handleAgentNotFound(Context ctx, Runnable action) {
+	try {
+	    action.run();
+	} catch (AgentNotFoundException e) {
+	    ctx.status(404).json(Map.of("error", e.getMessage()));
+	}
+	}
+
+    @Get("/memories/{name}")
+	public void getMemoryByName(Context ctx, @Param("name") String name) {
+	handleAgentNotFound(ctx, () -> {
+	    Map<String, Object> model = new HashMap<>();
+	    model.put("memories", service.getMemoriesOfAgent(name));
+
+	    Mustache mustache = mf.compile("agent.mustache");
+	    String output = mustache.execute(new StringWriter(), model).toString();
+	    ctx.html(output);
+	});
     }
 
     @Get("/info")
@@ -87,27 +136,83 @@ public final class SimulationController {
 			analytics.getPromptHistory(), "locationVisits", analytics.getVisits()));
     }
 
+    @Get("/world")
+    public void getWorld(Context ctx) {
+	ctx.json(service.getWorldSnapshot());
+    }
+
+    @Get("/world/proposals")
+    public void getWorldProposals(Context ctx) {
+	ctx.json(Map.of("proposals", service.getWorldProposals()));
+    }
+
+    @Get("/world/ledger/export")
+    public void getLedgerExport(Context ctx) {
+	ctx.json(service.getLedgerExport());
+    }
+
+    @Post("/world/proposals/{id}/approve")
+    public void approveWorldProposal(Context ctx) {
+	try {
+	    ctx.json(Map.of("success", true, "proposal", service.approveWorldProposal(ctx.pathParam("id"))));
+	} catch (SmallvilleException e) {
+	    ctx.status(400).json(Map.of("error", e.getMessage()));
+	}
+    }
+
+    @Post("/world/proposals/{id}/reject")
+    public void rejectWorldProposal(Context ctx) {
+	try {
+	    ctx.json(Map.of("success", true, "proposal", service.rejectWorldProposal(ctx.pathParam("id"))));
+	} catch (SmallvilleException e) {
+	    ctx.status(400).json(Map.of("error", e.getMessage()));
+	}
+    }
+
+    @Get("/models")
+    public void getModels(Context ctx) {
+	ctx.json(service.getModels());
+    }
+
+    @Post("/models/default")
+    public void setDefaultModel(Context ctx) {
+	SetDefaultModelRequest request = ctx.bodyAsClass(SetDefaultModelRequest.class);
+	service.setDefaultModel(request);
+	ctx.json(Map.of("success", true));
+    }
+
     @Get("/agents")
     public void getAgents(Context ctx) {
 	ctx.json(Map.of("agents", service.getAgents()));
     }
 
     @Get("/agents/{name}")
-    public void getAgentsByName(Context ctx, @Param String name) {
-	AgentStateResponse res = service.getAgentState(name);
-	ctx.json(res);
+	public void getAgentsByName(Context ctx, @Param("name") String name) {
+	handleAgentNotFound(ctx, () -> {
+	    AgentStateResponse res = service.getAgentState(name);
+	    ctx.json(res);
+	});
+    }
+
+    @Get("/agents/{name}/memory-ledger")
+    public void getAgentMemoryLedger(Context ctx, @Param("name") String name) {
+	handleAgentNotFound(ctx, () -> {
+	    ctx.json(service.getAgentMemoryLedger(name));
+	});
     }
 
     @Post("/agents/{name}/ask")
     public void askAgentQuestion(Context ctx) {
-	AskQuestionRequest request = ctx
-	    .bodyValidator(AskQuestionRequest.class)
-	    .check((req) -> exists(req.getQuestion()), "{question} cannot be blank")
-	    .get();
+	handleAgentNotFound(ctx, () -> {
+	    AskQuestionRequest request = ctx
+		.bodyValidator(AskQuestionRequest.class)
+		.check((req) -> exists(req.getQuestion()), "{question} cannot be blank")
+		.get();
 
-	String res = service.askQuestion(ctx.pathParam("name"), request.getQuestion());
+	    String res = service.askQuestion(ctx.pathParam("name"), request.getQuestion());
 
-	ctx.json(Map.of("answer", res));
+	    ctx.json(Map.of("answer", res));
+	});
     }
 
     @Post("/agents")
@@ -122,6 +227,21 @@ public final class SimulationController {
 
 	service.createAgent(request);
 	ctx.json(Map.of("success", true));
+    }
+
+    @Post("/agents/import")
+    public void importAgents(Context ctx) {
+	ImportAgentsRequest request = ctx.bodyAsClass(ImportAgentsRequest.class);
+	ctx.json(service.importAgents(request));
+    }
+
+    @Post("/agents/{name}/model")
+    public void setAgentModel(Context ctx) {
+	handleAgentNotFound(ctx, () -> {
+	    SetAgentModelRequest request = ctx.bodyAsClass(SetAgentModelRequest.class);
+	    service.setAgentModel(ctx.pathParam("name"), request);
+	    ctx.json(Map.of("success", true));
+	});
     }
 
     @Post("/locations")
@@ -156,10 +276,12 @@ public final class SimulationController {
 
     @Post("/memories")
     public void saveAgentMemory(Context ctx) {
-	CreateMemoryRequest request = ctx.bodyAsClass(CreateMemoryRequest.class);
-	service.createMemory(request);
+	handleAgentNotFound(ctx, () -> {
+	    CreateMemoryRequest request = ctx.bodyAsClass(CreateMemoryRequest.class);
+	    service.createMemory(request);
 
-	ctx.json(Map.of("success", true));
+	    ctx.json(Map.of("success", true));
+	});
     }
 
     @Post("/state")

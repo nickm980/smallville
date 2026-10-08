@@ -7,15 +7,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.List;
 import java.util.UUID;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class SmallvilleClientMemoryStreamTest {
     private static SmallvilleClient client;
+    private static MockSmallvilleHttpServer server;
 
     @BeforeAll
-    public static void setUp() {
-	client = SmallvilleClient.create("http://localhost:8080", new AgentHandlerCallback() {
+    public static void setUp() throws Exception {
+	server = new MockSmallvilleHttpServer();
+	server.start();
+	client = SmallvilleClient.create(server.getBaseUrl(), new AgentHandlerCallback() {
 	    @Override
 	    public void handle(SimulationUpdateEvent event) {
 		System.out.println("Finished updating");
@@ -24,6 +28,11 @@ public class SmallvilleClientMemoryStreamTest {
 		}
 	    }
 	});
+    }
+
+    @AfterAll
+    public static void tearDown() {
+	server.stop();
     }
     
     @Test

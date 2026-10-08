@@ -1,0 +1,76 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: Agent Memory Ledger
+description: >-
+  Schema for GET /agents/{name}/memory-ledger response. Exposes per-agent
+  persona anchors, affect state (from dream cycles and ponder nudges),
+  memory layers (working/recent/archived), dream packs, and recall policy.
+type: object
+additionalProperties: false
+properties:
+  agent:
+    type: string
+  personaAnchors:
+    type: object
+    additionalProperties: false
+    properties:
+      traits:
+        type: string
+      goals:
+        type: array
+        items:
+          type: string
+      rituals:
+        type: array
+        items:
+          type: string
+      persona:
+        type: array
+        items:
+          type: string
+      socialPreference:
+        type: string
+    required:
+      - traits
+      - goals
+      - rituals
+      - persona
+      - socialPreference
+  affect:
+    $ref: "affect-state.schema.yaml"
+  working:
+    type: array
+    items:
+      type: string
+    description: Current working memory descriptions.
+  recent:
+    type: array
+    items:
+      type: string
+    description: Hot/recent memory descriptions retained after the last dream cycle.
+  archived:
+    type: array
+    items:
+      type: string
+    description: Archived memory descriptions that have been compressed into dream packs.
+  dreamPacks:
+    type: array
+    items:
+      $ref: "dream-pack.schema.yaml"
+  recallPolicy:
+    type: object
+    description: Recall configuration derived from the scenario memory seed.
+    properties:
+      recallTopK:
+        type: integer
+      searchOrder:
+        type: array
+        items:
+          type: string
+required:
+  - agent
+  - personaAnchors
+  - affect
+  - working
+  - recent
+  - archived
+  - dreamPacks

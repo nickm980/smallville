@@ -18,7 +18,7 @@ export interface User {
   emoji: string;
 }
 
-export default async function UsersTable({ users }: { users: User[] }) {
+export default function UsersTable({ users }: { users: User[] }) {
   return (
     <Table>
       <TableHead>
@@ -30,6 +30,20 @@ export default async function UsersTable({ users }: { users: User[] }) {
         </TableRow>
       </TableHead>
       <TableBody>
+        {users.length === 0 && (
+          <TableRow>
+            <TableCell>No agents loaded yet.</TableCell>
+            <TableCell>
+              <Text>Start the backend or advance the seeded tiny world.</Text>
+            </TableCell>
+            <TableCell>
+              <Text>-</Text>
+            </TableCell>
+            <TableCell>
+              <Text>-</Text>
+            </TableCell>
+          </TableRow>
+        )}
         {users.map((user) => (
           <TableRow key={user.name}>
             <TableCell>{user.name}</TableCell>

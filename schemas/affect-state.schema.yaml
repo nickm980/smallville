@@ -1,0 +1,58 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: Affect State
+description: >-
+  Schema for agent affect state derived from dream cycles and daytime ponder
+  nudges. Valence, activation, and socialDrive are bounded doubles. Dream
+  cycles set the baseline; ponder nudges (morning/afternoon tea, lunch) blend
+  toward routine contentment; evening-wind nudges additionally boost
+  socialDrive and damp activation before the sleep window.
+type: object
+additionalProperties: false
+properties:
+  moodLabel:
+    type: string
+    enum:
+      - content
+      - calm
+      - neutral
+      - uneasy
+      - distressed
+  valence:
+    type: number
+    minimum: -1.0
+    maximum: 1.0
+    description: >-
+      Emotional valence. Dream formula: (avgImportance/5.0)-1.0.
+      Ponder formula: (avgImportance/5.0)-0.5 blended with alpha weight.
+  activation:
+    type: number
+    minimum: 0.0
+    maximum: 1.0
+    description: >-
+      Task activation level. Evening-wind nudge damps this by
+      eveningActivationDamp (default 0.15).
+  socialDrive:
+    type: number
+    minimum: 0.0
+    maximum: 1.0
+    description: >-
+      Social interaction drive. Evening-wind nudge boosts this by
+      eveningSocialBoost (default 0.2).
+  focusTarget:
+    type:
+      - string
+      - "null"
+  drivers:
+    type: array
+    items:
+      type: string
+  updatedAtTick:
+    type: integer
+    minimum: 0
+required:
+  - moodLabel
+  - valence
+  - activation
+  - socialDrive
+  - drivers
+  - updatedAtTick

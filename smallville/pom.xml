@@ -14,7 +14,10 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<junit-jupiter.version>5.7.1</junit-jupiter.version>
-
+		<slf4j.version>1.7.36</slf4j.version>
+		<jackson.version>2.17.2</jackson.version>
+		<snakeyaml.version>2.2</snakeyaml.version>
+		<stanford-corenlp.version>4.5.6</stanford-corenlp.version>
 	</properties>
 
 	<repositories>
@@ -116,7 +119,7 @@
 		<dependency>
 			<groupId>org.yaml</groupId>
 			<artifactId>snakeyaml</artifactId>
-			<version>1.21</version>
+			<version>${snakeyaml.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.javalin</groupId>
@@ -131,7 +134,7 @@
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>20210307</version>
+			<version>20231013</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -147,23 +150,23 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.7</version>
+			<version>${slf4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.7</version>
+			<artifactId>slf4j-reload4j</artifactId>
+			<version>${slf4j.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.15.0-rc3</version>
+			<version>${jackson.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
-			<version>2.14.2</version>
+			<version>${jackson.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/edu.mit/jwi -->
 		<dependency>
@@ -175,13 +178,12 @@
 		<dependency>
 			<groupId>edu.stanford.nlp</groupId>
 			<artifactId>stanford-corenlp</artifactId>
-			<version>4.2.2</version>
+			<version>${stanford-corenlp.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>edu.stanford.nlp</groupId>
 			<artifactId>stanford-corenlp</artifactId>
-			<version>4.2.2</version>
+			<version>${stanford-corenlp.version}</version>
 			<classifier>models</classifier>
 		</dependency>
 		<dependency>

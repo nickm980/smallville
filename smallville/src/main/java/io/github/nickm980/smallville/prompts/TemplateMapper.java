@@ -28,9 +28,14 @@ public class TemplateMapper {
 	MemoryStream stream = agent.getMemoryStream();
 	Map<String, Object> data = new HashMap<String, Object>();
 	data.put("agent.name", agent.getFullName());
-	data.put("agent.locationName", agent.getLocation().getFullPath());
+	data.put("agent.locationName", agent.getLocation() == null ? "Unknown" : agent.getLocation().getFullPath());
 	data.put("agent.description", stream.getCharacteristics().stream().map(c -> c.getDescription()).collect(Collectors.toList()));
+	data.put("agent.workingMemories", stream.getWorkingMemories());
 	data.put("agent.traits", agent.getTraits());
+	data.put("agent.goals", agent.getGoals());
+	data.put("agent.rituals", agent.getRituals());
+	data.put("agent.socialPreference", agent.getSocialPreference());
+	data.put("agent.model", agent.getModel());
 
 	return new TemplateEngine().format(prompt, data);
     }
@@ -47,15 +52,21 @@ public class TemplateMapper {
 
 	result.put("name", agent.getFullName());
 	result.put("memories", agent.getMemoryStream().getMemories().stream().limit(10).collect(Collectors.toList()));
+	result.put("workingMemories", stream.getWorkingMemories());
 	result.put("activity", agent.getCurrentActivity());
 	result.put("lastActivity", agent.getLastActivity());
 	result.put("summary", buildAgentSummary(agent));
-	result.put("locationName", agent.getLocation().getFullPath());
-	result.put("locationChildren", agent.getLocation().getFullPath());
+	result.put("locationName", agent.getLocation() == null ? "Unknown" : agent.getLocation().getFullPath());
+	result.put("locationChildren", agent.getLocation() == null ? "" : agent.getLocation().getFullPath());
 	result.put("description", desc);
 	result.put("plans", stream.getPlans());
 	result.put("shortPlans", stream.getPlans(PlanType.SHORT_TERM));
 	result.put("recentMemories", agent.getMemoryStream().getRecentMemories());
+	result.put("goals", agent.getGoals());
+	result.put("rituals", agent.getRituals());
+	result.put("socialPreference", agent.getSocialPreference());
+	result.put("model", agent.getModel());
+	result.put("canProposeWorldChanges", agent.canProposeWorldChanges());
 	/*
 	 * agent.plansBlock is a number list of the upcoming plans with a block [...]
 	 * between the current time and the next time.
@@ -90,14 +101,12 @@ public class TemplateMapper {
 	}
 
 	if (plans == null || plans.isEmpty()) {
-	    result = """
-	    	- $name will wake up at 8:00 AM
-	    	[...]
-	    	- $name will get ready for bed at 10:00 PM
-	    	""";
+	    result = "- $name will wake up at 8:00 AM" + System.lineSeparator()
+		+ "[...]" + System.lineSeparator()
+		+ "- $name will get ready for bed at 10:00 PM" + System.lineSeparator();
 	}
 
-	result.replace("$name", name);
+	result = result.replace("$name", name);
 
 	return result;
     }

@@ -1,0 +1,38 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: Dream Pack
+description: Schema for a compressed dream pack produced when cold memories are archived during the dreaming phase. Serialized as gzip JSON under the agent's dream-packs directory.
+type: object
+additionalProperties: false
+properties:
+  packId:
+    type: string
+    description: UUID identifying this dream pack.
+  agentName:
+    type: string
+  createdAtTick:
+    type: integer
+    minimum: 0
+  summaryText:
+    type: string
+    description: Concatenated top descriptions from the compressed cold memories.
+  sourceHashes:
+    type: array
+    items:
+      type: string
+    description: SHA-256 hashes of the original memory descriptions that were compressed into this pack.
+  retentionReasons:
+    type: object
+    additionalProperties:
+      type: string
+    description: Map from sourceHash to the reason the memory was retained or archived.
+  compressedEntryCount:
+    type: integer
+    minimum: 0
+required:
+  - packId
+  - agentName
+  - createdAtTick
+  - summaryText
+  - sourceHashes
+  - retentionReasons
+  - compressedEntryCount

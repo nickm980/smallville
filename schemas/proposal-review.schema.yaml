@@ -1,0 +1,30 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: Stable Loop Proposal Review
+description: Descriptive schema for proposal_review.md content once represented as structured fields. This documents the reviewed file contract and does not change proposal handling.
+type: object
+additionalProperties: false
+properties:
+  run_id:
+    type: string
+  tick_observed:
+    type: integer
+  proposal_count:
+    type: integer
+  approved_count:
+    type: integer
+  rejected_count:
+    type: integer
+  invalid_target_count:
+    type: integer
+  review_notes:
+    type: array
+    items:
+      type: string
+required:
+  - run_id
+  - tick_observed
+  - proposal_count
+  - approved_count
+  - rejected_count
+  - invalid_target_count
+  - review_notes

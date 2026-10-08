@@ -1,0 +1,148 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: Sidecar Replay Run Manifest
+description: Descriptive schema for the Python sidecar replay/export manifest.json. This documents the sidecar bundle contract and is not wired into runtime validation.
+type: object
+additionalProperties: false
+properties:
+  run_started_at_utc:
+    type: string
+    format: date-time
+  run_finished_at_utc:
+    type: string
+    format: date-time
+  base_url:
+    type: string
+  days:
+    type: number
+  timestep_minutes:
+    type: integer
+  tick_count:
+    type: integer
+  pause_seconds:
+    type: number
+  mode:
+    type: string
+  allow_pending_proposals:
+    type: boolean
+  allow_auto_govern:
+    type: boolean
+  status:
+    type: string
+    enum:
+      - starting
+      - running
+      - paused
+      - completed
+      - failed
+  stopped_reason:
+    type: string
+  policy_trace_file:
+    type: string
+  policy_trace_schema_version:
+    type: integer
+  records:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      properties:
+        tick_index:
+          type: integer
+        simulated_time:
+          type: string
+        step:
+          type: integer
+        proposal_count:
+          type: integer
+        agent_count:
+          type: integer
+        location_count:
+          type: integer
+        blocking_proposal_count:
+          type: integer
+      required:
+        - tick_index
+        - simulated_time
+        - step
+        - proposal_count
+        - agent_count
+        - location_count
+  metrics:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      properties:
+        tick_index:
+          type: integer
+        wall_clock_ms:
+          type: integer
+        advance_ms:
+          type: integer
+        artifact_fetch_ms:
+          type: integer
+        artifact_write_ms:
+          type: integer
+        policy_ms:
+          type: integer
+      required:
+        - tick_index
+        - wall_clock_ms
+        - advance_ms
+        - artifact_fetch_ms
+        - artifact_write_ms
+        - policy_ms
+  frame_index:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      properties:
+        tick:
+          type: integer
+        time:
+          type: string
+        step:
+          type: integer
+        agentCount:
+          type: integer
+        locationCount:
+          type: integer
+        proposalCount:
+          type: integer
+        blockingProposalCount:
+          type: integer
+        worldFile:
+          type: string
+        svgFile:
+          type: string
+        svgHash:
+          type: string
+        policyTraceFile:
+          type: string
+      required:
+        - tick
+        - time
+        - step
+        - agentCount
+        - locationCount
+        - proposalCount
+        - worldFile
+        - svgFile
+required:
+  - run_started_at_utc
+  - base_url
+  - days
+  - timestep_minutes
+  - tick_count
+  - pause_seconds
+  - mode
+  - allow_pending_proposals
+  - allow_auto_govern
+  - status
+  - stopped_reason
+  - policy_trace_file
+  - policy_trace_schema_version
+  - records
+  - metrics
+  - frame_index

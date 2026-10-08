@@ -1,0 +1,210 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: Sidecar Policy Trace
+description: Descriptive schema for policy_trace.json and tick_NNN_policy_trace.json emitted by the Python sidecar trial governor. This documents export structure only and is not wired into runtime validation.
+oneOf:
+  - $ref: "#/$defs/tickTrace"
+  - type: object
+    additionalProperties: false
+    properties:
+      schema_version:
+        type: integer
+      generated_at_utc:
+        type: string
+        format: date-time
+      policy_config:
+        type: object
+        additionalProperties: false
+        properties:
+          reviewWindowHours:
+            type: integer
+          laborDaysPerAgentPerDay:
+            type: number
+          maxAutoapprovedChildAdditionsPerParentPerDay:
+            type: integer
+          maxAutoapprovedAdditionsPerAgentPerDay:
+            type: integer
+          effortCosts:
+            type: object
+        required:
+          - reviewWindowHours
+          - laborDaysPerAgentPerDay
+          - maxAutoapprovedChildAdditionsPerParentPerDay
+          - maxAutoapprovedAdditionsPerAgentPerDay
+          - effortCosts
+      ticks:
+        type: array
+        items:
+          $ref: "#/$defs/tickTrace"
+    required:
+      - schema_version
+      - generated_at_utc
+      - policy_config
+      - ticks
+$defs:
+  decision:
+    type: object
+    additionalProperties: false
+    properties:
+      proposal_id:
+        type: string
+      agent:
+        type: string
+      type:
+        type: string
+      parent_location:
+        type:
+          - string
+          - "null"
+      target_location:
+        type:
+          - string
+          - "null"
+      name:
+        type:
+          - string
+          - "null"
+      status_before:
+        type:
+          - string
+          - "null"
+      created_at_tick:
+        type: integer
+      created_at_simulation_time:
+        type:
+          - string
+          - "null"
+      action:
+        type: string
+        enum:
+          - approve
+          - reject_scope
+          - deferred_time_window
+          - deferred_budget
+          - escalate
+      rationale:
+        type: string
+      suggestion:
+        type:
+          - string
+          - "null"
+      age_hours:
+        type: number
+      effort_labor_days:
+        type: number
+      effort_class:
+        type: string
+      simulated_day_index:
+        type: integer
+      approval_day_index:
+        type:
+          - integer
+          - "null"
+      requires_human_review:
+        type: boolean
+      executed:
+        type: boolean
+    required:
+      - proposal_id
+      - agent
+      - type
+      - created_at_tick
+      - action
+      - rationale
+      - age_hours
+      - effort_labor_days
+      - effort_class
+      - simulated_day_index
+      - requires_human_review
+      - executed
+  agentOutcome:
+    type: object
+    additionalProperties: false
+    properties:
+      agent:
+        type: string
+      outcome:
+        type: string
+        enum:
+          - submitted
+          - rejected_duplicate
+          - no_proposal
+      rationale:
+        type: string
+      current_action:
+        type:
+          - string
+          - "null"
+      location:
+        type:
+          - string
+          - "null"
+      next_short_plan:
+        type:
+          - string
+          - "null"
+      working_memory:
+        type:
+          - string
+          - "null"
+      proposal_ids:
+        type: array
+        items:
+          type:
+            - string
+            - "null"
+      proposal_targets:
+        type: array
+        items:
+          type:
+            - string
+            - "null"
+    required:
+      - agent
+      - outcome
+      - rationale
+      - proposal_ids
+      - proposal_targets
+  tickTrace:
+    type: object
+    additionalProperties: false
+    properties:
+      tick_index:
+        type: integer
+      simulated_time:
+        type: string
+      simulated_day_index:
+        type: integer
+      review_window_hours:
+        type: integer
+      pending_before_count:
+        type: integer
+      pending_after_count:
+        type: integer
+      blocking_pending_count:
+        type: integer
+      blocking_pending_ids:
+        type: array
+        items:
+          type: string
+      agent_outcomes:
+        type: array
+        items:
+          $ref: "#/$defs/agentOutcome"
+      proposal_decisions:
+        type: array
+        items:
+          $ref: "#/$defs/decision"
+      budget_snapshot:
+        type: object
+    required:
+      - tick_index
+      - simulated_time
+      - simulated_day_index
+      - review_window_hours
+      - pending_before_count
+      - pending_after_count
+      - blocking_pending_count
+      - blocking_pending_ids
+      - agent_outcomes
+      - proposal_decisions
+      - budget_snapshot

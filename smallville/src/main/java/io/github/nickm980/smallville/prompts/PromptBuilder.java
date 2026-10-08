@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import io.github.nickm980.smallville.World;
+import io.github.nickm980.smallville.config.simulation.SimulationFile;
 import io.github.nickm980.smallville.entities.Agent;
 import io.github.nickm980.smallville.entities.Conversation;
 import io.github.nickm980.smallville.entities.Location;
@@ -73,12 +74,27 @@ public class PromptBuilder {
     }
 
     public PromptBuilder withWorld(World world) {
-	data.put("world", WorldModel.fromWorld(agent.getFullName(), world));
+	return withWorld(world, null);
+    }
+
+    public PromptBuilder withWorld(World world, SimulationFile simulation) {
+	String agentName = agent == null ? "" : agent.getFullName();
+	data.put("world", WorldModel.fromWorld(agentName, world, simulation));
 
 	if (data.get("locations") == null) {
 	    data.put("locations", world.getLocations());
 	}
 
+	return this;
+    }
+
+    public PromptBuilder withDailyRhythm(SimulationFile.DailyRhythmSeed rhythm) {
+	data.put("dailyRhythm", rhythm);
+	return this;
+    }
+
+    public PromptBuilder withWorldBuilding(SimulationFile.WorldBuildingSeed worldBuilding) {
+	data.put("worldBuilding", worldBuilding);
 	return this;
     }
 

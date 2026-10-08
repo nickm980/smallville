@@ -1,11 +1,8 @@
 package io.github.nickm980.smallville.memory;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
@@ -14,10 +11,14 @@ import java.util.stream.Stream;
  * Includes plans, observations, and characteristics
  */
 public class MemoryStream {
+    private static final int MAX_WORKING_MEMORIES = 3;
+
     private List<Memory> memories;
+    private List<Observation> workingMemories;
 
     public MemoryStream() {
 	this.memories = new ArrayList<Memory>();
+	this.workingMemories = new ArrayList<Observation>();
     }
 
     public void prunePlans(PlanType type) {
@@ -41,40 +42,16 @@ public class MemoryStream {
      * @return
      */
     public List<Memory> getRelevantMemories(String query, int minImportance) {
-	// score, memory index
-	Map<Double, Integer> scores = new HashMap<Double, Integer>();
-
-	for (Memory memory : memories) {
-	    if (memory.getImportance() >= minImportance) {
-		double score = memory.getScore(query);
-		scores.put(score, memories.indexOf(memory));
-	    }
-	}
-
-	List<Double> keys = new ArrayList<Double>(scores.keySet());
-	Collections.sort(keys);
-
-	List<Integer> indices = scores.values().stream().collect(Collectors.toList());
-
-	if (scores.size() > 3) {
-	    double first = keys.get(keys.size() - 1);
-	    double second = keys.get(keys.size() - 2);
-	    double third = keys.get(keys.size() - 3);
-
-	    indices = List.of(scores.get(first), scores.get(second), scores.get(third));
-	}
-
-	List<Memory> memCopies = new ArrayList<Memory>();
-
-	for (int index : indices) {
-	    memCopies.add(memories.get(index));
-	}
-
-	return memCopies;
+    return getMemories()
+	    .stream()
+	    .filter(memory -> memory.getImportance() >= minImportance)
+	    .sorted(Comparator.comparingDouble((Memory memory) -> memory.getScore(query)).reversed())
+	    .limit(3)
+	    .collect(Collectors.toList());
     }
 
     public List<Memory> getUnweightedMemories() {
-	return memories.stream().filter(memory -> {
+    return getMemories().stream().filter(memory -> {
 	    return memory.getImportance() == 0 && !(memory instanceof Plan);
 	}).collect(Collectors.toList());
     }
@@ -92,7 +69,13 @@ public class MemoryStream {
     }
 
     public List<Memory> getMemories() {
-	return memories;
+    List<Memory> result = new ArrayList<Memory>(workingMemories);
+    result.addAll(memories);
+    return result;
+    }
+
+    public List<Observation> getWorkingMemories() {
+    return workingMemories;
     }
 
     public List<Observation> getObservations() {
@@ -114,6 +97,36 @@ public class MemoryStream {
 
     public void addAll(List<? extends Memory> memories) {
 	this.memories.addAll(memories);
+    }
+
+    public void addWorkingMemory(String description) {
+    addWorkingMemory(new Observation(description));
+    }
+
+    public void addWorkingMemory(Observation memory) {
+    if (memory == null || memory.getDescription() == null || memory.getDescription().isBlank()) {
+        return;
+    }
+
+    String description = memory.getDescription().trim();
+    workingMemories.removeIf(existing -> existing.getDescription().equalsIgnoreCase(description));
+    workingMemories.add(memory);
+    trimWorkingMemories();
+    }
+
+    private void trimWorkingMemories() {
+    while (workingMemories.size() > MAX_WORKING_MEMORIES) {
+        Observation oldest = workingMemories
+        .stream()
+        .min(Comparator.comparing(Observation::getTime))
+        .orElse(null);
+
+        if (oldest == null) {
+        break;
+        }
+
+        workingMemories.remove(oldest);
+    }
     }
 
     public void add(Memory memory) {

@@ -8,6 +8,7 @@ public abstract class PromptRequest {
     private String content;
     private String assistant;
     private String function;
+    private String model;
 
     public PromptRequest(String content) {
 	this.content = content;
@@ -33,6 +34,14 @@ public abstract class PromptRequest {
 
     public String getContent() {
 	return content;
+    }
+
+    public String getModel() {
+	return model;
+    }
+
+    public void setModel(String model) {
+	this.model = model;
     }
 
     public Map<String, String> build() {

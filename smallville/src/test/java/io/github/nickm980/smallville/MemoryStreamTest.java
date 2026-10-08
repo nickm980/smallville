@@ -1,7 +1,10 @@
 package io.github.nickm980.smallville;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -21,6 +24,39 @@ public class MemoryStreamTest {
 	stream.add(new Observation("memory"));
 
 	assertEquals(1, stream.getObservations().size());
+    }
+
+    @Test
+    public void test_working_memories_are_distinct_from_observations_but_still_queryable() {
+	MemoryStream stream = new MemoryStream();
+	stream.addWorkingMemory("remember the tea tray");
+	stream.add(new Observation("watered the south bed"));
+
+	assertEquals(1, stream.getWorkingMemories().size());
+	assertEquals(1, stream.getObservations().size());
+	assertEquals("remember the tea tray", stream.getWorkingMemories().get(0).getDescription());
+	assertTrue(stream.getRelevantMemories("tea tray", -1).stream()
+	    .map(Memory::getDescription)
+	    .anyMatch("remember the tea tray"::equals));
+    }
+
+    @Test
+    public void test_working_memories_are_deduplicated_and_trimmed() {
+	MemoryStream stream = new MemoryStream();
+	LocalDateTime now = LocalDateTime.now();
+
+	stream.addWorkingMemory(new Observation("tea tray", now.minusMinutes(4), 0));
+	stream.addWorkingMemory(new Observation("seed notes", now.minusMinutes(3), 0));
+	stream.addWorkingMemory(new Observation("watering round", now.minusMinutes(2), 0));
+	stream.addWorkingMemory(new Observation("tea tray", now.minusMinutes(1), 0));
+	stream.addWorkingMemory(new Observation("potting bench", now, 0));
+
+	assertEquals(3, stream.getWorkingMemories().size());
+	assertEquals(1, stream.getWorkingMemories().stream().filter(memory -> memory.getDescription().equals("tea tray")).count());
+	assertTrue(stream.getWorkingMemories().stream().anyMatch(memory -> memory.getDescription().equals("tea tray")));
+	assertTrue(stream.getWorkingMemories().stream().anyMatch(memory -> memory.getDescription().equals("watering round")));
+	assertTrue(stream.getWorkingMemories().stream().anyMatch(memory -> memory.getDescription().equals("potting bench")));
+	assertFalse(stream.getWorkingMemories().stream().anyMatch(memory -> memory.getDescription().equals("seed notes")));
     }
 
     @Test
@@ -71,15 +107,15 @@ public class MemoryStreamTest {
     @Test
     public void test_adding_and_getting_plans_from_memory_stream() {
 	ChatService service = new ChatService(new World(), new ChatGPT());
-	List<Plan> plans = service.parsePlans("""
-		\nI will then go to the Green House and sleep from 12:05 AM.
-		\nI will wake up and make breakfast from 11:30 PM - 9:30 AM.
-		\nI will then go to the Forest and spend some time gathering branches from 10:00 AM - 11:00 AM.
-				""");
+	List<Plan> plans = service.parsePlans("\nI will then go to the Green House and sleep from 12:05 AM."
+	    + "\nI will wake up and make breakfast from 11:30 PM - 9:30 AM."
+	    + "\nI will then go to the Forest and spend some time gathering branches from 10:00 AM - 11:00 AM.");
 	MemoryStream stream = new MemoryStream();
 
 	stream.addAll(plans);
 
 	assertEquals(3, stream.getPlans().size());
+	assertFalse(stream.getPlans().stream().anyMatch(plan -> plan.getDescription().equals("9:30 AM.")));
+	assertFalse(stream.getPlans().stream().anyMatch(plan -> plan.getDescription().equals("11:00 AM.")));
     }
 }

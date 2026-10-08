@@ -1,0 +1,61 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: Stable Loop Baseline Manifest
+description: Descriptive schema for baseline index manifest files under baselines/. This records approved checkpoints and their linked run bundles without committing the bundle itself.
+type: object
+additionalProperties: false
+properties:
+  baseline_id:
+    type: string
+  baseline_name:
+    type: string
+  approved_tag:
+    type: string
+  approved_commit_sha:
+    type: string
+  baseline_index_parent_sha:
+    type: string
+  baseline_indexed_at_utc:
+    type: string
+    format: date-time
+  run_id:
+    type: string
+  run_bundle_path:
+    type: string
+  scenario_name:
+    type: string
+  frozen_model:
+    type: string
+  launch_mode:
+    type: string
+  parser_scope_frozen:
+    type: boolean
+  targeted_test_result:
+    type: string
+  full_suite_test_result:
+    type: string
+  startup_contract_version:
+    type: string
+  run_bundle_contract_version:
+    type: string
+  key_artifacts:
+    type: array
+    items:
+      type: string
+required:
+  - baseline_id
+  - baseline_name
+  - approved_tag
+  - approved_commit_sha
+  - baseline_index_parent_sha
+  - baseline_indexed_at_utc
+  - run_id
+  - run_bundle_path
+  - scenario_name
+  - frozen_model
+  - launch_mode
+  - parser_scope_frozen
+  - targeted_test_result
+  - full_suite_test_result
+  - startup_contract_version
+  - run_bundle_contract_version
+  - key_artifacts

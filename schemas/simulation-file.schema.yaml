@@ -1,0 +1,185 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: Smallville Simulation File
+description: Descriptive schema for scenario simulation.yaml files matching the current SimulationFile contract. This documents supported fields only and does not add engine enforcement.
+type: object
+additionalProperties: false
+$defs:
+  stringList:
+    type: array
+    items:
+      type: string
+  locationSeed:
+    type: object
+    additionalProperties: false
+    properties:
+      name:
+        type: string
+      state:
+        type:
+          - string
+          - "null"
+      objects:
+        type: array
+        items:
+          $ref: "#/$defs/locationSeed"
+    required:
+      - name
+  worldSeed:
+    type: object
+    additionalProperties: false
+    properties:
+      locations:
+        type: array
+        items:
+          $ref: "#/$defs/locationSeed"
+    required:
+      - locations
+  agentSeed:
+    type: object
+    additionalProperties: false
+    properties:
+      name:
+        type: string
+      memories:
+        $ref: "#/$defs/stringList"
+      persona:
+        $ref: "#/$defs/stringList"
+      workingMemories:
+        $ref: "#/$defs/stringList"
+      goals:
+        $ref: "#/$defs/stringList"
+      rituals:
+        $ref: "#/$defs/stringList"
+      activity:
+        type:
+          - string
+          - "null"
+      location:
+        type:
+          - string
+          - "null"
+      traits:
+        type:
+          - string
+          - "null"
+      model:
+        type:
+          - string
+          - "null"
+      socialPreference:
+        type:
+          - string
+          - "null"
+      canProposeWorldChanges:
+        type: boolean
+    required:
+      - name
+  worldBuildingSeed:
+    type: object
+    additionalProperties: false
+    properties:
+      summary:
+        type:
+          - string
+          - "null"
+      rules:
+        $ref: "#/$defs/stringList"
+      allowedLocationStates:
+        $ref: "#/$defs/stringList"
+  dailyRhythmSeed:
+    type: object
+    additionalProperties: false
+    properties:
+      breakfast:
+        type:
+          - string
+          - "null"
+      lunch:
+        type:
+          - string
+          - "null"
+      dinner:
+        type:
+          - string
+          - "null"
+      morningTea:
+        type:
+          - string
+          - "null"
+      afternoonTea:
+        type:
+          - string
+          - "null"
+      eveningWind:
+        type:
+          - string
+          - "null"
+        description: >-
+          Evening wind-down window (e.g. "19:30-21:30"). Ponder nudges
+          during this window boost socialDrive and damp activation.
+      snack:
+        type:
+          - string
+          - "null"
+  memorySeed:
+    type: object
+    additionalProperties: false
+    description: Memory subsystem configuration for dream cycles, ponder nudges, and recall.
+    properties:
+      dreamIntervalTicks:
+        type: integer
+        minimum: 1
+      dreamWindowStart:
+        type: string
+        description: Start of the dream-eligible window (HH:MM format).
+      dreamWindowEnd:
+        type: string
+        description: End of the dream-eligible window (HH:MM format).
+      hotMemoryLimit:
+        type: integer
+        minimum: 1
+      recallTopK:
+        type: integer
+        minimum: 1
+      archiveCompression:
+        type: boolean
+      ponderEnabled:
+        type: boolean
+        description: Whether daytime ponder nudges are active.
+      ponderBlendAlpha:
+        type: number
+        minimum: 0.0
+        maximum: 1.0
+        description: >-
+          Weight for existing affect in ponder blend (1.0 = keep existing,
+          0.0 = fully adopt ponder valence).
+      ponderCooldownTicks:
+        type: integer
+        minimum: 0
+        description: Minimum ticks between ponder nudges.
+      eveningSocialBoost:
+        type: number
+        minimum: 0.0
+        maximum: 1.0
+        description: socialDrive increase applied during evening-wind ponder.
+      eveningActivationDamp:
+        type: number
+        minimum: 0.0
+        maximum: 1.0
+        description: activation decrease applied during evening-wind ponder.
+properties:
+  world:
+    $ref: "#/$defs/worldSeed"
+  agents:
+    type: array
+    items:
+      $ref: "#/$defs/agentSeed"
+  worldBuilding:
+    $ref: "#/$defs/worldBuildingSeed"
+  dailyRhythm:
+    $ref: "#/$defs/dailyRhythmSeed"
+  memory:
+    $ref: "#/$defs/memorySeed"
+required:
+  - world
+  - agents

@@ -1,0 +1,49 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: Stable Loop Endpoint Capture
+description: Descriptive schema for captured endpoint response files in a run bundle. The body payload is intentionally generic because each endpoint returns a different reviewed shape.
+type: object
+additionalProperties: false
+$defs:
+  jsonValue:
+    anyOf:
+      - type: object
+        additionalProperties:
+          $ref: "#/$defs/jsonValue"
+      - type: array
+        items:
+          $ref: "#/$defs/jsonValue"
+      - type: string
+      - type: number
+      - type: integer
+      - type: boolean
+      - type: "null"
+properties:
+  run_id:
+    type: string
+  captured_at_utc:
+    type: string
+    format: date-time
+  tick_index:
+    type: integer
+  method:
+    type: string
+    enum:
+      - GET
+      - POST
+      - PUT
+      - PATCH
+      - DELETE
+  path:
+    type: string
+  http_status:
+    type: integer
+  body:
+    $ref: "#/$defs/jsonValue"
+required:
+  - run_id
+  - captured_at_utc
+  - tick_index
+  - method
+  - path
+  - http_status
+  - body

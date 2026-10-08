@@ -19,4 +19,8 @@ public final class Settings {
     public static String getApiKey() {
 	return API_KEY;
     }
+
+    public static boolean hasApiKey() {
+	return API_KEY != null && !API_KEY.isBlank();
+    }
 }

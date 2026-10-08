@@ -1,0 +1,20 @@
+{
+  "agentName" : "Jamie",
+  "totalEvents" : 2,
+  "hotCount" : 20,
+  "archivedCount" : 10,
+  "dreamPackCount" : 1,
+  "lastDreamTick" : 11,
+  "lastRecallTick" : 0,
+  "ponderCount" : 0,
+  "lastPonderTick" : 0,
+  "lastAffect" : {
+    "moodLabel" : "distressed",
+    "valence" : -0.78,
+    "activation" : 0.11000000000000001,
+    "socialDrive" : 0.0,
+    "focusTarget" : "setting out tea before the first watering round and stock review",
+    "drivers" : [ "setting out tea before the first watering round and stock review", "Checking watering barrel levels", "checking gate for morning opening" ],
+    "updatedAtTick" : 11
+  }
+}

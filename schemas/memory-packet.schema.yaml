@@ -1,0 +1,197 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: SmallVille Memory Packet
+description: Deterministic offline sidecar packet compiled from ledger export JSON and scenario simulation.yaml. This packet is interpretive only and does not mutate runtime world state.
+type: object
+additionalProperties: false
+$defs:
+  nullableString:
+    type:
+      - string
+      - "null"
+  source:
+    type: object
+    additionalProperties: false
+    properties:
+      ledgerGeneratedAtUtc:
+        type: string
+        format: date-time
+      ledgerScenarioField:
+        type: string
+      ledgerExportSha256:
+        type: string
+      simulationSha256:
+        type: string
+    required:
+      - ledgerGeneratedAtUtc
+      - ledgerScenarioField
+      - ledgerExportSha256
+      - simulationSha256
+  boundary:
+    type: object
+    additionalProperties: false
+    properties:
+      hostAuthority:
+        type: string
+        enum:
+          - java
+      sidecarRole:
+        type: string
+      mutationAuthority:
+        type: string
+        enum:
+          - none
+    required:
+      - hostAuthority
+      - sidecarRole
+      - mutationAuthority
+  memoryConfig:
+    type: object
+    additionalProperties: false
+    properties:
+      dreamIntervalTicks:
+        type: integer
+      dreamWindowStart:
+        type: string
+      dreamWindowEnd:
+        type: string
+      hotMemoryLimit:
+        type: integer
+      recallTopK:
+        type: integer
+      archiveCompression:
+        type: boolean
+      ponderEnabled:
+        type: boolean
+      ponderBlendAlpha:
+        type: number
+      ponderCooldownTicks:
+        type: integer
+      eveningSocialBoost:
+        type: number
+      eveningActivationDamp:
+        type: number
+    required:
+      - dreamIntervalTicks
+      - dreamWindowStart
+      - dreamWindowEnd
+      - hotMemoryLimit
+      - recallTopK
+      - archiveCompression
+      - ponderEnabled
+      - ponderBlendAlpha
+      - ponderCooldownTicks
+      - eveningSocialBoost
+      - eveningActivationDamp
+  memoryIndexSummary:
+    type: object
+    additionalProperties: false
+    properties:
+      agentName:
+        type: string
+      totalEvents:
+        type: integer
+      hotCount:
+        type: integer
+      archivedCount:
+        type: integer
+      dreamPackCount:
+        type: integer
+      lastDreamTick:
+        type: integer
+      lastRecallTick:
+        type: integer
+      ponderCount:
+        type: integer
+      lastPonderTick:
+        type: integer
+      lastAffectPresent:
+        type: boolean
+    required:
+      - agentName
+      - totalEvents
+      - hotCount
+      - archivedCount
+      - dreamPackCount
+      - lastDreamTick
+      - lastRecallTick
+      - ponderCount
+      - lastPonderTick
+      - lastAffectPresent
+  agentMemoryView:
+    type: object
+    additionalProperties: false
+    properties:
+      agentName:
+        type: string
+      seedTraits:
+        $ref: "#/$defs/nullableString"
+      seedGoals:
+        type: array
+        items:
+          type: string
+      seedRituals:
+        type: array
+        items:
+          type: string
+      seedPersona:
+        type: array
+        items:
+          type: string
+      seedMemories:
+        type: array
+        items:
+          type: string
+      seedWorkingMemories:
+        type: array
+        items:
+          type: string
+      seedLocation:
+        $ref: "#/$defs/nullableString"
+      seedActivity:
+        $ref: "#/$defs/nullableString"
+      socialPreference:
+        $ref: "#/$defs/nullableString"
+      canProposeWorldChanges:
+        type: boolean
+      memoryIndex:
+        $ref: "#/$defs/memoryIndexSummary"
+    required:
+      - agentName
+      - seedTraits
+      - seedGoals
+      - seedRituals
+      - seedPersona
+      - seedMemories
+      - seedWorkingMemories
+      - seedLocation
+      - seedActivity
+      - socialPreference
+      - canProposeWorldChanges
+      - memoryIndex
+properties:
+  packetType:
+    type: string
+    const: memory
+  packetVersion:
+    type: integer
+    const: 1
+  scenarioId:
+    type: string
+  source:
+    $ref: "#/$defs/source"
+  boundary:
+    $ref: "#/$defs/boundary"
+  memoryConfig:
+    $ref: "#/$defs/memoryConfig"
+  agents:
+    type: array
+    items:
+      $ref: "#/$defs/agentMemoryView"
+required:
+  - packetType
+  - packetVersion
+  - scenarioId
+  - source
+  - boundary
+  - memoryConfig
+  - agents

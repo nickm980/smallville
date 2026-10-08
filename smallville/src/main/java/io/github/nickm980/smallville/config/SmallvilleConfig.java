@@ -5,10 +5,14 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,55 +47,89 @@ public class SmallvilleConfig {
     }
 
     private static InputStream loadInputStream(String path) {
-	Path file = Paths.get(path);
+	List<Path> candidates = new ArrayList<Path>();
+	candidates.add(Paths.get(path));
+
+	if (isDefaultScenarioPath(path)) {
+	    candidates.add(Paths.get("scenarios", "two-house-garden-v1", path));
+	    candidates.add(Paths.get("..", "scenarios", "two-house-garden-v1", path));
+	}
+
+	candidates.add(Paths.get("src", "main", "resources", path));
+	candidates.add(Paths.get("smallville", "src", "main", "resources", path));
 
 	InputStream inputStream = null;
 
-	if (Files.exists(file)) {
-	    LOG.debug("Configuration file found");
+	for (Path file : candidates) {
+	    if (!Files.exists(file)) {
+		continue;
+	    }
+
+	    LOG.debug("Configuration file found at {}", file.toAbsolutePath());
 	    try {
 		inputStream = Files.newInputStream(file);
+		break;
 	    } catch (IOException e) {
 		e.printStackTrace();
 	    }
-	} else {
-	    LOG.debug("Loading default configuration");
-	    inputStream = SmallvilleConfig.class.getResourceAsStream("/" + file);
 	}
 
 	if (inputStream == null) {
-	    LOG.error("No " + file + " found. It must be either in resources folder or next to jar");
+	    LOG.debug("Loading default configuration");
+	    inputStream = SmallvilleConfig.class.getResourceAsStream("/" + path);
+	}
+
+	if (inputStream == null) {
+	    LOG.error("No {} found. It must be either in resources folder or next to jar", path);
 	}
 
 	return inputStream;
     }
 
+	private static boolean isDefaultScenarioPath(String path) {
+	    return "config.yaml".equals(path) || "simulation.yaml".equals(path);
+	}
+
     private static JsonNode loadJsonFile(String file) {
-	InputStream stream = loadInputStream(file);
 	ObjectMapper mapper = new ObjectMapper();
-	JsonNode result = null;
-	
-	try {
-	    result = mapper.readTree(stream);
-	    stream.close();
+	try (InputStream stream = loadInputStream(file)) {
+	    if (stream == null) {
+		return null;
+	    }
+	    return mapper.readTree(stream);
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
 
-	return result;
+	return null;
     }
 
-    private static <T> T loadYamlFile(String file, Class<T> clazz) {
-	Yaml yaml = new Yaml();
-	InputStream stream = loadInputStream(file);
-	T result = yaml.loadAs(stream, clazz);
-
-	try {
-	    stream.close();
+    public static <T> T loadYamlFile(String file, Class<T> clazz) {
+	try (InputStream stream = loadInputStream(file)) {
+	    if (stream == null) {
+		return null;
+	    }
+	    return createYaml(clazz).loadAs(stream, clazz);
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
 
-	return result;
+	return null;
+    }
+
+    public static <T> T parseYaml(String content, Class<T> clazz) {
+	if (content == null || content.isBlank()) {
+	    return null;
+	}
+
+	return createYaml(clazz).loadAs(content, clazz);
+    }
+
+    private static <T> Yaml createYaml(Class<T> clazz) {
+	LoaderOptions loaderOptions = new LoaderOptions();
+	loaderOptions.setAllowDuplicateKeys(false);
+	loaderOptions.setMaxAliasesForCollections(25);
+	loaderOptions.setCodePointLimit(1_000_000);
+	return new Yaml(new Constructor(clazz, loaderOptions));
     }
 }

@@ -1,0 +1,4 @@
+aiohttp>=3.9,<4
+jsonschema>=4.0
+PyYAML>=6.0
+referencing>=0.31.0

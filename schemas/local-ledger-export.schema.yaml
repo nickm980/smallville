@@ -1,0 +1,176 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: Local Ledger Export
+description: Descriptive schema for GET /world/ledger/export and the exported ledger_export.json bundle artifact.
+type: object
+additionalProperties: false
+properties:
+  generatedAtUtc:
+    type: string
+  scenario:
+    type: object
+    additionalProperties: false
+    properties:
+      name:
+        type: string
+      configRoot:
+        type:
+          - string
+          - "null"
+      simulationFileEnabled:
+        type: boolean
+      worldSummary:
+        type: string
+  bootstrap:
+    type: object
+    additionalProperties: false
+    properties:
+      seededLocationCount:
+        type: integer
+      seededAgentCount:
+        type: integer
+      seededAgents:
+        type: array
+        items:
+          type: string
+      governanceLedgerPath:
+        type:
+          - string
+          - "null"
+      memoryRoot:
+        type: string
+      dreamIntervalTicks:
+        type: integer
+      dreamWindowStart:
+        type:
+          - string
+          - "null"
+      dreamWindowEnd:
+        type:
+          - string
+          - "null"
+      hotMemoryLimit:
+        type: integer
+      recallTopK:
+        type: integer
+      archiveCompression:
+        type:
+          - string
+          - "null"
+  world:
+    type: object
+  governanceLedger:
+    type: object
+    additionalProperties: false
+    properties:
+      proposals:
+        type: array
+        items:
+          type: object
+      guidanceRules:
+        type: array
+        items:
+          type: string
+      blockedProposalTargets:
+        type: array
+        items:
+          type: string
+  proposalHistoryFull:
+    type: array
+    items:
+      type: object
+  memoryIndex:
+    type: object
+    additionalProperties: false
+    properties:
+      rootPath:
+        type: string
+      agents:
+        type: array
+        items:
+          type: object
+          additionalProperties: false
+          properties:
+            agent:
+              type: string
+            personaAnchorCount:
+              type: integer
+            workingCount:
+              type: integer
+            recentCount:
+              type: integer
+            archivedCount:
+              type: integer
+            dreamPackCount:
+              type: integer
+            lastDreamTick:
+              type:
+                - integer
+                - "null"
+            indexFile:
+              type: string
+            eventsFile:
+              type: string
+            dreamPackFiles:
+              type: array
+              items:
+                type: string
+  offlinePolicy:
+    type: object
+    additionalProperties: false
+    properties:
+      offlineMode:
+        type: boolean
+      loopbackOnly:
+        type: boolean
+      cloudSupportEnabled:
+        type: boolean
+      primaryApiPath:
+        type:
+          - string
+          - "null"
+      primaryLoopback:
+        type: boolean
+      askShadowBridgeEnabled:
+        type: boolean
+      askShadowBridgeEndpoint:
+        type:
+          - string
+          - "null"
+      askShadowBridgeLoopback:
+        type: boolean
+      cloudSupportApiPath:
+        type:
+          - string
+          - "null"
+      cloudSupportLoopback:
+        type: boolean
+  governancePolicy:
+    type: object
+    additionalProperties: false
+    properties:
+      proposalMode:
+        type:
+          - string
+          - "null"
+      reviewWindowHours:
+        type: integer
+      unwindowedExport:
+        type: boolean
+      guidanceRules:
+        type: array
+        items:
+          type: string
+      blockRules:
+        type: array
+        items:
+          type: object
+required:
+  - generatedAtUtc
+  - scenario
+  - bootstrap
+  - world
+  - governanceLedger
+  - proposalHistoryFull
+  - memoryIndex
+  - offlinePolicy
+  - governancePolicy

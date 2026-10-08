@@ -24,7 +24,9 @@ public class PlansParsingTest {
 		\n2:20 am at Red House: Bedroom, still sleeping
 		""");
 
-	assertTrue(plans.size() == 5);
+	assertEquals(5, plans.size());
+	assertFalse(plans.stream().anyMatch(plan -> plan.getDescription().equals("4:00 PM")));
+	assertFalse(plans.stream().anyMatch(plan -> plan.getDescription().equals("5:00 PM")));
     }
 
     @Test
@@ -39,6 +41,8 @@ public class PlansParsingTest {
 		\n- Have dinner at home at 6:00 PM.
 		""");
 
-	assertTrue(plans.size() == 5);
+	assertEquals(5, plans.size());
+	assertFalse(plans.stream().anyMatch(plan -> plan.getDescription().equals("4:00 PM")));
+	assertFalse(plans.stream().anyMatch(plan -> plan.getDescription().equals("5:00 PM")));
     }
 }

@@ -1,0 +1,34 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: Stable Loop Operator Notes
+description: Descriptive schema for operator_notes.md content once represented as structured fields. This documents the reviewed note surface without changing runtime behavior.
+type: object
+additionalProperties: false
+properties:
+  run_id:
+    type: string
+  scenario_name:
+    type: string
+  frozen_model:
+    type: string
+  startup_result:
+    type: string
+  seed_integrity:
+    type: string
+  plan_integrity:
+    type: string
+  action_log_quality:
+    type: string
+  restart_integrity:
+    type: string
+  next_decision:
+    type: string
+required:
+  - run_id
+  - scenario_name
+  - frozen_model
+  - startup_result
+  - seed_integrity
+  - plan_integrity
+  - action_log_quality
+  - restart_integrity
+  - next_decision

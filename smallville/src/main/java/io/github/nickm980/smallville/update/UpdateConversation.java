@@ -35,6 +35,9 @@ public class UpdateConversation extends AgentUpdate {
 	if (subject == null) {
 	    LOG.warn("[Conversation] Conversation detected but no subject found. Attempting isolated dialogue");
 	    Dialog dialog =  converter.saySomething(agent, observation);
+	    Observation isolatedDialog = new Observation(dialog.getMessage());
+	    agent.getMemoryStream().add(isolatedDialog);
+	    agent.getMemoryStream().addWorkingMemory(isolatedDialog);
 	    LOG.info(agent.getFullName() + " said " + dialog.getMessage());
 	    return true;
 	}
@@ -47,6 +50,10 @@ public class UpdateConversation extends AgentUpdate {
 	}
 
 	Conversation conversation = converter.getConversationIfExists(agent, other, observation);
+	if (conversation == null || conversation.size() == 0) {
+	    LOG.warn("[Conversation] No dialog lines were produced for {} and {}. Skipping conversation record.", agent.getFullName(), other.getFullName());
+	    return false;
+	}
 
 	List<Observation> memories = conversation
 	    .getDialog()
@@ -56,6 +63,11 @@ public class UpdateConversation extends AgentUpdate {
 
 	agent.getMemoryStream().addAll(memories);
 	other.getMemoryStream().addAll(memories);
+	if (!memories.isEmpty()) {
+	    Observation latestDialog = memories.get(memories.size() - 1);
+	    agent.getMemoryStream().addWorkingMemory(latestDialog);
+	    other.getMemoryStream().addWorkingMemory(latestDialog);
+	}
 
 	world.create(conversation);
 	return false;

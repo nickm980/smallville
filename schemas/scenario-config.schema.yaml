@@ -1,0 +1,64 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: Smallville Scenario Config
+description: Descriptive schema for scenario-local config.yaml files used by the Stable Loop scenario family. This schema documents the current reviewed config shape and is not enforced by the engine.
+type: object
+additionalProperties: false
+properties:
+  apiPath:
+    type: string
+    description: OpenAI-compatible chat completions endpoint used by the local-first runtime.
+  model:
+    type: string
+    description: Default model tag for the scenario.
+  timeFormat:
+    type: string
+    description: Short time display format.
+  fullTimeFormat:
+    type: string
+    description: Full time display format.
+  yesterdayFormat:
+    type: string
+    description: Format used when summarizing the previous day.
+  reflectionCutoff:
+    type: integer
+    description: Reflection threshold value supplied by the scenario config.
+  simulationFile:
+    type: boolean
+    description: Whether the scenario should load a simulation.yaml seed file.
+  maxRetries:
+    type: integer
+    minimum: 0
+    description: Maximum retry count for model calls.
+  modelRouting:
+    type: object
+    description: Optional per-aspect model assignments. Keys are aspect names, values are model tags. When set, each intelligence aspect uses its designated model instead of the scenario default.
+    additionalProperties:
+      type: string
+    properties:
+      memoryRanking:
+        type: string
+        description: Model for memory weight scoring (structured numeric output, low temperature).
+      longTermPlanning:
+        type: string
+        description: Model for full-day plan generation (benefits from long context).
+      shortTermPlanning:
+        type: string
+        description: Model for hourly plan breakdown.
+      activity:
+        type: string
+        description: Model for current activity and location selection (structured JSON output).
+      conversation:
+        type: string
+        description: Model for dialogue generation and conversational responses.
+      reflection:
+        type: string
+        description: Model for meta-cognitive reflection and insight synthesis (benefits from long context).
+required:
+  - apiPath
+  - model
+  - timeFormat
+  - fullTimeFormat
+  - yesterdayFormat
+  - reflectionCutoff
+  - simulationFile
+  - maxRetries

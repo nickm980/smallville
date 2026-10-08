@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Table,
   TableHead,
@@ -12,28 +14,49 @@ import QuickModal from '../modal';
 import { useState } from 'react';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { updateLocation } from '../../lib/smallville';
+import { useRouter } from 'next/navigation';
 export interface SmallvilleLocation {
   name: string;
   state: string | undefined | null;
 }
 
-export default async function LocationsTable({
-  locations
+export default function LocationsTable({
+  locations,
+  onUpdated
 }: {
   locations: SmallvilleLocation[];
+  onUpdated?: () => Promise<void> | void;
 }) {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, setPending] = useState(false);
-  let currentLocationName: string = '';
+  const [currentLocationName, setCurrentLocationName] = useState('');
+  const [nextState, setNextState] = useState('');
 
   async function changeLocationState(name: string, state: string) {
-    setPending(true)
+    if (!name || !state.trim()) {
+      return;
+    }
 
-    await updateLocation(name, state)
+    setPending(true);
+    const ok = await updateLocation(name, state);
+    setPending(false);
 
-    setPending(false)
+    if (ok) {
+      setIsOpen(false);
+      setNextState('');
+      if (onUpdated) {
+        await onUpdated();
+      } else {
+        router.refresh();
+      }
+    }
+  }
 
-    console.log("changed "+ name + " to " + state)
+  function openEditor(location: SmallvilleLocation) {
+    setCurrentLocationName(location.name);
+    setNextState(location.state ?? '');
+    setIsOpen(true);
   }
 
   return (
@@ -47,6 +70,17 @@ export default async function LocationsTable({
           </TableRow>
         </TableHead>
         <TableBody>
+          {locations.length === 0 && (
+            <TableRow>
+              <TableCell>No locations loaded yet.</TableCell>
+              <TableCell>
+                <Text>The dashboard will populate once the Smallville server is running.</Text>
+              </TableCell>
+              <TableCell className="text-right">
+                <Text>-</Text>
+              </TableCell>
+            </TableRow>
+          )}
           {locations.map((location) => (
             <TableRow key={location.name}>
               <TableCell>{location.name}</TableCell>
@@ -61,8 +95,7 @@ export default async function LocationsTable({
                     variant="secondary"
                     color="gray"
                     onClick={() => {
-                      setIsOpen(true);
-                      currentLocationName = location.name;
+                      openEditor(location);
                     }}
                   >
                     Edit State
@@ -74,9 +107,7 @@ export default async function LocationsTable({
         </TableBody>
       </Table>
       <QuickModal
-        setIsOpen={() => {
-          setIsOpen(true);
-        }}
+        setIsOpen={setIsOpen}
         isOpen={isOpen}
         title={'Edit Location'}
       >
@@ -90,11 +121,11 @@ export default async function LocationsTable({
               aria-hidden="true"
             >
               <QuestionMarkCircleIcon
-                className="mr-3 h-10 w-4 text-gray-400"
-                aria-hidden="true"
-              />
-            </div>
-            <input
+              className="mr-3 h-10 w-4 text-gray-400"
+              aria-hidden="true"
+            />
+          </div>
+          <input
               type="text"
               name="location_state"
               id="location_state"
@@ -103,12 +134,13 @@ export default async function LocationsTable({
               className="h-10 block w-full rounded-md border border-gray-200 pl-9 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               placeholder="Enter a new state (off, on, in use, etc.)"
               spellCheck={false}
+              value={nextState}
+              onChange={(e) => {
+                setNextState(e.currentTarget.value);
+              }}
               onKeyDown={async (e) => {
                 if (e.key === 'Enter') {
-                  changeLocationState(
-                    currentLocationName,
-                    e.currentTarget.value
-                  );
+                  await changeLocationState(currentLocationName, nextState);
                 }
               }}
             />
@@ -148,9 +180,9 @@ export default async function LocationsTable({
         </Button>
         <Button
           onClick={async () => {
-            await changeLocationState(currentLocationName, "test")
-            setIsOpen(false);
+            await changeLocationState(currentLocationName, nextState);
           }}
+          loading={isPending}
         >
           Change State
         </Button>

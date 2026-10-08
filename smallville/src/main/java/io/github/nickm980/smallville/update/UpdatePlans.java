@@ -1,5 +1,6 @@
 package io.github.nickm980.smallville.update;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,8 +25,12 @@ public class UpdatePlans extends AgentUpdate {
     @Override
     public boolean update(Prompts converter, World world, Agent agent, UpdateInfo info) {
 	LOG.info("[Plans] Updating plans...");
+	LocalDateTime now = LocalDateTime.now();
 	boolean hasPlans = !agent.getMemoryStream().getPlans().isEmpty();
 	boolean shouldUpdatePlans = !hasPlans;
+	boolean hasStaleShortTermPlans = hasOnlyExpiredShortTermPlans(agent, now);
+	boolean hasMixedShortTermPlans = hasExpiredAndFutureShortTermPlans(agent, now);
+	boolean plansUpdated = shouldUpdatePlans;
 	String observation = info.getObservation();
 	
 	if (observation != null && !observation.isEmpty()) {
@@ -41,6 +46,14 @@ public class UpdatePlans extends AgentUpdate {
 	    agent.getMemoryStream().prunePlans(PlanType.SHORT_TERM);
 	    updatePlans(converter, agent, PlanType.LONG_TERM);
 	    updatePlans(converter, agent, PlanType.SHORT_TERM);
+	} else if (hasStaleShortTermPlans) {
+	    LOG.info("[Plans] Refreshing stale short term plans");
+	    agent.getMemoryStream().prunePlans(PlanType.SHORT_TERM);
+	    updatePlans(converter, agent, PlanType.SHORT_TERM);
+	    plansUpdated = true;
+	} else if (hasMixedShortTermPlans) {
+	    LOG.info("[Plans] Pruning expired short term plans from mixed family");
+	    plansUpdated = pruneExpiredShortTermPlans(agent, now);
 	}
 
 	if (agent.getMemoryStream().getPlans(PlanType.LONG_TERM).isEmpty()) {
@@ -53,8 +66,34 @@ public class UpdatePlans extends AgentUpdate {
 
 	LOG.info("[Plans] Plans updated");
 
-	info.setPlansUpdated(shouldUpdatePlans);
+	info.setPlansUpdated(plansUpdated);
 	return next(converter, world, agent, info);
+    }
+
+    private boolean hasOnlyExpiredShortTermPlans(Agent agent, LocalDateTime now) {
+	List<Plan> shortTermPlans = agent.getMemoryStream().getPlans(PlanType.SHORT_TERM);
+	return !shortTermPlans.isEmpty() && shortTermPlans.stream().allMatch(plan -> plan.getTime().isBefore(now));
+	}
+
+    private boolean hasExpiredAndFutureShortTermPlans(Agent agent, LocalDateTime now) {
+	List<Plan> shortTermPlans = agent.getMemoryStream().getPlans(PlanType.SHORT_TERM);
+	boolean hasExpiredPlans = shortTermPlans.stream().anyMatch(plan -> plan.getTime().isBefore(now));
+	boolean hasFuturePlans = shortTermPlans.stream().anyMatch(plan -> !plan.getTime().isBefore(now));
+	return hasExpiredPlans && hasFuturePlans;
+    }
+
+    private boolean pruneExpiredShortTermPlans(Agent agent, LocalDateTime now) {
+	List<Plan> shortTermPlans = agent.getMemoryStream().getPlans(PlanType.SHORT_TERM);
+	List<Plan> activeShortTermPlans = shortTermPlans.stream()
+	    .filter(plan -> !plan.getTime().isBefore(now))
+	    .collect(Collectors.toList());
+
+	if (activeShortTermPlans.size() == shortTermPlans.size()) {
+	    return false;
+	}
+
+	agent.getMemoryStream().setPlans(activeShortTermPlans, PlanType.SHORT_TERM);
+	return true;
     }
 
     private void updatePlans(Prompts converter, Agent agent, PlanType type) {

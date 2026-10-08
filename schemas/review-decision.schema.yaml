@@ -1,0 +1,79 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: UEIA Review Decision
+description: Descriptive schema for UEIA Phase 1 review-decision artifacts. Review decisions document human-review-oriented findings only. They do not authorize automatic approval, execution, direct mutation, or runtime coupling. Materials, people, power, and place fields preserve the required ethics and bias review lens.
+type: object
+additionalProperties: false
+properties:
+  decision_id:
+    type: string
+  dossier_id:
+    type: string
+    description: Optional dossier identifier used when a decision is explicitly tied to the constrained dossier.
+  subject_type:
+    type: string
+  subject_id:
+    type: string
+  review_scope:
+    type: string
+    enum:
+      - record
+      - packet
+      - brief
+      - proposal-pack
+  gate_level:
+    type: string
+    enum:
+      - L0
+      - L1
+      - L2
+      - L3
+      - L4
+      - L5
+  decision_status:
+    type: string
+    description: Descriptive review outcome such as open-question, approved-for-packet, or deferred where relevant. This field does not imply approval for execution.
+  reviewer_role:
+    type: string
+  rationale:
+    type: string
+  required_changes:
+    type: array
+    items:
+      type: string
+  approved_for_next_gate:
+    type: boolean
+    description: Approval for the next review gate only. This field does not authorize execution in Phase 1.
+  reviewed_at:
+    type: string
+  bias_review_materials:
+    type: array
+    items:
+      type: string
+  bias_review_people:
+    type: array
+    items:
+      type: string
+  bias_review_power:
+    type: array
+    items:
+      type: string
+  bias_review_place:
+    type: array
+    items:
+      type: string
+required:
+  - decision_id
+  - subject_type
+  - subject_id
+  - review_scope
+  - gate_level
+  - decision_status
+  - reviewer_role
+  - rationale
+  - required_changes
+  - approved_for_next_gate
+  - reviewed_at
+  - bias_review_materials
+  - bias_review_people
+  - bias_review_power
+  - bias_review_place

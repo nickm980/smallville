@@ -1,0 +1,20 @@
+{
+  "agentName" : "Jamie",
+  "totalEvents" : 2,
+  "hotCount" : 4,
+  "archivedCount" : 0,
+  "dreamPackCount" : 0,
+  "lastDreamTick" : 1,
+  "lastRecallTick" : 0,
+  "ponderCount" : 1,
+  "lastPonderTick" : 1,
+  "lastAffect" : {
+    "moodLabel" : "distressed",
+    "valence" : -0.8,
+    "activation" : 0.0,
+    "socialDrive" : 0.0,
+    "focusTarget" : "setting out tea before the first watering round and stock review",
+    "drivers" : [ "setting out tea before the first watering round and stock review", "8:00 am at the Blue House: Kitchen, wake up and open the curtains", "8:00 am at the Blue House: Kitchen, organize the tea tray" ],
+    "updatedAtTick" : 1
+  }
+}

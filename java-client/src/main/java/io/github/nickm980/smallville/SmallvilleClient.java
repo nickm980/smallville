@@ -368,8 +368,7 @@ public class SmallvilleClient {
 		System.out.println(response.body());
 
 		// Parse the JSON text
-		Object memories= new JSONObject(response.body()).get("memories");
-		JSONArray jsonArray = new JSONArray(memories);
+		JSONArray jsonArray = new JSONObject(response.body()).getJSONArray("memories");
 
 		// Iterate through the JSON array and extract the memories
 		for (int i = 0; i < jsonArray.length(); i++) {

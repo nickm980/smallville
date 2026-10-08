@@ -2,6 +2,7 @@ package io.github.nickm980.smallville;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -61,12 +62,64 @@ public class World {
 	return Optional.ofNullable(locations.getById(locationName));
     }
 
+    public Optional<Location> resolveLocation(String locationName) {
+	if (locationName == null || locationName.isBlank()) {
+	    return Optional.empty();
+	}
+
+	String candidate = sanitizeLocationName(locationName);
+	Optional<Location> exactMatch = getLocation(candidate);
+	if (exactMatch.isPresent()) {
+	    return exactMatch;
+	}
+
+	String normalizedCandidate = normalizeLocationName(candidate);
+	Optional<Location> prefixMatch = locations
+	    .all()
+	    .stream()
+	    .filter(location -> {
+		String normalizedLocation = normalizeLocationName(location.getFullPath());
+		return normalizedCandidate.equals(normalizedLocation)
+		    || normalizedCandidate.startsWith(normalizedLocation + " ");
+	    })
+	    .sorted((Location first, Location second) -> Integer.compare(second.getFullPath().length(), first.getFullPath().length()))
+	    .findFirst();
+
+	if (prefixMatch.isPresent()) {
+	    return prefixMatch;
+	}
+
+	List<Location> leafMatches = locations
+	    .all()
+	    .stream()
+	    .filter(location -> {
+		List<String> parts = location.getAll();
+		String leaf = parts.get(parts.size() - 1);
+		return normalizeLocationName(leaf).equals(normalizedCandidate);
+	    })
+	    .toList();
+
+	if (leafMatches.size() == 1) {
+	    return Optional.of(leafMatches.get(0));
+	}
+
+	return Optional.empty();
+    }
+
     public Optional<Agent> getAgent(String name) {
 	return Optional.ofNullable(agents.getById(name));
     }
 
     public List<Conversation> getConversationsAfter(LocalDateTime time) {
-	return conversations.all();
+	if (time == null) {
+	    return conversations.all();
+	}
+
+	return conversations
+	    .all()
+	    .stream()
+	    .filter(conversation -> conversation.getCreatedAt() == null || !conversation.getCreatedAt().isBefore(time))
+	    .toList();
     }
 
     public void setState(String object, String state) {
@@ -74,5 +127,20 @@ public class World {
 
 	LOG.info("Changing state. " + object + ": " + state);
 	obj.setState(state);
+    }
+
+    private String sanitizeLocationName(String locationName) {
+	String sanitized = locationName.trim();
+	sanitized = sanitized.replaceAll("^[\"']+", "");
+	sanitized = sanitized.replaceAll("[\"']+$", "");
+	sanitized = sanitized.replaceAll("\\s*\\([^)]*\\)\\s*$", "");
+	sanitized = sanitized.replaceAll("[\\s\\.,;!]+$", "");
+	return sanitized.trim();
+    }
+
+    private String normalizeLocationName(String locationName) {
+	return sanitizeLocationName(locationName)
+	    .replaceAll("\\s+", " ")
+	    .toLowerCase(Locale.ROOT);
     }
 }

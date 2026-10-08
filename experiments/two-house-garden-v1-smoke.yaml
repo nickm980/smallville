@@ -1,0 +1,27 @@
+experiment_id: two-house-garden-v1-smoke
+scenario_name: two-house-garden-v1
+launch_mode: host-native
+model: llama3.2:3b-16k
+intended_tick_count: 3
+approval_status: pending-review
+expected_captures:
+  - manifest.yaml
+  - endpoint_ping_cold.json
+  - endpoint_models_cold.json
+  - endpoint_world_cold.json
+  - endpoint_state_cold.json
+  - endpoint_agents_cold.json
+  - endpoint_state_post_tick_001.json
+  - endpoint_world_tick_001.json
+  - endpoint_state_tick_001.json
+  - endpoint_state_post_tick_002.json
+  - endpoint_world_tick_002.json
+  - endpoint_state_tick_002.json
+  - endpoint_state_post_tick_003.json
+  - endpoint_world_tick_003.json
+  - endpoint_state_tick_003.json
+  - endpoint_world_restart_cold.json
+  - endpoint_state_restart_cold.json
+  - proposal_review.md
+  - operator_notes.md
+reviewer_notes: ""

@@ -1,0 +1,67 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: Stable Loop Run Manifest
+description: Descriptive schema for approved run-bundle manifest.yaml files. This documents the reviewed capture contract and is not wired into runtime validation.
+type: object
+additionalProperties: false
+properties:
+  run_id:
+    type: string
+  scenario_name:
+    type: string
+  launch_script:
+    type: string
+  working_directory:
+    type: string
+  smallville_port:
+    type: integer
+  frozen_model:
+    type: string
+  provider_mode_expected:
+    type: string
+  api_path:
+    type: string
+  java_version:
+    type: string
+  maven_version:
+    type: string
+  jar_name:
+    type: string
+  jar_sha256:
+    type: string
+  git_clean:
+    type: boolean
+  targeted_test_command:
+    type: string
+  targeted_test_result:
+    type: string
+  full_suite_test_command:
+    type: string
+  full_suite_test_result:
+    type: string
+  startup_soft_timeout_sec:
+    type: integer
+  startup_hard_timeout_sec:
+    type: integer
+  approval_scope:
+    type: string
+required:
+  - run_id
+  - scenario_name
+  - launch_script
+  - working_directory
+  - smallville_port
+  - frozen_model
+  - provider_mode_expected
+  - api_path
+  - java_version
+  - maven_version
+  - jar_name
+  - jar_sha256
+  - git_clean
+  - targeted_test_command
+  - targeted_test_result
+  - full_suite_test_command
+  - full_suite_test_result
+  - startup_soft_timeout_sec
+  - startup_hard_timeout_sec
+  - approval_scope

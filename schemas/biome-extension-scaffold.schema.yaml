@@ -1,0 +1,95 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: SmallVille Biome Extension Scaffold
+description: Deterministic scaffold-only packet for future biome work. This artifact records explicit non-implementation so the sidecar seam does not speculate beyond current host-backed inputs.
+type: object
+additionalProperties: false
+$defs:
+  source:
+    type: object
+    additionalProperties: false
+    properties:
+      ledgerGeneratedAtUtc:
+        type: string
+        format: date-time
+      ledgerScenarioField:
+        type: string
+      ledgerExportSha256:
+        type: string
+      simulationSha256:
+        type: string
+    required:
+      - ledgerGeneratedAtUtc
+      - ledgerScenarioField
+      - ledgerExportSha256
+      - simulationSha256
+  boundary:
+    type: object
+    additionalProperties: false
+    properties:
+      hostAuthority:
+        type: string
+        enum:
+          - java
+      sidecarRole:
+        type: string
+      mutationAuthority:
+        type: string
+        enum:
+          - none
+    required:
+      - hostAuthority
+      - sidecarRole
+      - mutationAuthority
+properties:
+  packetType:
+    type: string
+    const: biome-scaffold
+  packetVersion:
+    type: integer
+    const: 1
+  scenarioId:
+    type: string
+  source:
+    $ref: "#/$defs/source"
+  boundary:
+    $ref: "#/$defs/boundary"
+  status:
+    type: string
+    const: scaffold-only
+  implemented:
+    type: boolean
+    const: false
+  worldLocationRoots:
+    type: array
+    items:
+      type: string
+  openQuestions:
+    type: array
+    items:
+      type: string
+  extensionFields:
+    type: array
+    items:
+      type: string
+  scaffold:
+    type: object
+    additionalProperties: false
+    properties:
+      biomes:
+        type: array
+        items:
+          type: object
+    required:
+      - biomes
+required:
+  - packetType
+  - packetVersion
+  - scenarioId
+  - source
+  - boundary
+  - status
+  - implemented
+  - worldLocationRoots
+  - openQuestions
+  - extensionFields
+  - scaffold

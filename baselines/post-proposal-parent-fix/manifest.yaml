@@ -1,0 +1,51 @@
+baseline_id: post-proposal-parent-fix
+baseline_name: Smallville Post-Proposal-Parent Fix
+checkpoint_status: frozen
+active_accepted_tag: smallville-post-proposal-parent-fix
+active_accepted_commit_sha: 150e2073fdb608efb4e76ad05cdacbfdb7119222
+previous_checkpoint_tag: smallville-pre-proposal-parent-fix
+parser_checkpoint_tag: smallville-stable-loop-01
+baseline_indexed_at_utc: 2026-03-13T22:51:56Z
+control_harness: tiny-world
+formal_protocol_harness: two-house-garden-v1
+manual_proposal_review_required: true
+proposal_review_output_stable: true
+proposal_review_writer_path: scripts/Write-ProposalReview.ps1
+historical_status_note: docs/contracts/harness-status-v1.md
+active_status_note: docs/contracts/harness-status-v2.md
+post_fix_runtime_pair:
+  tiny_world_smoke_run_id: 20260313-194619-tiny-world-smoke-control-llama3.2-3b-16k
+  tiny_world_smoke_path: runs/20260313-194619-tiny-world-smoke-control-llama3.2-3b-16k
+  reviewed_protocol_run_id: 20260313-200242-two-house-garden-v1-reviewed-llama3.2-3b-16k
+  reviewed_protocol_path: runs/20260313-200242-two-house-garden-v1-reviewed-llama3.2-3b-16k
+pre_fix_comparison:
+  reviewed_protocol_run_id: 20260313-173414-two-house-garden-v1-reviewed-llama3.2-3b-16k
+  reviewed_protocol_path: runs/20260313-173414-two-house-garden-v1-reviewed-llama3.2-3b-16k
+  object_like_parent_proposals_visible: true
+post_fix_observations:
+  object_like_parent_proposals_visible: false
+  valid_container_parent_proposals_visible: true
+  proposal_review_counts_and_notes_stable: true
+evidence_gaps:
+  - run_id: 20260313-200242-two-house-garden-v1-reviewed-llama3.2-3b-16k
+    missing_file: runs/20260313-200242-two-house-garden-v1-reviewed-llama3.2-3b-16k/operator_notes.md
+    status: accepted-known-gap
+    future_requirement: reviewed runs must include operator_notes.md
+hash_path_style: repo-relative
+key_artifacts:
+  - docs/contracts/harness-status-v2.md
+  - runs/20260313-194619-tiny-world-smoke-control-llama3.2-3b-16k/manifest.yaml
+  - runs/20260313-194619-tiny-world-smoke-control-llama3.2-3b-16k/endpoint_world_cold.json
+  - runs/20260313-194619-tiny-world-smoke-control-llama3.2-3b-16k/endpoint_state_post_tick_001.json
+  - runs/20260313-194619-tiny-world-smoke-control-llama3.2-3b-16k/proposal_review.md
+  - runs/20260313-194619-tiny-world-smoke-control-llama3.2-3b-16k/operator_notes.md
+  - runs/20260313-194619-tiny-world-smoke-control-llama3.2-3b-16k/log_excerpt_startup.txt
+  - runs/20260313-200242-two-house-garden-v1-reviewed-llama3.2-3b-16k/manifest.yaml
+  - runs/20260313-200242-two-house-garden-v1-reviewed-llama3.2-3b-16k/endpoint_world_cold.json
+  - runs/20260313-200242-two-house-garden-v1-reviewed-llama3.2-3b-16k/endpoint_world_proposals_cold.json
+  - runs/20260313-200242-two-house-garden-v1-reviewed-llama3.2-3b-16k/endpoint_world_tick_003.json
+  - runs/20260313-200242-two-house-garden-v1-reviewed-llama3.2-3b-16k/endpoint_world_restart_cold.json
+  - runs/20260313-200242-two-house-garden-v1-reviewed-llama3.2-3b-16k/proposal_review.md
+  - runs/20260313-200242-two-house-garden-v1-reviewed-llama3.2-3b-16k/log_excerpt_startup.txt
+  - runs/20260313-200242-two-house-garden-v1-reviewed-llama3.2-3b-16k/log_excerpt_tick_003.txt
+  - runs/20260313-200242-two-house-garden-v1-reviewed-llama3.2-3b-16k/log_excerpt_restart.txt

@@ -1,0 +1,41 @@
+baseline_id: stable-loop-01
+baseline_name: Smallville Stable Loop 01
+approved_tag: smallville-stable-loop-01
+approved_commit_sha: c5b3695485d652c94c394ee72becff66ab59c26e
+baseline_index_parent_sha: c5b3695485d652c94c394ee72becff66ab59c26e
+baseline_indexed_at_utc: 2026-03-13T16:36:53Z
+run_id: 20260313-142225-tiny-world-llama3.2-3b-16k
+run_bundle_path: C:/SmallVille/runs/20260313-142225-tiny-world-llama3.2-3b-16k
+scenario_name: tiny-world
+frozen_model: llama3.2:3b-16k
+launch_mode: host-native
+parser_scope_frozen: true
+targeted_test_result: 6 tests, 0 failures, 0 errors, 0 skipped
+full_suite_test_result: 41 tests, 0 failures, 0 errors, 1 skipped
+startup_contract_version: stable-loop-v1.3
+run_bundle_contract_version: stable-loop-v1.3
+key_artifacts:
+  - manifest.yaml
+  - endpoint_ping_cold.json
+  - endpoint_models_cold.json
+  - endpoint_world_cold.json
+  - endpoint_state_cold.json
+  - endpoint_info_cold.json
+  - endpoint_agents_cold.json
+  - endpoint_world_proposals_cold.json
+  - endpoint_state_post_tick_001.json
+  - endpoint_state_post_tick_002.json
+  - endpoint_state_post_tick_003.json
+  - endpoint_world_tick_001.json
+  - endpoint_world_tick_002.json
+  - endpoint_world_tick_003.json
+  - endpoint_state_tick_001.json
+  - endpoint_state_tick_002.json
+  - endpoint_state_tick_003.json
+  - endpoint_world_restart_cold.json
+  - endpoint_state_restart_cold.json
+  - proposal_review.md
+  - operator_notes.md
+  - log_excerpt_startup.txt
+  - log_excerpt_tick_003.txt
+  - log_excerpt_restart.txt

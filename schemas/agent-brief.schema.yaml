@@ -1,0 +1,91 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: UEIA Agent Brief
+description: Descriptive schema for UEIA Phase 1 agent-brief artifacts. Briefs are reviewable proposal artifacts only. They do not bind to runtime prompts, do not grant execution rights, and do not override the rule that packets are not runtime world state. Supporting references preserve evidence lineage back to the constrained dossier.
+type: object
+additionalProperties: false
+properties:
+  brief_id:
+    type: string
+  dossier_id:
+    type: string
+    description: Required dossier identifier used to preserve single-dossier discipline.
+  packet_id:
+    type: string
+  role_name:
+    type: string
+  agent_name_or_slot:
+    type: string
+  purpose:
+    type: string
+  approved_facts:
+    type: array
+    description: Reviewed, status-disciplined fact entries only.
+    items:
+      type: object
+      additionalProperties: false
+      properties:
+        fact_id:
+          type: string
+        fact_text:
+          type: string
+        fact_status:
+          type: string
+          enum:
+            - observed
+            - inferred
+            - open-question
+            - approved-for-packet
+            - deferred
+        source_record_id:
+          type: string
+      required:
+        - fact_id
+        - fact_text
+        - fact_status
+        - source_record_id
+  task_focus:
+    type: array
+    items:
+      type: string
+  forbidden_assumptions:
+    type: array
+    items:
+      type: string
+  review_questions:
+    type: array
+    items:
+      type: string
+  brief_status:
+    type: string
+    description: Descriptive brief review status only. This field does not grant execution rights.
+  created_at:
+    type: string
+  supporting_refs:
+    type: array
+    description: Optional evidence-linking references used to preserve provenance between brief content and dossier evidence.
+    items:
+      type: object
+      additionalProperties: false
+      properties:
+        ref_type:
+          type: string
+        ref_id:
+          type: string
+        ref_note:
+          type: string
+      required:
+        - ref_type
+        - ref_id
+required:
+  - brief_id
+  - dossier_id
+  - packet_id
+  - role_name
+  - agent_name_or_slot
+  - purpose
+  - approved_facts
+  - task_focus
+  - forbidden_assumptions
+  - review_questions
+  - brief_status
+  - created_at

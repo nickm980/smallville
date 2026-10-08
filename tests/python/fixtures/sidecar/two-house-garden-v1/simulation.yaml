@@ -1,0 +1,111 @@
+world:
+  locations:
+    - name: "Blue House"
+      objects:
+        - name: "Kitchen"
+          state: "Tea things laid out beside a garden notebook"
+        - name: "Study"
+          state: "Open ledger of planting notes and weather sketches"
+    - name: "Green House"
+      state: "Sheltered warmth holding the day's young plants steady"
+      objects:
+        - name: "Potting Bench"
+          state: "Propagation trays, dibber, and labels arranged for tidy work"
+        - name: "Glass Table"
+          state: "Plan sheets and tray maps spread beside a mug ring"
+        - name: "Water Barrel"
+          state: "Half full and ready for the next watering round"
+    - name: "Garden"
+      state: "Paths clear between the houses and the growing beds"
+      objects:
+        - name: "Bench"
+          state: "A calm pause point for tea and note review"
+        - name: "Gate"
+          state: "Closed to keep the work area settled"
+        - name: "North Bed"
+          state: "Young greens need a quick health review"
+        - name: "South Bed"
+          state: "Freshly prepared for transplanting and bed tidy work"
+
+worldBuilding:
+  summary: "A calm two-house horticultural microcosm built around watering rounds, propagation work, quiet review, and shared tea pauses."
+  rules:
+    - "Keep all additions domestic, horticultural, and locally grounded within the Blue House, Green House, and Garden."
+    - "New details should support watering, plant care, propagation, tray work, note review, or quiet shared pauses."
+    - "Do not introduce pricing systems, live inventory, sensors, commerce mechanics, or external institutions."
+  allowedLocationStates:
+    - "Open"
+    - "Closed"
+    - "Warm"
+    - "Quiet"
+    - "In use"
+    - "Needs attention"
+    - "Ready for review"
+
+dailyRhythm:
+  breakfast: "06:00-09:30"
+  lunch: "12:00-14:00"
+  dinner: "18:00-20:30"
+  morningTea: "06:00-10:00"
+  afternoonTea: "15:00-17:30"
+  eveningWind: "19:30-21:30"
+  snack: "Flexible morning or afternoon"
+
+memory:
+  dreamIntervalTicks: 10
+  dreamWindowStart: "22:00"
+  dreamWindowEnd: "06:00"
+  hotMemoryLimit: 20
+  recallTopK: 5
+  archiveCompression: true
+  ponderEnabled: true
+  ponderBlendAlpha: 0.6
+  ponderCooldownTicks: 5
+  eveningSocialBoost: 0.2
+  eveningActivationDamp: 0.1
+
+agents:
+  - name: "Jamie"
+    location: "Blue House: Kitchen"
+    activity: "setting out tea before the first watering round and stock review"
+    traits: "grounded, hospitable, observant"
+    goals:
+      - "Keep the two-house routine calm, practical, and ready for garden work."
+      - "Support watering rounds, tray checks, and tidy closeouts without pushing the pace."
+      - "Notice which plants or spaces need quiet attention before the next work block."
+    rituals:
+      - "Start with tea and a short status check before shared horticultural work."
+      - "Review the water barrel and garden paths before midday."
+    socialPreference: "balanced"
+    canProposeWorldChanges: true
+    persona:
+      - "Jamie prefers useful routines that make the houses and garden feel steady and welcoming."
+      - "Jamie likes work that leaves tools, trays, and shared spaces easier to use for the next round."
+      - "Jamie pays attention to practical details like gates, watering order, and whether the bench is ready for a pause."
+    workingMemories:
+      - "The water barrel should be checked before the greenhouse trays are watered."
+      - "A short tea pause helps Alex review notes before transplanting decisions."
+      - "The garden gate may need checking if the path gets busy during watering rounds."
+      - "Some of the plants may be nearly ready for a calm sale-ready stock review."
+  - name: "Alex"
+    location: "Green House: Glass Table"
+    activity: "reviewing tray notes and plant condition inside the sheltered growing space"
+    traits: "curious, artistic, patient"
+    goals:
+      - "Keep tray, container, and propagation work well observed and easy to review."
+      - "Notice plant health shifts early enough for gentle action rather than rushed correction."
+      - "Shape a quiet rhythm where note-making and practical garden work stay aligned."
+    rituals:
+      - "Begin with note review at the glass table before moving to trays or beds."
+      - "Pause for tea once the first plant health and tray checks are complete."
+    socialPreference: "solitary"
+    canProposeWorldChanges: true
+    persona:
+      - "Alex treats the greenhouse like a careful studio for plant observation, propagation, and planning."
+      - "Alex notices small differences in leaves, trays, and sheltered-space conditions before speaking up."
+      - "Alex prefers one thoughtful exchange at a time, especially after a quiet review pass."
+    workingMemories:
+      - "The north bed should get a calm plant health review before any heavier work begins."
+      - "Some propagation trays need checking for spacing, labels, and container condition."
+      - "The south bed looks ready for tidy planting work once the notes are confirmed."
+      - "A sale-ready stock check should stay simple and observational rather than commercial."

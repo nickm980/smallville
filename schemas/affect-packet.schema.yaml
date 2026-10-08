@@ -1,0 +1,177 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: SmallVille Affect Packet
+description: Deterministic offline sidecar packet exposing affect state carried by the host memory index plus the host-authoritative dream and ponder configuration surface.
+type: object
+additionalProperties: false
+$defs:
+  nullableString:
+    type:
+      - string
+      - "null"
+  source:
+    type: object
+    additionalProperties: false
+    properties:
+      ledgerGeneratedAtUtc:
+        type: string
+        format: date-time
+      ledgerScenarioField:
+        type: string
+      ledgerExportSha256:
+        type: string
+      simulationSha256:
+        type: string
+    required:
+      - ledgerGeneratedAtUtc
+      - ledgerScenarioField
+      - ledgerExportSha256
+      - simulationSha256
+  boundary:
+    type: object
+    additionalProperties: false
+    properties:
+      hostAuthority:
+        type: string
+        enum:
+          - java
+      sidecarRole:
+        type: string
+      mutationAuthority:
+        type: string
+        enum:
+          - none
+    required:
+      - hostAuthority
+      - sidecarRole
+      - mutationAuthority
+  affectConfig:
+    type: object
+    additionalProperties: false
+    properties:
+      dreamWindowStart:
+        type: string
+      dreamWindowEnd:
+        type: string
+      ponderEnabled:
+        type: boolean
+      ponderBlendAlpha:
+        type: number
+      ponderCooldownTicks:
+        type: integer
+      eveningSocialBoost:
+        type: number
+      eveningActivationDamp:
+        type: number
+      breakWindows:
+        type: object
+        additionalProperties: false
+        properties:
+          morningTea:
+            $ref: "#/$defs/nullableString"
+          lunch:
+            $ref: "#/$defs/nullableString"
+          afternoonTea:
+            $ref: "#/$defs/nullableString"
+          eveningWind:
+            $ref: "#/$defs/nullableString"
+        required:
+          - morningTea
+          - lunch
+          - afternoonTea
+          - eveningWind
+    required:
+      - dreamWindowStart
+      - dreamWindowEnd
+      - ponderEnabled
+      - ponderBlendAlpha
+      - ponderCooldownTicks
+      - eveningSocialBoost
+      - eveningActivationDamp
+      - breakWindows
+  formulaMirrors:
+    type: object
+    additionalProperties: false
+    properties:
+      dreamValence:
+        type: string
+      dreamActivation:
+        type: string
+      dreamSocialDrive:
+        type: string
+      ponderValence:
+        type: string
+      ponderBlend:
+        type: string
+      eveningWindModulation:
+        type: string
+    required:
+      - dreamValence
+      - dreamActivation
+      - dreamSocialDrive
+      - ponderValence
+      - ponderBlend
+      - eveningWindModulation
+  agentAffectView:
+    type: object
+    additionalProperties: false
+    properties:
+      agentName:
+        type: string
+      socialPreference:
+        $ref: "#/$defs/nullableString"
+      lastDreamTick:
+        type: integer
+      lastPonderTick:
+        type: integer
+      ponderCount:
+        type: integer
+      affectAvailable:
+        type: boolean
+      affectState:
+        anyOf:
+          - $ref: "affect-state.schema.yaml"
+          - type: "null"
+      affectSource:
+        type: string
+        enum:
+          - ledger.memoryIndex.lastAffect
+          - missing
+    required:
+      - agentName
+      - socialPreference
+      - lastDreamTick
+      - lastPonderTick
+      - ponderCount
+      - affectAvailable
+      - affectState
+      - affectSource
+properties:
+  packetType:
+    type: string
+    const: affect
+  packetVersion:
+    type: integer
+    const: 1
+  scenarioId:
+    type: string
+  source:
+    $ref: "#/$defs/source"
+  boundary:
+    $ref: "#/$defs/boundary"
+  affectConfig:
+    $ref: "#/$defs/affectConfig"
+  formulaMirrors:
+    $ref: "#/$defs/formulaMirrors"
+  agents:
+    type: array
+    items:
+      $ref: "#/$defs/agentAffectView"
+required:
+  - packetType
+  - packetVersion
+  - scenarioId
+  - source
+  - boundary
+  - affectConfig
+  - formulaMirrors
+  - agents

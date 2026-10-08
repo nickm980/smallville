@@ -1,0 +1,376 @@
+# Archive Record Examples Dossier v1
+
+## Purpose
+
+This note provides specification-only archive-record examples normalized to the frozen `archive-record.schema.yaml` contract.
+
+Shared dossier identifier used below:
+- `dossier_id`: `dossier-bootstrap-v1`
+
+## Provenance Rule
+
+Each example preserves provenance across:
+- accepted reviewed-run evidence
+- accepted control-run evidence
+- Water Mill manifest and note files
+- Water Mill image observations
+
+No example should be treated as implementation instruction.
+
+## Example Group 1: Accepted Reviewed-Run Evidence
+
+- `record_id`: `rec-reviewed-run-bundle-summary`
+- `dossier_id`: `dossier-bootstrap-v1`
+- `source_type`: `run-bundle`
+- `source_title`: `accepted post-fix two-house-garden-v1 reviewed run`
+- `source_path_or_uri`: `C:\SmallVille\runs\20260313-200242-two-house-garden-v1-reviewed-llama3.2-3b-16k`
+- `snapshot_type`: `accepted run bundle`
+- `source_hash`: `example-reviewed-run-bundle-hash-not-captured-in-this-spec`
+- `provenance_status`: `accepted operational run evidence`
+- `fact_status`: `observed`
+- `owner_layer`: `primary operational dossier`
+- `summary`: `Primary operational dossier anchor for reviewed-run evidence, manual review posture, and accepted evidence-gap handling.`
+- `fact_items`:
+  - `fact_id`: `fr-reviewed-anchor`
+    - `fact_text`: `The accepted reviewed run anchors the primary operational dossier.`
+    - `fact_status`: `observed`
+    - `source_refs`: [`runs/20260313-200242-two-house-garden-v1-reviewed-llama3.2-3b-16k`, `docs/contracts/harness-status-v2.md`]
+    - `notes`: `Observed from accepted run evidence and frozen harness documentation.`
+  - `fact_id`: `fr-reviewed-manual-review`
+    - `fact_text`: `Manual review remains part of the accepted operational posture.`
+    - `fact_status`: `observed`
+    - `source_refs`: [`docs/contracts/harness-status-v2.md`, `docs/contracts/operator-surface-status-v1.md`]
+    - `notes`: `Observed from frozen governance notes.`
+  - `fact_id`: `fr-reviewed-maintenance-context`
+    - `fact_text`: `The reviewed run can anchor maintenance, review, and operational-context packet examples.`
+    - `fact_status`: `inferred`
+    - `source_refs`: [`runs/20260313-200242-two-house-garden-v1-reviewed-llama3.2-3b-16k`]
+    - `notes`: `Inference kept below implementation authority.`
+  - `fact_id`: `fr-reviewed-promotion-scope`
+    - `fact_text`: `Only a bounded subset of reviewed-run subtopics should be promoted into first packet examples.`
+    - `fact_status`: `open-question`
+    - `source_refs`: [`docs/contracts/ueia-single-dossier-bootstrap-spec-v1.md`]
+    - `notes`: `Open scope question for canonical specimen selection.`
+  - `fact_id`: `fr-reviewed-primary-packet-anchor`
+    - `fact_text`: `Use the reviewed run as the primary operational dossier anchor for packet-ready examples.`
+    - `fact_status`: `approved-for-packet`
+    - `source_refs`: [`docs/contracts/ueia-single-dossier-bootstrap-spec-v1.md`]
+    - `notes`: `Approved-for-packet within the single-dossier boundary.`
+  - `fact_id`: `fr-reviewed-no-implementation`
+    - `fact_text`: `No implementation work should be derived directly from the reviewed-run example set in this freeze.`
+    - `fact_status`: `deferred`
+    - `source_refs`: [`docs/contracts/ueia-single-dossier-bootstrap-spec-v1.md`]
+    - `notes`: `Deferred beyond the freeze turn.`
+- `notes`: `This record keeps the reviewed run as the operational anchor without expanding dossier scope.`
+
+## Example Group 2: Accepted Control-Run Evidence
+
+- `record_id`: `rec-control-run-smoke-context`
+- `dossier_id`: `dossier-bootstrap-v1`
+- `source_type`: `run-bundle`
+- `source_title`: `accepted post-fix tiny-world smoke control context`
+- `source_path_or_uri`: `C:\SmallVille\runs\20260313-194619-tiny-world-smoke-control-llama3.2-3b-16k`
+- `snapshot_type`: `accepted run bundle`
+- `source_hash`: `example-control-run-bundle-hash-not-captured-in-this-spec`
+- `provenance_status`: `accepted control evidence`
+- `fact_status`: `observed`
+- `owner_layer`: `control context`
+- `summary`: `Control-run evidence used to preserve bounded comparison discipline without becoming a second operational dossier.`
+- `fact_items`:
+  - `fact_id`: `fr-control-accepted-context`
+    - `fact_text`: `tiny-world remains the accepted control context.`
+    - `fact_status`: `observed`
+    - `source_refs`: [`docs/contracts/harness-status-v2.md`]
+    - `notes`: `Observed from frozen harness governance.`
+  - `fact_id`: `fr-control-boundary`
+    - `fact_text`: `The control run is used to preserve bounded comparison discipline.`
+    - `fact_status`: `observed`
+    - `source_refs`: [`docs/contracts/ueia-single-dossier-bootstrap-spec-v1.md`]
+    - `notes`: `Observed from the bootstrap dossier rule.`
+  - `fact_id`: `fr-control-anti-drift`
+    - `fact_text`: `Control context can keep the bootstrap packet from drifting into uncontrolled expansion.`
+    - `fact_status`: `inferred`
+    - `source_refs`: [`runs/20260313-194619-tiny-world-smoke-control-llama3.2-3b-16k`]
+    - `notes`: `Inference about boundary value, not execution authority.`
+  - `fact_id`: `fr-control-comparison-cues`
+    - `fact_text`: `The most useful comparison cues for packet review remain unresolved.`
+    - `fact_status`: `open-question`
+    - `source_refs`: [`docs/contracts/ueia-single-dossier-bootstrap-spec-v1.md`]
+    - `notes`: `Open question to avoid accidental dossier merge.`
+  - `fact_id`: `fr-control-control-only`
+    - `fact_text`: `Use tiny-world only as control context and not as merged operational source material.`
+    - `fact_status`: `approved-for-packet`
+    - `source_refs`: [`docs/contracts/ueia-single-dossier-bootstrap-spec-v1.md`]
+    - `notes`: `Packet-ready constraint for later canonical selection.`
+  - `fact_id`: `fr-control-no-multi-dossier`
+    - `fact_text`: `Broader comparison frameworks across multiple operational dossiers remain deferred.`
+    - `fact_status`: `deferred`
+    - `source_refs`: [`docs/contracts/ueia-single-dossier-bootstrap-spec-v1.md`]
+    - `notes`: `Deferred by single-dossier rule.`
+- `notes`: `This record preserves control context without widening the dossier boundary.`
+
+## Example Group 3: Water Mill Design Assets
+
+- `record_id`: `rec-water-mill-design-asset-pack`
+- `dossier_id`: `dossier-bootstrap-v1`
+- `source_type`: `design-asset-pack`
+- `source_title`: `Water Mill context pack`
+- `source_path_or_uri`: `C:\Users\callu\Downloads\water_mill_codex_context_pack.zip`
+- `snapshot_type`: `design asset pack`
+- `source_hash`: `example-water-mill-zip-hash-not-captured-in-this-spec`
+- `provenance_status`: `approved static design-asset reference`
+- `fact_status`: `observed`
+- `owner_layer`: `Water Mill context pack`
+- `summary`: `Approved static design-asset pack containing nine images, manifests, and note files for descriptive dossier vocabulary only.`
+- `fact_items`:
+  - `fact_id`: `fr-pack-inventory`
+    - `fact_text`: `The pack contains nine primary JPEG images, one contact sheet, two manifests, and two note files.`
+    - `fact_status`: `observed`
+    - `source_refs`: [`water_mill_codex_context_pack.zip::asset_manifest.json`, `water_mill_codex_context_pack.zip::README.md`]
+    - `notes`: `Observed directly from pack inventory.`
+  - `fact_id`: `fr-pack-visible-components`
+    - `fact_text`: `Visible pack content includes a mill body, side-mounted wheel, upper deck, stairs, railings, wind-tower views, wiring, and a solar trial-fit.`
+    - `fact_status`: `observed`
+    - `source_refs`: [`water_mill_codex_context_pack.zip::01_water_mill_overall_front_left.jpeg`, `water_mill_codex_context_pack.zip::03_wind_tower_open_with_wiring.jpeg`, `water_mill_codex_context_pack.zip::09_solar_panel_trial_fit.jpeg`]
+    - `notes`: `Observed from image content only, not real-world authority.`
+  - `fact_id`: `fr-pack-interpretation-use`
+    - `fact_text`: `The pack supports structure classification, water-system vocabulary, and hybrid-energy research prompts.`
+    - `fact_status`: `inferred`
+    - `source_refs`: [`water_mill_codex_context_pack.zip::README.md`, `water_mill_codex_context_pack.zip::design_observations.md`]
+    - `notes`: `Inference anchored to pack notes.`
+  - `fact_id`: `fr-pack-integration-open`
+    - `fact_text`: `The degree of mill-and-tower integration remains unresolved.`
+    - `fact_status`: `open-question`
+    - `source_refs`: [`water_mill_codex_context_pack.zip::design_observations.md`]
+    - `notes`: `Open question preserved for review.`
+  - `fact_id`: `fr-pack-vocabulary-promotion`
+    - `fact_text`: `Visible components and manifest metadata may be used as packet-ready descriptive vocabulary only.`
+    - `fact_status`: `approved-for-packet`
+    - `source_refs`: [`water_mill_codex_context_pack.zip::README.md`, `water_mill_codex_context_pack.zip::asset_manifest.json`]
+    - `notes`: `Approved-for-packet within design-asset-only boundary.`
+  - `fact_id`: `fr-pack-no-authority`
+    - `fact_text`: `Real-world dimensions, implementation claims, and authoritative hidden mechanics remain deferred.`
+    - `fact_status`: `deferred`
+    - `source_refs`: [`water_mill_codex_context_pack.zip::README.md`]
+    - `notes`: `Deferred by design-asset handling rule.`
+- `notes`: `The Water Mill pack remains a static design-asset reference source only.`
+
+## Example Group 4: Built Features
+
+- `record_id`: `rec-built-features-water-mill`
+- `dossier_id`: `dossier-bootstrap-v1`
+- `source_type`: `design-asset-image-set`
+- `source_title`: `Water Mill built-feature views`
+- `source_path_or_uri`: `C:\Users\callu\Downloads\water_mill_codex_context_pack.zip::01_water_mill_overall_front_left.jpeg;02_water_mill_top_oblique.jpeg;08_rear_house_elevation.jpeg`
+- `snapshot_type`: `design asset image set`
+- `source_hash`: `1902cd6d62f3a95bff683b328d0bddc7c0610ca19fbc1cad3037b8dd1a6bda55 / 50eed315b2d20f50c7958566d26f0761be9f45820fe14b4b827baf43380aac34 / 8bbce1777e70dd14fd5cc8d46706b7d5b1ed9440ec467f0cd9162b4e84439269`
+- `provenance_status`: `approved static design-asset observation`
+- `fact_status`: `observed`
+- `owner_layer`: `Water Mill context pack`
+- `summary`: `Built-feature example group for mill-house body, upper deck, and access-adjacent surfaces visible in Water Mill design assets.`
+- `fact_items`:
+  - `fact_id`: `fr-built-mill-house`
+    - `fact_text`: `A mill-house-like body is visible.`
+    - `fact_status`: `observed`
+    - `source_refs`: [`asset_manifest.json::1`, `asset_manifest.json::8`]
+    - `notes`: `Observed from visible forms only.`
+  - `fact_id`: `fr-built-upper-deck`
+    - `fact_text`: `An upper deck or terrace-like platform is visible.`
+    - `fact_status`: `observed`
+    - `source_refs`: [`asset_manifest.json::1`, `asset_manifest.json::2`]
+    - `notes`: `Observed from front-left and top-oblique views.`
+  - `fact_id`: `fr-built-service-use`
+    - `fact_text`: `The upper platform may support service, maintenance, observation, or staging uses.`
+    - `fact_status`: `inferred`
+    - `source_refs`: [`asset_manifest.json::1`, `asset_manifest.json::2`]
+    - `notes`: `Interpretive use claim, not settled function.`
+  - `fact_id`: `fr-built-deck-function`
+    - `fact_text`: `Whether the deck is primarily work surface, observation surface, or circulation surface remains unresolved.`
+    - `fact_status`: `open-question`
+    - `source_refs`: [`design_observations.md`]
+    - `notes`: `Open function question preserved for packet review.`
+  - `fact_id`: `fr-built-structure-classes`
+    - `fact_text`: `Mill-house, service-deck, and maintenance-access-point are acceptable structure-class candidates for packet use.`
+    - `fact_status`: `approved-for-packet`
+    - `source_refs`: [`README.md`, `asset_manifest.json::1`, `asset_manifest.json::2`, `asset_manifest.json::8`]
+    - `notes`: `Packet-ready labels only, not implementation classes.`
+  - `fact_id`: `fr-built-no-room-program`
+    - `fact_text`: `Definitive internal room program or spatial allocation remains deferred.`
+    - `fact_status`: `deferred`
+    - `source_refs`: [`design_observations.md`]
+    - `notes`: `Deferred beyond visible evidence.`
+- `notes`: `Built-feature language remains descriptive and non-authoritative.`
+
+## Example Group 5: Water-System Elements
+
+- `record_id`: `rec-water-system-elements-water-mill`
+- `dossier_id`: `dossier-bootstrap-v1`
+- `source_type`: `design-asset-image-set`
+- `source_title`: `Water Mill water-system element views`
+- `source_path_or_uri`: `C:\Users\callu\Downloads\water_mill_codex_context_pack.zip::01_water_mill_overall_front_left.jpeg;06_water_wheel_axle_closeup.jpeg;07_water_wheel_underside_oblique.jpeg`
+- `snapshot_type`: `design asset image set`
+- `source_hash`: `1902cd6d62f3a95bff683b328d0bddc7c0610ca19fbc1cad3037b8dd1a6bda55 / 9692791bc0f2cd1d4a55bcc19672c3726ef41648b761b9739fbe2fb1f53f7b90 / 78e6b2aa3d8915fea37636310dbbcaf797a269c5ced2012a63260ae1cd498500`
+- `provenance_status`: `approved static design-asset observation`
+- `fact_status`: `observed`
+- `owner_layer`: `Water Mill context pack`
+- `summary`: `Water-system element example group for wheel visibility, axle interface, and lower-body relationship.`
+- `fact_items`:
+  - `fact_id`: `fr-water-wheel-visible`
+    - `fact_text`: `A side-mounted water wheel is visible.`
+    - `fact_status`: `observed`
+    - `source_refs`: [`asset_manifest.json::1`, `asset_manifest.json::6`, `asset_manifest.json::7`]
+    - `notes`: `Observed from visible wheel structure only.`
+  - `fact_id`: `fr-water-axle-interface`
+    - `fact_text`: `An axle connection into the main body is visible.`
+    - `fact_status`: `observed`
+    - `source_refs`: [`asset_manifest.json::6`]
+    - `notes`: `Observed interface only.`
+  - `fact_id`: `fr-water-transfer-logic`
+    - `fact_text`: `The wheel and axle suggest a water-power interpretation path into the body.`
+    - `fact_status`: `inferred`
+    - `source_refs`: [`asset_manifest.json::6`, `asset_manifest.json::7`, `design_observations.md`]
+    - `notes`: `Interpretive logic only.`
+  - `fact_id`: `fr-water-open-path`
+    - `fact_text`: `The exact water path and whether the wheel reads as undershot, breastshot, or overshot remain unresolved.`
+    - `fact_status`: `open-question`
+    - `source_refs`: [`design_observations.md`, `README.md`]
+    - `notes`: `Open hydraulic interpretation question.`
+  - `fact_id`: `fr-water-packet-labels`
+    - `fact_text`: `Water wheel, axle interface, and wheel-chamber are acceptable packet-ready descriptive labels.`
+    - `fact_status`: `approved-for-packet`
+    - `source_refs`: [`README.md`, `asset_manifest.json::6`]
+    - `notes`: `Wheel-chamber remains an interpretive label, not settled fact.`
+  - `fact_id`: `fr-water-no-model`
+    - `fact_text`: `Hydraulic performance claims or modeled water flow behavior remain deferred.`
+    - `fact_status`: `deferred`
+    - `source_refs`: [`README.md`]
+    - `notes`: `Deferred by non-executing boundary.`
+- `notes`: `Water-system language remains descriptive only and does not authorize simulation behavior.`
+
+## Example Group 6: Access / Maintenance Structures
+
+- `record_id`: `rec-access-and-maintenance-structures`
+- `dossier_id`: `dossier-bootstrap-v1`
+- `source_type`: `design-asset-image-set`
+- `source_title`: `Water Mill access and maintenance views`
+- `source_path_or_uri`: `C:\Users\callu\Downloads\water_mill_codex_context_pack.zip::01_water_mill_overall_front_left.jpeg;08_rear_house_elevation.jpeg`
+- `snapshot_type`: `design asset image set`
+- `source_hash`: `1902cd6d62f3a95bff683b328d0bddc7c0610ca19fbc1cad3037b8dd1a6bda55 / 8bbce1777e70dd14fd5cc8d46706b7d5b1ed9440ec467f0cd9162b4e84439269`
+- `provenance_status`: `approved static design-asset observation`
+- `fact_status`: `observed`
+- `owner_layer`: `Water Mill context pack`
+- `summary`: `Access and maintenance record for stairs, landings, railings, and visible circulation points.`
+- `fact_items`:
+  - `fact_id`: `fr-access-stairs`
+    - `fact_text`: `Stairs are visible.`
+    - `fact_status`: `observed`
+    - `source_refs`: [`asset_manifest.json::1`, `asset_manifest.json::8`]
+    - `notes`: `Observed from front and rear views.`
+  - `fact_id`: `fr-access-landing`
+    - `fact_text`: `Railed edges, a landing, and rear access openings are visible.`
+    - `fact_status`: `observed`
+    - `source_refs`: [`asset_manifest.json::8`]
+    - `notes`: `Observed access surfaces only.`
+  - `fact_id`: `fr-access-circulation`
+    - `fact_text`: `The design anticipates circulation, access control, or maintenance movement.`
+    - `fact_status`: `inferred`
+    - `source_refs`: [`asset_manifest.json::1`, `asset_manifest.json::8`, `design_observations.md`]
+    - `notes`: `Inference from visible stairs and landings.`
+  - `fact_id`: `fr-access-routine-vs-service`
+    - `fact_text`: `Routine-use versus maintenance-only access points remain unresolved.`
+    - `fact_status`: `open-question`
+    - `source_refs`: [`design_observations.md`]
+    - `notes`: `Open access classification question.`
+  - `fact_id`: `fr-access-structure-classes`
+    - `fact_text`: `Access-stair, service landing, and maintenance circulation are acceptable packet-ready labels.`
+    - `fact_status`: `approved-for-packet`
+    - `source_refs`: [`README.md`, `asset_manifest.json::8`]
+    - `notes`: `Descriptive labels only.`
+  - `fact_id`: `fr-access-no-safety-protocol`
+    - `fact_text`: `Occupancy rules and safety protocol claims remain deferred.`
+    - `fact_status`: `deferred`
+    - `source_refs`: [`README.md`]
+    - `notes`: `Deferred beyond visible evidence and dossier scope.`
+- `notes`: `Access and maintenance interpretation remains tied to visible structures only.`
+
+## Example Group 7: Energy-Support Features
+
+- `record_id`: `rec-energy-support-features`
+- `dossier_id`: `dossier-bootstrap-v1`
+- `source_type`: `design-asset-image-set`
+- `source_title`: `Water Mill energy-support views`
+- `source_path_or_uri`: `C:\Users\callu\Downloads\water_mill_codex_context_pack.zip::03_wind_tower_open_with_wiring.jpeg;04_wind_tower_with_blades.jpeg;05_wind_tower_top_motor_view.jpeg;09_solar_panel_trial_fit.jpeg`
+- `snapshot_type`: `design asset image set`
+- `source_hash`: `cbbd6706b8cff4696cbdab3d5347319f140268c46e59ed44afffb654e54545f9 / 059d5a3a07c5e573ca93fc26395fd9eb036f9b58290edb35244921122d1fac3c / 18b7d8a645e3e8a8e2f8f031f8344e89f02e3fcb4047ea71b8d3c35d481f0d33 / e3d133278bf4cf7f45d7484263766e43856d6df8a6cb2c89b78f26ea39ceeda9`
+- `provenance_status`: `approved static design-asset observation`
+- `fact_status`: `observed`
+- `owner_layer`: `Water Mill context pack`
+- `summary`: `Energy-support example group covering visible wind-tower cavity, blades, motor, wiring, and solar trial-fit.`
+- `fact_items`:
+  - `fact_id`: `fr-energy-visible-components`
+    - `fact_text`: `A wind-tower element with visible cavity, wiring, motor area, and a solar trial-fit is shown.`
+    - `fact_status`: `observed`
+    - `source_refs`: [`asset_manifest.json::3`, `asset_manifest.json::4`, `asset_manifest.json::5`, `asset_manifest.json::9`]
+    - `notes`: `Observed component inventory only.`
+  - `fact_id`: `fr-energy-hybrid-logic`
+    - `fact_text`: `The design supports hybrid-energy interpretation prompts spanning water, wind, and solar-assist ideas.`
+    - `fact_status`: `inferred`
+    - `source_refs`: [`README.md`, `design_observations.md`, `asset_manifest.json::3`, `asset_manifest.json::9`]
+    - `notes`: `Inference, not proof of integrated power system.`
+  - `fact_id`: `fr-energy-integration-open`
+    - `fact_text`: `Tower integration, storage location, and control-routing logic remain unresolved.`
+    - `fact_status`: `open-question`
+    - `source_refs`: [`design_observations.md`, `README.md`]
+    - `notes`: `Open interpretation question.`
+  - `fact_id`: `fr-energy-packet-labels`
+    - `fact_text`: `Wind-assist tower, solar-assist panel, and power-routing cavity are acceptable packet-ready descriptive labels.`
+    - `fact_status`: `approved-for-packet`
+    - `source_refs`: [`README.md`, `asset_manifest.json::3`, `asset_manifest.json::5`, `asset_manifest.json::9`]
+    - `notes`: `Packet-ready labels only.`
+  - `fact_id`: `fr-energy-no-live-control`
+    - `fact_text`: `Electrical performance, storage topology, and live control claims remain deferred.`
+    - `fact_status`: `deferred`
+    - `source_refs`: [`README.md`]
+    - `notes`: `Deferred by non-executing boundary.`
+- `notes`: `Energy-support interpretation remains descriptive, non-authoritative, and non-implementational.`
+
+## Example Group 8: Waste / Reclassification Touchpoints
+
+- `record_id`: `rec-waste-and-reclassification-touchpoints`
+- `dossier_id`: `dossier-bootstrap-v1`
+- `source_type`: `interpretive-record`
+- `source_title`: `Waste and reclassification touchpoint prompts`
+- `source_path_or_uri`: `C:\SmallVille\docs\contracts\ueia-single-dossier-bootstrap-spec-v1.md;C:\Users\callu\Downloads\water_mill_codex_context_pack.zip::README.md;C:\Users\callu\Downloads\water_mill_codex_context_pack.zip::01_water_mill_overall_front_left.jpeg;08_rear_house_elevation.jpeg`
+- `snapshot_type`: `interpretive dossier record`
+- `source_hash`: `multiple-source-example-see-source-paths`
+- `provenance_status`: `mixed run evidence and design-asset prompt context`
+- `fact_status`: `open-question`
+- `owner_layer`: `archive layer`
+- `summary`: `Interpretive record for waste, composting, and reclassification themes carried as research prompts rather than evidenced infrastructure.`
+- `fact_items`:
+  - `fact_id`: `fr-waste-visible-surfaces`
+    - `fact_text`: `Decks, landings, stairs, and service-like surfaces are visible or named in the Water Mill context pack.`
+    - `fact_status`: `observed`
+    - `source_refs`: [`asset_manifest.json::1`, `asset_manifest.json::8`, `README.md`]
+    - `notes`: `Observed surfaces only; no waste hardware evidenced.`
+  - `fact_id`: `fr-waste-maintenance-prompt`
+    - `fact_text`: `Those surfaces could support research prompts around sorting, reclassification, or maintenance residue handling.`
+    - `fact_status`: `inferred`
+    - `source_refs`: [`ueia-single-dossier-bootstrap-spec-v1.md`, `README.md`]
+    - `notes`: `Research prompt only.`
+  - `fact_id`: `fr-waste-placement-open`
+    - `fact_text`: `Where composting, sorting, or residue handling would sit in a later interpretive packet remains unresolved.`
+    - `fact_status`: `open-question`
+    - `source_refs`: [`ueia-single-dossier-bootstrap-spec-v1.md`]
+    - `notes`: `Open thematic question.`
+  - `fact_id`: `fr-waste-packet-labels`
+    - `fact_text`: `Waste interaction points and reclassification candidates are acceptable packet-ready prompt labels only.`
+    - `fact_status`: `approved-for-packet`
+    - `source_refs`: [`ueia-single-dossier-bootstrap-spec-v1.md`]
+    - `notes`: `Prompt labels only, not settled infrastructure facts.`
+  - `fact_id`: `fr-waste-no-hardware-claim`
+    - `fact_text`: `Any claim that dedicated composting or waste-processing hardware is already evidenced remains deferred.`
+    - `fact_status`: `deferred`
+    - `source_refs`: [`ueia-single-dossier-bootstrap-spec-v1.md`, `README.md`]
+    - `notes`: `Deferred by evidence boundary.`
+- `notes`: `Waste and reclassification topics remain dossier themes and research prompts only.`

@@ -1,0 +1,234 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: SmallVille World Packet
+description: Deterministic offline sidecar packet exposing a bounded world projection from ledger export JSON plus scenario daily-rhythm supplementation where the host export omits fields such as eveningWind.
+type: object
+additionalProperties: false
+$defs:
+  nullableString:
+    type:
+      - string
+      - "null"
+  source:
+    type: object
+    additionalProperties: false
+    properties:
+      ledgerGeneratedAtUtc:
+        type: string
+        format: date-time
+      ledgerScenarioField:
+        type: string
+      ledgerExportSha256:
+        type: string
+      simulationSha256:
+        type: string
+    required:
+      - ledgerGeneratedAtUtc
+      - ledgerScenarioField
+      - ledgerExportSha256
+      - simulationSha256
+  boundary:
+    type: object
+    additionalProperties: false
+    properties:
+      hostAuthority:
+        type: string
+        enum:
+          - java
+      sidecarRole:
+        type: string
+      mutationAuthority:
+        type: string
+        enum:
+          - none
+    required:
+      - hostAuthority
+      - sidecarRole
+      - mutationAuthority
+  dailyRhythm:
+    type: object
+    additionalProperties: false
+    properties:
+      breakfast:
+        $ref: "#/$defs/nullableString"
+      lunch:
+        $ref: "#/$defs/nullableString"
+      dinner:
+        $ref: "#/$defs/nullableString"
+      morningTea:
+        $ref: "#/$defs/nullableString"
+      afternoonTea:
+        $ref: "#/$defs/nullableString"
+      eveningWind:
+        $ref: "#/$defs/nullableString"
+      snack:
+        $ref: "#/$defs/nullableString"
+    required:
+      - breakfast
+      - lunch
+      - dinner
+      - morningTea
+      - afternoonTea
+      - eveningWind
+      - snack
+  locationView:
+    type: object
+    additionalProperties: false
+    properties:
+      name:
+        type: string
+      parent:
+        $ref: "#/$defs/nullableString"
+      state:
+        $ref: "#/$defs/nullableString"
+      depth:
+        type: integer
+      agents:
+        type: array
+        items:
+          type: string
+    required:
+      - name
+      - parent
+      - state
+      - depth
+      - agents
+  agentView:
+    type: object
+    additionalProperties: false
+    properties:
+      name:
+        type: string
+      location:
+        $ref: "#/$defs/nullableString"
+      action:
+        $ref: "#/$defs/nullableString"
+      traits:
+        $ref: "#/$defs/nullableString"
+      socialPreference:
+        $ref: "#/$defs/nullableString"
+      canProposeWorldChanges:
+        type: boolean
+    required:
+      - name
+      - location
+      - action
+      - traits
+      - socialPreference
+      - canProposeWorldChanges
+  worldSnapshot:
+    type: object
+    additionalProperties: false
+    properties:
+      step:
+        type: integer
+      tick:
+        type: integer
+      time:
+        $ref: "#/$defs/nullableString"
+      worldSummary:
+        $ref: "#/$defs/nullableString"
+      worldRules:
+        type: array
+        items:
+          type: string
+      allowedLocationStates:
+        type: array
+        items:
+          type: string
+      locations:
+        type: array
+        items:
+          $ref: "#/$defs/locationView"
+      agents:
+        type: array
+        items:
+          $ref: "#/$defs/agentView"
+      conversationCount:
+        type: integer
+      pendingProposalCount:
+        type: integer
+    required:
+      - step
+      - tick
+      - time
+      - worldSummary
+      - worldRules
+      - allowedLocationStates
+      - locations
+      - agents
+      - conversationCount
+      - pendingProposalCount
+  offlinePolicy:
+    type: object
+    additionalProperties: false
+    properties:
+      offlineMode:
+        type: boolean
+      loopbackOnly:
+        type: boolean
+    required:
+      - offlineMode
+      - loopbackOnly
+  governancePolicy:
+    type: object
+    additionalProperties: false
+    properties:
+      proposalTypes:
+        type: array
+        items:
+          type: string
+      pendingStatuses:
+        type: array
+        items:
+          type: string
+    required:
+      - proposalTypes
+      - pendingStatuses
+properties:
+  packetType:
+    type: string
+    const: world
+  packetVersion:
+    type: integer
+    const: 1
+  scenarioId:
+    type: string
+  source:
+    $ref: "#/$defs/source"
+  boundary:
+    $ref: "#/$defs/boundary"
+  worldSnapshot:
+    $ref: "#/$defs/worldSnapshot"
+  dailyRhythmRuntime:
+    $ref: "#/$defs/dailyRhythm"
+  dailyRhythmScenario:
+    $ref: "#/$defs/dailyRhythm"
+  dailyRhythmMerged:
+    $ref: "#/$defs/dailyRhythm"
+  dailyRhythmSupplementedFields:
+    type: array
+    items:
+      type: string
+  offlinePolicy:
+    $ref: "#/$defs/offlinePolicy"
+  governancePolicy:
+    $ref: "#/$defs/governancePolicy"
+  governanceLedgerCount:
+    type: integer
+  proposalHistoryCount:
+    type: integer
+required:
+  - packetType
+  - packetVersion
+  - scenarioId
+  - source
+  - boundary
+  - worldSnapshot
+  - dailyRhythmRuntime
+  - dailyRhythmScenario
+  - dailyRhythmMerged
+  - dailyRhythmSupplementedFields
+  - offlinePolicy
+  - governancePolicy
+  - governanceLedgerCount
+  - proposalHistoryCount

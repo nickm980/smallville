@@ -1,6 +1,10 @@
 package io.github.nickm980.smallville.llm;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Semaphore;
@@ -9,6 +13,8 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -69,25 +75,29 @@ public class ChatGPT implements LLM {
     @Override
     public float[] getTokenEmbeddings(String text) {
 	OkHttpClient client = new OkHttpClient();
-	ObjectMapper mapper = new ObjectMapper();
 	float[] result = new float[0];
 
 	try {
-	    // Create the request body
-	    JsonNode requestBody = mapper.createObjectNode().put("model", "text-embedding-ada-002").put("input", text);
+	    if (!Settings.hasApiKey()) {
+		LOG.debug("Skipping embeddings request because no API key is configured.");
+		return result;
+	    }
 
-	    Request request = new Request.Builder()
+	    JsonNode requestBody = MAPPER.createObjectNode().put("model", "text-embedding-ada-002").put("input", text);
+
+	    Request.Builder requestBuilder = new Request.Builder()
 		.url("https://api.openai.com/v1/embeddings")
 		.post(RequestBody
-		    .create(mapper.writeValueAsString(requestBody), okhttp3.MediaType.parse("application/json")))
-		.addHeader("Authorization", "Bearer " + Settings.getApiKey())
-		.build();
+		    .create(MAPPER.writeValueAsString(requestBody), okhttp3.MediaType.parse("application/json")));
+
+	    addAuthorizationHeader(requestBuilder, "https://api.openai.com/v1/embeddings");
+	    Request request = requestBuilder.build();
 
 	    Response response = client.newCall(request).execute();
 	    String responseBody = response.body().string();
-	    JsonNode responseJson = mapper.readTree(responseBody);
+	    JsonNode responseJson = MAPPER.readTree(responseBody);
 
-	    result = mapper.convertValue(responseJson.get("data").get(0).get("embedding"), float[].class);
+	    result = MAPPER.convertValue(responseJson.get("data").get(0).get("embedding"), float[].class);
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
@@ -104,59 +114,46 @@ public class ChatGPT implements LLM {
 	    .readTimeout(3, TimeUnit.MINUTES)
 	    .build();
 
-	String json = """
-		{
-			"model": "%model",
-			"messages": [%messages],
-			"temperature": %temperature, "max_tokens": 2000
-
-		""";
-
 	if (prompt.isFunctional()) {
-	    json += """
-	    	,
-	    	"functions": %functions,
-	    	"function_call": {"name": "%function_name"}
-	    	""";
+	    LOG.warn("Function calling was requested for {}, but Smallville is sending a normal chat completion request.", prompt.getFunction());
 	}
 
-	json += "}";
-	json = json.replaceAll("\t", "");
-	json = json.strip();
-	if (prompt.isFunctional()) {
-//	    json = json
-//		.replace("%functions", MAPPER.writeValueAsString(SmallvilleConfig.getFunctions().get("functions")));
+	ObjectNode requestJson = MAPPER.createObjectNode();
+	requestJson.put("model", resolveModel(prompt));
+	requestJson.put("temperature", temperature);
+	requestJson.put("max_tokens", 2000);
+	requestJson.put("stream", false);
 
-	    json = json.replace("%function_name", prompt.getFunction());
-	}
+	ArrayNode messages = requestJson.putArray("messages");
+	messages.addPOJO(prompt.build());
 
-	json = json.replace("%messages", MAPPER.writeValueAsString(prompt.build()));
-	json = json.replace("%temperature", String.valueOf(temperature));
-	json = json.replace("%model", SmallvilleConfig.getConfig().getModel());
+	String json = MAPPER.writeValueAsString(requestJson);
 
 	LOG.debug("[Chat Request Original]" + json);
 	LOG.debug("[Chat Request]" + prompt.getContent());
 
-	RequestBody body = RequestBody.create(json.getBytes());
-	Request request = new Request.Builder()
+	RequestBody body = RequestBody.create(json, okhttp3.MediaType.parse("application/json"));
+	Request.Builder requestBuilder = new Request.Builder()
 	    .url(SmallvilleConfig.getConfig().getApiPath())
 	    .addHeader("Content-Type", "application/json")
-	    .addHeader("Authorization", "Bearer " + Settings.getApiKey())
-	    .post(body)
-	    .build();
+	    .post(body);
+	addAuthorizationHeader(requestBuilder, SmallvilleConfig.getConfig().getApiPath());
+	Request request = requestBuilder.build();
 
 	String result = "";
 
 	Response response = client.newCall(request).execute();
 	String responseBody = response.body().string();
 
-	ObjectMapper objectMapper = new ObjectMapper();
-	JsonNode node = objectMapper.readTree(responseBody);
+	JsonNode node = MAPPER.readTree(responseBody);
 
 	if (node.get("choices") == null) {
 	    LOG.debug(node.toPrettyString());
-	    throw new SmallvilleException(
-		    "Invalid api token, rate limit reached, or the LLM is overloaded with requests.");
+	    if (node.get("error") != null) {
+		throw new SmallvilleException(node.get("error").toString());
+	    }
+
+	    throw new SmallvilleException("The LLM response did not include any choices.");
 	}
 
 	
@@ -172,12 +169,45 @@ public class ChatGPT implements LLM {
 	LOG.debug("[Chat Response]" + node.get("choices").toPrettyString());
 
 	long end = System.currentTimeMillis();
-	LOG.debug("[Chat] Response took " + String.valueOf(start - end) + "ms");
+	LOG.debug("[Chat] Response took " + String.valueOf(end - start) + "ms");
 //	Analytics.addPrompt(prompt.getContent());
 //	Analytics.addPrompt(result);
-	PromptReceievedEvent promptReceievedEvent = new PromptReceievedEvent(prompt.getContent(), result, start-end);
+	PromptReceievedEvent promptReceievedEvent = new PromptReceievedEvent(prompt.getContent(), result, end - start);
 	events.postEvent(promptReceievedEvent);
 	
 	return promptReceievedEvent.getResult();
+    }
+
+    private String resolveModel(PromptRequest prompt) {
+	if (prompt.getModel() != null && !prompt.getModel().isBlank()) {
+	    return prompt.getModel();
+	}
+
+	return SmallvilleConfig.getConfig().getModel();
+    }
+
+    private void addAuthorizationHeader(Request.Builder requestBuilder, String apiPath) {
+	if (!isLocalLoopbackProvider(apiPath) && Settings.hasApiKey()) {
+	    requestBuilder.addHeader("Authorization", "Bearer " + Settings.getApiKey());
+	}
+    }
+
+    private boolean isLocalLoopbackProvider(String apiPath) {
+	try {
+	    URI uri = new URI(apiPath);
+	    String host = uri.getHost();
+	    if (host == null || host.isBlank()) {
+		return false;
+	    }
+
+	    if ("localhost".equalsIgnoreCase(host) || "127.0.0.1".equals(host) || "::1".equals(host)) {
+		return true;
+	    }
+
+	    InetAddress address = InetAddress.getByName(host);
+	    return address.isLoopbackAddress() || address.isAnyLocalAddress();
+	} catch (URISyntaxException | UnknownHostException e) {
+	    return false;
+	}
     }
 }

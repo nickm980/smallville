@@ -1,0 +1,22 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: Social Packet Stub
+description: >-
+  Stub-only schema for a future social packet. No v1 social packet artifact is
+  emitted because the current repo inputs do not ground non-speculative social
+  semantics tightly enough for this lane.
+type: object
+additionalProperties: false
+properties:
+  packetType:
+    const: social-packet
+  packetVersion:
+    const: sidecar-packet-assembler-v1
+  status:
+    const: stub-only
+  reason:
+    type: string
+required:
+  - packetType
+  - packetVersion
+  - status
+  - reason

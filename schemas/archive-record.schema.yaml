@@ -1,0 +1,100 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: UEIA Archive Record
+description: Descriptive schema for UEIA Phase 1 archive-record artifacts. This schema documents snapshot-only dossier evidence, preserves provenance, and does not bind to runtime or engine validation. Design assets remain snapshot sources only. No derived fact may appear without fact_status. Designed or reconstructed structures are not equivalent to directly evidenced structures and must not be treated as observed unless anchored by accepted source evidence.
+type: object
+additionalProperties: false
+properties:
+  record_id:
+    type: string
+  dossier_id:
+    type: string
+    description: Optional dossier identifier used to preserve single-dossier lineage.
+  source_type:
+    type: string
+  source_title:
+    type: string
+  source_path_or_uri:
+    type: string
+  collection_date:
+    type: string
+  snapshot_date:
+    type: string
+  license_or_scope:
+    type: string
+  provenance_status:
+    type: string
+  fact_status:
+    type: string
+    enum:
+      - observed
+      - inferred
+      - open-question
+      - approved-for-packet
+      - deferred
+  redaction_status:
+    type: string
+  owner_layer:
+    type: string
+  summary:
+    type: string
+  fact_items:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      properties:
+        fact_id:
+          type: string
+        fact_text:
+          type: string
+        fact_status:
+          type: string
+          enum:
+            - observed
+            - inferred
+            - open-question
+            - approved-for-packet
+            - deferred
+        source_refs:
+          type: array
+          items:
+            type: string
+        notes:
+          type: string
+      required:
+        - fact_id
+        - fact_text
+        - fact_status
+        - source_refs
+  notes:
+    type: string
+  source_hash:
+    type: string
+  snapshot_type:
+    type: string
+    description: Snapshot source class such as bundle, note, dataset, archive image, or design asset.
+  domain_tags:
+    type: array
+    items:
+      type: string
+  spatial_context:
+    type: string
+    description: Descriptive spatial context only. This field does not authorize geometry, runtime map layers, or renderable scene assets.
+  temporal_context:
+    type: string
+  structure_class:
+    type: string
+  design_asset_type:
+    type: string
+    description: Optional design-asset category for snapshot references only. This field does not confer observed real-world status.
+required:
+  - record_id
+  - source_type
+  - source_title
+  - source_path_or_uri
+  - collection_date
+  - provenance_status
+  - fact_status
+  - owner_layer
+  - summary
+  - fact_items

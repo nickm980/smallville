@@ -1,0 +1,20 @@
+{
+  "agentName" : "Rowan",
+  "totalEvents" : 110,
+  "hotCount" : 4,
+  "archivedCount" : 0,
+  "dreamPackCount" : 0,
+  "lastDreamTick" : 1,
+  "lastRecallTick" : 0,
+  "ponderCount" : 66,
+  "lastPonderTick" : 1,
+  "lastAffect" : {
+    "moodLabel" : "uneasy",
+    "valence" : -0.2,
+    "activation" : 0.4,
+    "socialDrive" : 0.7,
+    "focusTarget" : null,
+    "drivers" : [ ],
+    "updatedAtTick" : 1
+  }
+}

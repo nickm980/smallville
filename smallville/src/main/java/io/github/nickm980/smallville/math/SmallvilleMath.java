@@ -1,17 +1,31 @@
 package io.github.nickm980.smallville.math;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.robrua.nlp.bert.Bert;
 
 public final class SmallvilleMath {
 
+    private static final Logger LOG = LoggerFactory.getLogger(SmallvilleMath.class);
     private static Bert bert;
+    private static boolean bertUnavailable;
 
     private SmallvilleMath() {
     }
 
     private static Bert getBert() {
-	if (bert == null) {
-	    bert = Bert.load("com/robrua/nlp/easy-bert/bert-cased-L-12-H-768-A-12");
+	if (bert == null && !bertUnavailable) {
+	    try {
+		bert = Bert.load("com/robrua/nlp/easy-bert/bert-cased-L-12-H-768-A-12");
+	    } catch (RuntimeException | LinkageError e) {
+		bertUnavailable = true;
+		LOG.warn("BERT model could not be loaded. Smallville will use keyword similarity instead.", e);
+	    }
 	}
 	
 	return bert;
@@ -55,11 +69,17 @@ public final class SmallvilleMath {
      * @return Normalized value between 0 and 1 where 1 is an identical
      */
     public static double calculateSentenceSimilarity(String a, String b) {
-	if (a.isEmpty() || b.isEmpty()) {
+	if (a == null || b == null || a.isBlank() || b.isBlank()) {
 	    return 0.0;
+	}
+	if (getBert() == null) {
+	    return calculateKeywordSimilarity(a, b);
 	}
 	float[][] sequenceA = getTextEmbedding(a);
 	float[][] sequenceB = getTextEmbedding(b);
+	if (sequenceA.length == 0 || sequenceB.length == 0) {
+	    return calculateKeywordSimilarity(a, b);
+	}
 
 	float[] embeddingA = getWeightedAverage(sequenceA);
 	float[] embeddingB = getWeightedAverage(sequenceB);
@@ -95,7 +115,11 @@ public final class SmallvilleMath {
      * @return
      */
     public static float[][] getTextEmbedding(String input) {
-	return getBert().embedTokens(input);
+	Bert localBert = getBert();
+	if (localBert == null) {
+	    return new float[0][0];
+	}
+	return localBert.embedTokens(input);
     }
 
     public static double cosineSimilarity(float[] vec1, float[] vec2) {
@@ -109,5 +133,29 @@ public final class SmallvilleMath {
 	}
 	double cosineSimilarity = dotProduct / (Math.sqrt(norm1) * Math.sqrt(norm2));
 	return normalize(cosineSimilarity, 1, .8);
+    }
+
+    private static double calculateKeywordSimilarity(String a, String b) {
+	Set<String> first = tokenize(a);
+	Set<String> second = tokenize(b);
+
+	if (first.isEmpty() || second.isEmpty()) {
+	    return 0.0;
+	}
+
+	long overlap = first.stream().filter(second::contains).count();
+	if (overlap == 0) {
+	    return 0.0;
+	}
+
+	int union = first.size() + second.size() - (int) overlap;
+	return union == 0 ? 0.0 : (double) overlap / union;
+    }
+
+    private static Set<String> tokenize(String input) {
+	return Arrays
+	    .stream(input.toLowerCase().split("[^a-z0-9]+"))
+	    .filter(token -> !token.isBlank())
+	    .collect(Collectors.toSet());
     }
 }

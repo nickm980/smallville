@@ -1,18 +1,25 @@
 package io.github.nickm980.smallville.update;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.github.nickm980.smallville.World;
 import io.github.nickm980.smallville.config.SmallvilleConfig;
+import io.github.nickm980.smallville.config.simulation.SimulationFile;
 import io.github.nickm980.smallville.entities.Agent;
+import io.github.nickm980.smallville.entities.Conversation;
 import io.github.nickm980.smallville.entities.Location;
 import io.github.nickm980.smallville.entities.SimulationTime;
 import io.github.nickm980.smallville.events.EventBus;
 import io.github.nickm980.smallville.events.agent.AgentUpdateEvent;
 import io.github.nickm980.smallville.llm.LLM;
+import io.github.nickm980.smallville.memory.Observation;
 import io.github.nickm980.smallville.prompts.ChatService;
+import io.github.nickm980.smallville.prompts.dto.WorldProposalCandidate;
+import io.github.nickm980.smallville.runtime.RuntimeSettingsService;
 
 /**
  * 
@@ -29,8 +36,12 @@ public class UpdateService {
     private final EventBus events = EventBus.getEventBus();
     
     public UpdateService(LLM chat, World world) {
+	this(chat, world, null, new RuntimeSettingsService(SmallvilleConfig.getConfig()));
+    }
+
+    public UpdateService(LLM chat, World world, SimulationFile simulationSeed, RuntimeSettingsService runtimeSettings) {
 	this.world = world;
-	this.chatService = new ChatService(world, chat);
+	this.chatService = new ChatService(world, chat, simulationSeed, runtimeSettings);
     }
 
     /**
@@ -96,5 +107,32 @@ public class UpdateService {
 
     public String createTraitsWithCharacteristics(Agent agent) {
 	return chatService.createTraits(agent);
+    }
+
+    public boolean startAmbientConversation(Agent agent, Agent other, String topic) {
+	Conversation conversation = chatService.getConversationIfExists(agent, other, topic);
+	if (conversation == null || conversation.size() == 0) {
+	    return false;
+	}
+
+	List<Observation> memories = conversation
+	    .getDialog()
+	    .stream()
+	    .map(dialog -> new Observation(dialog.getMessage()))
+	    .collect(Collectors.toList());
+
+	agent.getMemoryStream().addAll(memories);
+	other.getMemoryStream().addAll(memories);
+	if (!memories.isEmpty()) {
+	    Observation latestDialog = memories.get(memories.size() - 1);
+	    agent.getMemoryStream().addWorkingMemory(latestDialog);
+	    other.getMemoryStream().addWorkingMemory(latestDialog);
+	}
+	world.create(conversation);
+	return true;
+    }
+
+    public WorldProposalCandidate createWorldProposal(Agent agent) {
+	return chatService.createWorldProposal(agent);
     }
 }

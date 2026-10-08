@@ -2,11 +2,26 @@ options.txt
 glove.840B.300d.txt
 .classpath
 .project
+.vscode/
 /logs/
 /.settings
+.tools/
+.env
+dashboard/.env.local
+/java-client/target/
+/examples/java-example/target/
+/examples/javascript-phaser/dist/
+scenarios/**/logs/
 *.log
 *.prefs
 .next
 out
 pages
 node_modules
+/runs/
+# Local workspace residue
+/tmp/
+/.codex-logs/
+/output/
+__pycache__/
+.smallville-memory/

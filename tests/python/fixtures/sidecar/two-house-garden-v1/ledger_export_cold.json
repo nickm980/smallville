@@ -1,0 +1,381 @@
+{
+  "bootstrap": {},
+  "generatedAtUtc": "2026-03-31T23:44:34.191531800Z",
+  "governanceLedger": [],
+  "governancePolicy": {
+    "pendingStatuses": [
+      "approved",
+      "pending"
+    ],
+    "proposalTypes": [
+      "add_location",
+      "add_object",
+      "change_state"
+    ]
+  },
+  "memoryIndex": {
+    "Alex": {
+      "agentName": "Alex",
+      "archivedCount": 9,
+      "dreamPackCount": 1,
+      "hotCount": 20,
+      "lastAffect": {
+        "activation": 0.05500000000000001,
+        "drivers": [
+          "reviewing tray notes and plant condition inside the sheltered growing space",
+          "review plan sheets and tray maps for the evening",
+          "Review plan sheets and tray maps for the evening"
+        ],
+        "focusTarget": "reviewing tray notes and plant condition inside the sheltered growing space",
+        "moodLabel": "distressed",
+        "socialDrive": 0.0,
+        "updatedAtTick": 11,
+        "valence": -0.89
+      },
+      "lastDreamTick": 11,
+      "lastPonderTick": 0,
+      "lastRecallTick": 0,
+      "ponderCount": 0,
+      "totalEvents": 2
+    },
+    "Jamie": {
+      "agentName": "Jamie",
+      "archivedCount": 10,
+      "dreamPackCount": 2,
+      "hotCount": 20,
+      "lastAffect": {
+        "activation": 0.09,
+        "drivers": [
+          "setting out tea before the first watering round and stock review",
+          "poured morning tea",
+          "poured morning tea"
+        ],
+        "focusTarget": "setting out tea before the first watering round and stock review",
+        "moodLabel": "distressed",
+        "socialDrive": 0.0,
+        "updatedAtTick": 11,
+        "valence": -0.8200000000000001
+      },
+      "lastDreamTick": 11,
+      "lastPonderTick": 0,
+      "lastRecallTick": 0,
+      "ponderCount": 0,
+      "totalEvents": 2
+    }
+  },
+  "offlinePolicy": {
+    "loopbackOnly": false,
+    "offlineMode": false
+  },
+  "proposalHistoryFull": [],
+  "scenario": "llama3.2:3b-16k",
+  "world": {
+    "actionLog": [
+      {
+        "actor": "World",
+        "fromLocation": "Garden: South Bed",
+        "summary": "Garden: South Bed is now Freshly prepared for transplanting and bed tidy work",
+        "tick": 0,
+        "time": "12:44 am",
+        "toLocation": "Garden: South Bed",
+        "type": "location-state"
+      },
+      {
+        "actor": "World",
+        "fromLocation": "Garden: North Bed",
+        "summary": "Garden: North Bed is now Young greens need a quick health review",
+        "tick": 0,
+        "time": "12:44 am",
+        "toLocation": "Garden: North Bed",
+        "type": "location-state"
+      },
+      {
+        "actor": "World",
+        "fromLocation": "Garden: Gate",
+        "summary": "Garden: Gate is now Closed to keep the work area settled",
+        "tick": 0,
+        "time": "12:44 am",
+        "toLocation": "Garden: Gate",
+        "type": "location-state"
+      },
+      {
+        "actor": "World",
+        "fromLocation": "Garden: Bench",
+        "summary": "Garden: Bench is now A calm pause point for tea and note review",
+        "tick": 0,
+        "time": "12:44 am",
+        "toLocation": "Garden: Bench",
+        "type": "location-state"
+      },
+      {
+        "actor": "World",
+        "fromLocation": "Garden",
+        "summary": "Garden is now Paths clear between the houses and the growing beds",
+        "tick": 0,
+        "time": "12:44 am",
+        "toLocation": "Garden",
+        "type": "location-state"
+      },
+      {
+        "actor": "World",
+        "fromLocation": "Green House: Water Barrel",
+        "summary": "Green House: Water Barrel is now Half full and ready for the next watering round",
+        "tick": 0,
+        "time": "12:44 am",
+        "toLocation": "Green House: Water Barrel",
+        "type": "location-state"
+      },
+      {
+        "actor": "World",
+        "fromLocation": "Green House: Glass Table",
+        "summary": "Green House: Glass Table is now Plan sheets and tray maps spread beside a mug ring",
+        "tick": 0,
+        "time": "12:44 am",
+        "toLocation": "Green House: Glass Table",
+        "type": "location-state"
+      },
+      {
+        "actor": "World",
+        "fromLocation": "Green House: Potting Bench",
+        "summary": "Green House: Potting Bench is now Propagation trays, dibber, and labels arranged for tidy work",
+        "tick": 0,
+        "time": "12:44 am",
+        "toLocation": "Green House: Potting Bench",
+        "type": "location-state"
+      },
+      {
+        "actor": "World",
+        "fromLocation": "Green House",
+        "summary": "Green House is now Sheltered warmth holding the day's young plants steady",
+        "tick": 0,
+        "time": "12:44 am",
+        "toLocation": "Green House",
+        "type": "location-state"
+      },
+      {
+        "actor": "World",
+        "fromLocation": "Blue House: Study",
+        "summary": "Blue House: Study is now Open ledger of planting notes and weather sketches",
+        "tick": 0,
+        "time": "12:44 am",
+        "toLocation": "Blue House: Study",
+        "type": "location-state"
+      },
+      {
+        "actor": "World",
+        "fromLocation": "Blue House: Kitchen",
+        "summary": "Blue House: Kitchen is now Tea things laid out beside a garden notebook",
+        "tick": 0,
+        "time": "12:44 am",
+        "toLocation": "Blue House: Kitchen",
+        "type": "location-state"
+      }
+    ],
+    "agents": [
+      {
+        "action": "reviewing tray notes and plant condition inside the sheltered growing space",
+        "affect": {
+          "activation": 0.05500000000000001,
+          "moodLabel": "distressed",
+          "valence": -0.89
+        },
+        "canProposeWorldChanges": true,
+        "emoji": null,
+        "goals": [
+          "Keep tray, container, and propagation work well observed and easy to review.",
+          "Notice plant health shifts early enough for gentle action rather than rushed correction.",
+          "Shape a quiet rhythm where note-making and practical garden work stay aligned."
+        ],
+        "location": "Green House: Glass Table",
+        "longPlans": [],
+        "memoryLedgerSummary": {
+          "archivedCount": 9,
+          "dreamPackCount": 1,
+          "hotCount": 20
+        },
+        "model": "llama3.2:3b-16k",
+        "name": "Alex",
+        "persona": [
+          "Alex treats the greenhouse like a careful studio for plant observation, propagation, and planning.",
+          "Alex notices small differences in leaves, trays, and shelteredspace conditions before speaking up.",
+          "Alex prefers one thoughtful exchange at a time, especially after a quiet review pass."
+        ],
+        "recentMemories": [],
+        "rituals": [
+          "Begin with note review at the glass table before moving to trays or beds.",
+          "Pause for tea once the first plant health and tray checks are complete."
+        ],
+        "shortPlans": [],
+        "socialPreference": "solitary",
+        "traits": "curious, artistic, patient",
+        "workingMemories": [
+          "Some propagation trays need checking for spacing, labels, and container condition.",
+          "The south bed looks ready for tidy planting work once the notes are confirmed.",
+          "A saleready stock check should stay simple and observational rather than commercial."
+        ]
+      },
+      {
+        "action": "setting out tea before the first watering round and stock review",
+        "affect": {
+          "activation": 0.09,
+          "moodLabel": "distressed",
+          "valence": -0.8200000000000001
+        },
+        "canProposeWorldChanges": true,
+        "emoji": null,
+        "goals": [
+          "Keep the two-house routine calm, practical, and ready for garden work.",
+          "Support watering rounds, tray checks, and tidy closeouts without pushing the pace.",
+          "Notice which plants or spaces need quiet attention before the next work block."
+        ],
+        "location": "Blue House: Kitchen",
+        "longPlans": [],
+        "memoryLedgerSummary": {
+          "archivedCount": 10,
+          "dreamPackCount": 2,
+          "hotCount": 20
+        },
+        "model": "llama3.2:3b-16k",
+        "name": "Jamie",
+        "persona": [
+          "Jamie prefers useful routines that make the houses and garden feel steady and welcoming.",
+          "Jamie likes work that leaves tools, trays, and shared spaces easier to use for the next round.",
+          "Jamie pays attention to practical details like gates, watering order, and whether the bench is ready for a pause."
+        ],
+        "recentMemories": [],
+        "rituals": [
+          "Start with tea and a short status check before shared horticultural work.",
+          "Review the water barrel and garden paths before midday."
+        ],
+        "shortPlans": [],
+        "socialPreference": "balanced",
+        "traits": "grounded, hospitable, observant",
+        "workingMemories": [
+          "A short tea pause helps Alex review notes before transplanting decisions.",
+          "The garden gate may need checking if the path gets busy during watering rounds.",
+          "Some of the plants may be nearly ready for a calm saleready stock review."
+        ]
+      }
+    ],
+    "conversations": [],
+    "dailyRhythm": {
+      "afternoonTea": "15:00-17:30",
+      "breakfast": "06:00-09:30",
+      "dinner": "18:00-20:30",
+      "lunch": "12:00-14:00",
+      "morningTea": "06:00-10:00",
+      "snack": "Flexible morning or afternoon"
+    },
+    "locations": [
+      {
+        "agents": [],
+        "depth": 0,
+        "name": "Blue House",
+        "parent": null,
+        "state": null
+      },
+      {
+        "agents": [
+          "Jamie"
+        ],
+        "depth": 1,
+        "name": "Blue House: Kitchen",
+        "parent": "Blue House",
+        "state": "Tea things laid out beside a garden notebook"
+      },
+      {
+        "agents": [],
+        "depth": 1,
+        "name": "Blue House: Study",
+        "parent": "Blue House",
+        "state": "Open ledger of planting notes and weather sketches"
+      },
+      {
+        "agents": [],
+        "depth": 0,
+        "name": "Garden",
+        "parent": null,
+        "state": "Paths clear between the houses and the growing beds"
+      },
+      {
+        "agents": [],
+        "depth": 1,
+        "name": "Garden: Bench",
+        "parent": "Garden",
+        "state": "A calm pause point for tea and note review"
+      },
+      {
+        "agents": [],
+        "depth": 1,
+        "name": "Garden: Gate",
+        "parent": "Garden",
+        "state": "Closed to keep the work area settled"
+      },
+      {
+        "agents": [],
+        "depth": 1,
+        "name": "Garden: North Bed",
+        "parent": "Garden",
+        "state": "Young greens need a quick health review"
+      },
+      {
+        "agents": [],
+        "depth": 1,
+        "name": "Garden: South Bed",
+        "parent": "Garden",
+        "state": "Freshly prepared for transplanting and bed tidy work"
+      },
+      {
+        "agents": [],
+        "depth": 0,
+        "name": "Green House",
+        "parent": null,
+        "state": "Sheltered warmth holding the day's young plants steady"
+      },
+      {
+        "agents": [
+          "Alex"
+        ],
+        "depth": 1,
+        "name": "Green House: Glass Table",
+        "parent": "Green House",
+        "state": "Plan sheets and tray maps spread beside a mug ring"
+      },
+      {
+        "agents": [],
+        "depth": 1,
+        "name": "Green House: Potting Bench",
+        "parent": "Green House",
+        "state": "Propagation trays, dibber, and labels arranged for tidy work"
+      },
+      {
+        "agents": [],
+        "depth": 1,
+        "name": "Green House: Water Barrel",
+        "parent": "Green House",
+        "state": "Half full and ready for the next watering round"
+      }
+    ],
+    "pendingProposals": [],
+    "step": 1,
+    "tick": 0,
+    "time": "12:44 am",
+    "worldBuilding": {
+      "allowedLocationStates": [
+        "Open",
+        "Closed",
+        "Warm",
+        "Quiet",
+        "In use",
+        "Needs attention",
+        "Ready for review"
+      ],
+      "rules": [
+        "Keep all additions domestic, horticultural, and locally grounded within the Blue House, Green House, and Garden.",
+        "New details should support watering, plant care, propagation, tray work, note review, or quiet shared pauses.",
+        "Do not introduce pricing systems, live inventory, sensors, commerce mechanics, or external institutions."
+      ],
+      "summary": "A calm two-house horticultural microcosm built around watering rounds, propagation work, quiet review, and shared tea pauses."
+    }
+  }
+}

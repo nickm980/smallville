@@ -1,7 +1,8 @@
-#Configuration options to run through LocalAI
-apiPath: https://api.openai.com/v1/chat/completions
-# LLM model should support function calling
-model: gpt-3.5-turbo
+# Local Ollama defaults using the OpenAI-compatible chat completions endpoint.
+# Override this with your hosted provider URL if you want to use an API key.
+apiPath: http://localhost:11434/v1/chat/completions
+# Choose a locally installed Ollama model. `llama3.2:3b-16k` is already available on this machine.
+model: llama3.2:3b-16k
 timeFormat: h:mm a
 fullTimeFormat: EEEE, MMMM d, h:mm a
 yesterdayFormat: EEEE MMMM d
@@ -11,5 +12,10 @@ yesterdayFormat: EEEE MMMM d
 reflectionCutoff: 50
 #Set to true if the simulation.yaml file should be used to initialize the simulation
 simulationFile: false
-# How many times ChatGPT should attempt to send a prompt before aborting
+# How many times the LLM client should attempt to send a prompt before aborting
 maxRetries: 2
+# Ask-shadow bridge is opt-in. When disabled, /agents/{name}/ask skips the localhost bridge seam.
+askShadowBridgeEnabled: false
+askShadowBridgeEndpoint: http://127.0.0.1:8010/neural/turn
+askShadowBridgeConnectTimeoutMs: 200
+askShadowBridgeCallTimeoutMs: 1200

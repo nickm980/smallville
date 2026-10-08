@@ -1,0 +1,86 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: Ledger Export
+description: Schema for GET /world/ledger/export response. Full simulation state export including world snapshot, governance ledger, proposal history, per-agent memory indexes, and policy summaries.
+type: object
+additionalProperties: false
+properties:
+  generatedAtUtc:
+    type: string
+    format: date-time
+  scenario:
+    type: string
+  bootstrap:
+    type: object
+    description: Scenario bootstrap configuration (world locations, world building rules, daily rhythm).
+  world:
+    type: object
+    description: Current world snapshot (same shape as GET /world response).
+  governanceLedger:
+    type: array
+    description: Full unwindowed proposal history for governance review.
+    items:
+      type: object
+  proposalHistoryFull:
+    type: array
+    description: Complete proposal history including all reviewed and pending proposals.
+    items:
+      type: object
+  ledgerEntryType:
+    type: string
+    description: Canonical vocabulary for MemoryLedgerEntry.type. Authoritative source — Java enum LedgerEntryType and Python tests must match exactly.
+    enum:
+      - observation
+      - plan
+      - reflection
+      - characteristic
+      - recall
+      - dream-compress
+      - ponder
+  memoryIndex:
+    type: object
+    description: Per-agent memory ledger index keyed by agent name.
+    additionalProperties:
+      type: object
+      properties:
+        agentName:
+          type: string
+        totalEvents:
+          type: integer
+        hotCount:
+          type: integer
+        archivedCount:
+          type: integer
+        dreamPackCount:
+          type: integer
+        lastDreamTick:
+          type: integer
+        lastRecallTick:
+          type: integer
+        ponderCount:
+          type: integer
+          minimum: 0
+          description: Number of ponder nudges applied to this agent.
+        lastPonderTick:
+          type: integer
+          minimum: 0
+          description: Tick at which the most recent ponder nudge was applied.
+        lastAffect:
+          $ref: "affect-state.schema.yaml"
+      required:
+        - agentName
+        - totalEvents
+        - hotCount
+        - archivedCount
+        - dreamPackCount
+  offlinePolicy:
+    type: object
+    description: Offline mode and loopback isolation policy summary.
+  governancePolicy:
+    type: object
+    description: Governance policy summary (proposal review, world change rules).
+required:
+  - generatedAtUtc
+  - scenario
+  - world
+  - governanceLedger
+  - memoryIndex

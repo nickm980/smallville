@@ -1,0 +1,203 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: UEIA Derived Scenario Packet
+description: Descriptive schema for UEIA Phase 1 derived scenario packet artifacts. A packet is a reviewable interpretive artifact only. It is not runtime world state, does not authorize direct world or scene mutation, and does not bind to engine or runtime code. Spatial, built-feature, water-system, and visualization fields are descriptive only and must not be read as geometry, mesh or model assets, runtime map layers, or renderable scene assets. Research thesis links hold hypotheses, research questions, and interpretive prompts rather than truth claims.
+type: object
+additionalProperties: false
+properties:
+  packet_id:
+    type: string
+  dossier_id:
+    type: string
+    description: Required dossier identifier used to preserve single-dossier discipline.
+  baseline_tag:
+    type: string
+  baseline_commit:
+    type: string
+  source_record_ids:
+    type: array
+    items:
+      type: string
+  harness_family:
+    type: string
+  scenario_target:
+    type: string
+  packet_summary:
+    type: string
+  world_facts:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      properties:
+        fact_id:
+          type: string
+        fact_text:
+          type: string
+        fact_status:
+          type: string
+          enum:
+            - observed
+            - inferred
+            - open-question
+            - approved-for-packet
+            - deferred
+        source_record_id:
+          type: string
+        packet_use_note:
+          type: string
+      required:
+        - fact_id
+        - fact_text
+        - fact_status
+        - source_record_id
+  task_classes:
+    type: array
+    items:
+      type: string
+  constraints:
+    type: array
+    items:
+      type: string
+  open_questions:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      properties:
+        question_id:
+          type: string
+        question_text:
+          type: string
+        question_status:
+          type: string
+          enum:
+            - open-question
+            - deferred
+        source_record_ids:
+          type: array
+          items:
+            type: string
+      required:
+        - question_id
+        - question_text
+        - question_status
+  compiler_role:
+    type: string
+  created_at:
+    type: string
+  packet_status:
+    type: string
+    description: Descriptive packet review status only. This field does not grant execution rights.
+  supporting_refs:
+    type: array
+    description: Optional evidence-linking references used to preserve provenance between packet claims and dossier evidence.
+    items:
+      type: object
+      additionalProperties: false
+      properties:
+        ref_type:
+          type: string
+        ref_id:
+          type: string
+        ref_note:
+          type: string
+      required:
+        - ref_type
+        - ref_id
+  built_features:
+    type: array
+    description: Descriptive built-feature groupings only. This field does not authorize world-building implementation.
+    items:
+      type: object
+      additionalProperties: false
+      properties:
+        feature_name:
+          type: string
+        fact_status:
+          type: string
+          enum:
+            - observed
+            - inferred
+            - open-question
+            - approved-for-packet
+            - deferred
+        source_record_id:
+          type: string
+        feature_note:
+          type: string
+      required:
+        - feature_name
+        - fact_status
+  water_system_elements:
+    type: array
+    description: Descriptive water-system vocabulary only. This field does not authorize hydraulic simulation, geometry, or runtime infrastructure.
+    items:
+      type: object
+      additionalProperties: false
+      properties:
+        element_name:
+          type: string
+        fact_status:
+          type: string
+          enum:
+            - observed
+            - inferred
+            - open-question
+            - approved-for-packet
+            - deferred
+        source_record_id:
+          type: string
+        element_note:
+          type: string
+      required:
+        - element_name
+        - fact_status
+  research_thesis_links:
+    type: array
+    description: Hypotheses, research questions, and interpretive prompts only. These are not truth claims.
+    items:
+      type: object
+      additionalProperties: false
+      properties:
+        thesis_id:
+          type: string
+        prompt_text:
+          type: string
+        link_status:
+          type: string
+          enum:
+            - inferred
+            - open-question
+            - approved-for-packet
+            - deferred
+        source_record_ids:
+          type: array
+          items:
+            type: string
+        notes:
+          type: string
+      required:
+        - thesis_id
+        - prompt_text
+        - link_status
+  visualization_hints:
+    type: array
+    description: Descriptive interpretation hints only. These do not authorize renderable assets, geometry, or runtime scene layers.
+    items:
+      type: string
+required:
+  - packet_id
+  - dossier_id
+  - baseline_tag
+  - baseline_commit
+  - source_record_ids
+  - harness_family
+  - scenario_target
+  - packet_summary
+  - world_facts
+  - task_classes
+  - constraints
+  - open_questions
+  - compiler_role
+  - created_at
+  - packet_status
